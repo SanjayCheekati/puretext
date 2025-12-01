@@ -20,6 +20,7 @@ const PasswordDialog: React.FC<PasswordDialogProps> = ({
   error = ''
 }) => {
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   if (!isOpen) return null;
 
@@ -37,15 +38,25 @@ const PasswordDialog: React.FC<PasswordDialogProps> = ({
         <p className="text-gray-600 mb-4">{message}</p>
         
         <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            autoFocus
-            disabled={isLoading}
-          />
+          <div className="relative mb-4">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              className="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+              disabled={isLoading}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
+              disabled={isLoading}
+            >
+              {showPassword ? '👁️' : '👁️‍🗨️'}
+            </button>
+          </div>
           
           {error && (
             <p className="text-red-500 text-sm mb-4">{error}</p>
