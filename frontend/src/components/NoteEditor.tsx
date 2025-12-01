@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { NoteData, Tab } from '../types';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
@@ -31,7 +31,7 @@ const NoteEditor: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
 
   const isPasswordProcessing = useRef(false);
-  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const autoSaveTimeoutRef = useRef<number | null>(null);
 
   // Load note on mount
   useEffect(() => {
@@ -44,17 +44,17 @@ const NoteEditor: React.FC = () => {
   useEffect(() => {
     if (noteData && !password && isDirty && !isLocked) {
       if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
+        window.clearTimeout(autoSaveTimeoutRef.current);
       }
 
-      autoSaveTimeoutRef.current = setTimeout(() => {
+      autoSaveTimeoutRef.current = window.setTimeout(() => {
         handleSaveWithoutPassword();
       }, 1500);
     }
 
     return () => {
       if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
+        window.clearTimeout(autoSaveTimeoutRef.current);
       }
     };
   }, [noteData, isDirty, password, isLocked]);
@@ -269,12 +269,6 @@ const NoteEditor: React.FC = () => {
     }
 
     setShowTabNameDialog(false);
-  };
-
-  const handleRenameTab = (index: number) => {
-    setSelectedTabIndex(index);
-    setTabNameDialogMode('rename');
-    setShowTabNameDialog(true);
   };
 
   const handleDeleteTab = (index: number) => {
