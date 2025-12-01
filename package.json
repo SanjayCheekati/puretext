@@ -1,5 +1,5 @@
 {
-  "name": "privatetext",
+  "name": "puretext",
   "version": "1.0.0",
   "description": "Secure note-taking app with client-side encryption",
   "main": "index.js",

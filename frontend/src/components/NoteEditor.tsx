@@ -31,6 +31,7 @@ const NoteEditor: React.FC = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
 
   const isPasswordProcessing = useRef(false);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load note on mount
   useEffect(() => {
@@ -38,6 +39,25 @@ const NoteEditor: React.FC = () => {
       loadNote();
     }
   }, [noteName]);
+
+  // Auto-save when no password and content changes
+  useEffect(() => {
+    if (noteData && !password && isDirty && !isLocked) {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+
+      autoSaveTimeoutRef.current = setTimeout(() => {
+        handleSaveWithoutPassword();
+      }, 1500);
+    }
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [noteData, isDirty, password, isLocked]);
 
   const loadNote = async () => {
     try {
@@ -82,11 +102,25 @@ const NoteEditor: React.FC = () => {
         // Decrypt existing note
         const response = await fetchNote(noteName!);
         if (response.exists && response.data) {
-          const decrypted = await decryptNote(response.data, inputPassword);
-          setNoteData(decrypted);
-          setPassword(inputPassword);
-          setIsLocked(false);
-          setShowPasswordDialog(false);
+          // Try to decrypt with user password first
+          try {
+            const decrypted = await decryptNote(response.data, inputPassword);
+            setNoteData(decrypted);
+            setPassword(inputPassword);
+            setIsLocked(false);
+            setShowPasswordDialog(false);
+          } catch (decryptErr) {
+            // If failed, try with default password (no-password notes)
+            try {
+              const decrypted = await decryptNote(response.data, 'no-password-set');
+              setNoteData(decrypted);
+              setPassword('');
+              setIsLocked(false);
+              setShowPasswordDialog(false);
+            } catch {
+              throw new Error('Incorrect password');
+            }
+          }
         }
       } else if (passwordDialogMode === 'lock') {
         // Lock the note with new password
@@ -143,6 +177,35 @@ const NoteEditor: React.FC = () => {
   const handleSave = async () => {
     if (!password || !noteData || !noteName || !isDirty) return;
     await saveNoteWithPassword(password);
+  };
+
+  const handleSaveWithoutPassword = async () => {
+    if (!noteData || !noteName || password) return;
+
+    try {
+      setIsSaving(true);
+      // Save without encryption - use a default password for storage
+      const defaultPassword = 'no-password-set';
+      const encrypted = await encryptNote(noteData, defaultPassword);
+
+      // Check if we need to create delete token
+      let deleteTokenHash: string | undefined;
+      let existingToken = getDeleteToken(noteName);
+
+      if (!existingToken) {
+        const newToken = generateDeleteToken();
+        const hash = await hashDeleteToken(newToken);
+        saveDeleteToken(noteName, newToken);
+        deleteTokenHash = hash;
+      }
+
+      await saveNote(noteName, encrypted, deleteTokenHash);
+      setIsDirty(false);
+    } catch (err) {
+      setError('Failed to auto-save note');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleContentChange = (content: string) => {
@@ -281,7 +344,7 @@ const NoteEditor: React.FC = () => {
       <>
         <div className="h-screen flex items-center justify-center bg-gray-50">
           <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Privatetext</h1>
+            <h1 className="text-3xl font-bold mb-4">Puretext</h1>
             <p className="text-gray-600">Loading note...</p>
           </div>
         </div>
@@ -309,7 +372,7 @@ const NoteEditor: React.FC = () => {
       <div className="bg-blue-900 border-b border-blue-800 px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-white">Privatetext</h1>
+            <h1 className="text-xl font-bold text-white">Puretext</h1>
             <span className="text-gray-400">/ {noteName}</span>
           </div>
 
@@ -399,13 +462,22 @@ const NoteEditor: React.FC = () => {
 
       {/* Editor */}
       <div className="flex-1 p-4 flex justify-center bg-gray-100">
-        <textarea
-          value={currentTab.content}
-          onChange={(e) => handleContentChange(e.target.value)}
-          className="w-full max-w-4xl h-full p-6 bg-white text-gray-900 border-0 rounded-lg focus:outline-none resize-none font-mono text-lg leading-relaxed shadow-sm"
-          placeholder="Start typing..."
-          disabled={isLocked}
-        />
+        <div className="w-full max-w-4xl h-full flex gap-4">
+          {/* Line numbers */}
+          <div className="flex-shrink-0 pt-6 pr-2 text-right text-gray-400 text-lg font-mono leading-relaxed select-none">
+            {currentTab.content.split('\n').map((_, i) => (
+              <div key={i}>{i + 1}</div>
+            ))}
+          </div>
+          {/* Text area */}
+          <textarea
+            value={currentTab.content}
+            onChange={(e) => handleContentChange(e.target.value)}
+            className="flex-1 h-full p-6 pl-2 bg-white text-gray-900 border-0 rounded-lg focus:outline-none resize-none font-mono text-lg leading-relaxed shadow-sm"
+            placeholder="Start typing..."
+            disabled={isLocked}
+          />
+        </div>
       </div>
 
       {/* Dialogs */}
@@ -454,6 +526,16 @@ const NoteEditor: React.FC = () => {
           {error}
         </div>
       )}
+
+      {/* Home Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-lg flex items-center gap-2 focus:outline-none"
+        title="Go to Home"
+      >
+        <span>🏠</span>
+        <span>Home</span>
+      </button>
     </div>
   );
 };

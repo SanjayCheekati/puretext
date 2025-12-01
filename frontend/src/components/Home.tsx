@@ -19,7 +19,7 @@ const Home: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-5xl font-bold text-gray-800 mb-2">
-              🔒 Privatetext
+              🔒 Puretext
             </h1>
             <p className="text-gray-600">
               Secure, encrypted notes. Zero-knowledge.

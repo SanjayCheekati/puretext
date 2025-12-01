@@ -1,12 +1,12 @@
-# 🔒 Privatetext
+# 🔒 Puretext
 
 **Your secure, encrypted notepad in the cloud.**
 
-Privatetext is a privacy-first note-taking app that keeps your thoughts, ideas, and sensitive information completely secure. With military-grade encryption happening right in your browser, your data stays yours - always.
+Puretext is a privacy-first note-taking app that keeps your thoughts, ideas, and sensitive information completely secure. With military-grade encryption happening right in your browser, your data stays yours - always.
 
 ---
 
-## 🎯 Why Privatetext?
+## 🎯 Why Puretext?
 
 ### For Students
 - 📚 **Study Notes**: Keep lecture notes, research, and study materials organized and accessible from any device
@@ -106,7 +106,7 @@ That's it! No registration, no email verification, no complicated setup.
 
 ## 🌟 Key Features
 
-- **Custom URLs** - Access notes like `privatetext.com/my-note`
+- **Custom URLs** - Access notes like `puretext.com/my-note`
 - **Password Protection** - Lock sensitive notes with encryption
 - **Multiple Tabs** - Organize content within each note
 - **Manual Save** - Save only when you're ready
@@ -127,9 +127,9 @@ If you forget your password, even we cannot recover your data. That's how secure
 
 ---
 
-## 📱 Start Using Privatetext Today
+## 📱 Start Using Puretext Today
 
-No sign-up required. No credit card needed. Just visit Privatetext and start writing.
+No sign-up required. No credit card needed. Just visit Puretext and start writing.
 
 **Your thoughts deserve privacy. Your data deserves security.**
 

@@ -1,7 +1,7 @@
 {
-  "name": "privatetext-backend",
+  "name": "puretext-backend",
   "version": "1.0.0",
-  "description": "Privatetext backend server",
+  "description": "Puretext backend server",
   "main": "server.js",
   "type": "module",
   "scripts": {
