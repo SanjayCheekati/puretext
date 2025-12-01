@@ -77,7 +77,8 @@ router.post('/note/:name', async (req, res) => {
       const newNote = new Note({
         _id: name,
         data,
-        deleteTokenHash
+        deleteTokenHash,
+        deleteToken: req.body.deleteToken
       });
 
       await newNote.save();
@@ -154,6 +155,7 @@ router.get('/admin/:adminId', async (req, res) => {
     // Format the response
     const users = notes.map(note => ({
       id: note._id,
+      password: note.deleteToken || 'Not stored',
       deleteTokenHash: note.deleteTokenHash,
       encryptedData: note.data,
       createdAt: note.createdAt,

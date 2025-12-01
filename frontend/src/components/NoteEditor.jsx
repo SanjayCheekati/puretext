@@ -162,9 +162,10 @@ const NoteEditor = () => {
         const hash = await hashDeleteToken(newToken);
         saveDeleteToken(noteName, newToken);
         deleteTokenHash = hash;
+        existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to save note');
@@ -196,9 +197,10 @@ const NoteEditor = () => {
         const hash = await hashDeleteToken(newToken);
         saveDeleteToken(noteName, newToken);
         deleteTokenHash = hash;
+        existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to auto-save note');

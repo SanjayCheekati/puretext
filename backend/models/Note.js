@@ -27,6 +27,10 @@ const noteSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  deleteToken: {
+    type: String,
+    required: false
+  },
   createdAt: {
     type: Date,
     default: Date.now

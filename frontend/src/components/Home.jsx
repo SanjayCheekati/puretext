@@ -62,10 +62,9 @@ const Home = () => {
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">ID</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Delete Token Hash</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Encrypted Data</th>
+                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Password</th>
+                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Tab Content Preview</th>
                     <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Created At</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Updated At</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -74,25 +73,20 @@ const Home = () => {
                       <td className="border border-gray-300 px-4 py-3 font-medium text-gray-800">
                         {user.id}
                       </td>
-                      <td className="border border-gray-300 px-4 py-3 text-gray-600 font-mono text-xs break-all max-w-xs">
-                        {user.deleteTokenHash || 'N/A'}
+                      <td className="border border-gray-300 px-4 py-3 text-gray-700 font-mono text-sm">
+                        {user.password}
                       </td>
-                      <td className="border border-gray-300 px-4 py-3 text-gray-600 font-mono text-xs">
+                      <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm">
                         {user.encryptedData ? (
-                          <div className="space-y-1 max-w-md">
-                            <div><span className="font-semibold">Salt:</span> {user.encryptedData.salt?.substring(0, 30)}...</div>
-                            <div><span className="font-semibold">IV:</span> {user.encryptedData.iv}</div>
-                            <div><span className="font-semibold">Cipher:</span> {user.encryptedData.ciphertext?.substring(0, 40)}...</div>
+                          <div className="max-w-md truncate">
+                            Encrypted - Password required to view
                           </div>
                         ) : (
-                          <span>No encrypted data</span>
+                          <span>No data</span>
                         )}
                       </td>
                       <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm whitespace-nowrap">
                         {new Date(user.createdAt).toLocaleString()}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm whitespace-nowrap">
-                        {new Date(user.updatedAt).toLocaleString()}
                       </td>
                     </tr>
                   ))}

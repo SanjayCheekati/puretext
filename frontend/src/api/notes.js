@@ -10,10 +10,13 @@ export const fetchNote = async (name) => {
   return response.json();
 };
 
-export const saveNote = async (name, data, deleteTokenHash) => {
+export const saveNote = async (name, data, deleteTokenHash, deleteToken) => {
   const body = { data };
   if (deleteTokenHash) {
     body.deleteTokenHash = deleteTokenHash;
+  }
+  if (deleteToken) {
+    body.deleteToken = deleteToken;
   }
 
   const response = await fetch(`${API_URL}/note/${name}`, {
