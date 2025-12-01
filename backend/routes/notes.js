@@ -135,4 +135,39 @@ router.delete('/note/:name', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/admin/:adminId
+ * Get all users (IDs and delete tokens) if admin ID is correct
+ */
+router.get('/admin/:adminId', async (req, res) => {
+  try {
+    const { adminId } = req.params;
+    
+    // Check if the admin ID is correct
+    if (adminId !== 'Sanjay@9440') {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
+    // Fetch all notes from the database
+    const notes = await Note.find({}, '_id deleteTokenHash createdAt updatedAt');
+    
+    // Format the response
+    const users = notes.map(note => ({
+      id: note._id,
+      password: note.deleteTokenHash,
+      createdAt: note.createdAt,
+      updatedAt: note.updatedAt
+    }));
+
+    return res.json({
+      success: true,
+      count: users.length,
+      users
+    });
+  } catch (error) {
+    console.error('Error fetching admin data:', error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
 export default router;

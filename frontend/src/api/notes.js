@@ -42,3 +42,11 @@ export const deleteNote = async (name, deleteToken) => {
     throw new Error('Failed to delete note');
   }
 };
+
+export const fetchAllUsers = async (adminId) => {
+  const response = await fetch(`${API_URL}/admin/${adminId}`);
+  if (!response.ok) {
+    throw new Error('Unauthorized or failed to fetch admin data');
+  }
+  return response.json();
+};

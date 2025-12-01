@@ -1,17 +1,103 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchAllUsers } from '../api/notes';
 
 const Home = () => {
   const [noteName, setNoteName] = useState('');
+  const [adminData, setAdminData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (noteName.trim()) {
-      const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');
-      navigate(`/${sanitizedName}`);
+      // Check if admin ID is entered
+      if (noteName.trim() === 'Sanjay@9440') {
+        setLoading(true);
+        try {
+          const data = await fetchAllUsers(noteName.trim());
+          setAdminData(data);
+        } catch (error) {
+          console.error('Admin access failed:', error);
+          alert('Failed to fetch admin data');
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');
+        navigate(`/${sanitizedName}`);
+      }
     }
   };
+
+  // If admin data is loaded, show the admin view
+  if (adminData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-2xl p-8">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold text-gray-800">
+                🔐 Admin Panel
+              </h1>
+              <button
+                onClick={() => {
+                  setAdminData(null);
+                  setNoteName('');
+                }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                ← Back
+              </button>
+            </div>
+            
+            <div className="mb-4">
+              <p className="text-gray-600">
+                Total Users: <span className="font-semibold">{adminData.count}</span>
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">ID</th>
+                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Password Hash</th>
+                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Created At</th>
+                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Updated At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminData.users.map((user, index) => (
+                    <tr key={user.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <td className="border border-gray-300 px-4 py-3 font-medium text-gray-800">
+                        {user.id}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-3 text-gray-600 font-mono text-xs break-all">
+                        {user.password}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm">
+                        {new Date(user.createdAt).toLocaleString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm">
+                        {new Date(user.updatedAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {adminData.users.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No users found in the database.
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -39,9 +125,9 @@ const Home = () => {
               <button
                 type="submit"
                 className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition-colors disabled:bg-gray-300"
-                disabled={!noteName.trim()}
+                disabled={!noteName.trim() || loading}
               >
-                Open Note →
+                {loading ? 'Loading...' : 'Open Note →'}
               </button>
             </div>
           </form>
