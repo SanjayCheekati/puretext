@@ -357,7 +357,7 @@ const NoteEditor = () => {
     return <div>Error loading note</div>;
   }
 
-  const currentTab = noteData.tabs[noteData.activeTab];
+  const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
@@ -377,7 +377,7 @@ const NoteEditor = () => {
                 disabled={isSaving}
                 className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm disabled:bg-gray-400 whitespace-nowrap"
               >
-                {isSaving ? '⟳' : '💾'} <span className="hidden sm:inline">{isSaving ? 'Saving...' : 'Save'}</span>
+                {isSaving ? '⟳ Saving...' : '💾 Save'}
               </button>
             )}
 
@@ -385,8 +385,7 @@ const NoteEditor = () => {
               onClick={handleCopyURL}
               className="px-2 sm:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap"
             >
-              <span className="sm:hidden">📤</span>
-              <span className="hidden sm:inline">Share</span>
+              Share
             </button>
 
             {!isLocked && !password && (
@@ -394,7 +393,7 @@ const NoteEditor = () => {
                 onClick={handleLockNote}
                 className="px-2 sm:px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-xs sm:text-sm whitespace-nowrap"
               >
-                🔓 <span className="hidden sm:inline">Lock</span>
+                🔓 Lock
               </button>
             )}
 
@@ -403,7 +402,7 @@ const NoteEditor = () => {
                 onClick={handleChangePassword}
                 className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap"
               >
-                🔒 <span className="hidden sm:inline">Change Password</span>
+                🔒 Change Password
               </button>
             )}
           </div>
@@ -411,12 +410,12 @@ const NoteEditor = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-gray-200 border-b border-gray-300 px-2 sm:px-4 py-2 flex justify-center overflow-x-auto">
-        <div className="flex flex-wrap items-center gap-1 sm:gap-2 max-w-4xl w-full">
+      <div className="bg-gray-200 border-b border-gray-300 px-2 sm:px-4 py-2 relative z-10">
+        <div className="flex flex-wrap items-center gap-2 justify-center min-h-[40px]">
         {noteData.tabs.map((tab, index) => (
           <div
             key={tab.id}
-            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
+            className={`flex items-center gap-2 px-3 py-1 rounded ${
               index === noteData.activeTab
                 ? 'bg-white text-gray-900 border border-gray-400'
                 : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
@@ -424,7 +423,7 @@ const NoteEditor = () => {
           >
             <button
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
-              className="font-medium focus:outline-none truncate max-w-[100px] sm:max-w-none"
+              className="font-medium focus:outline-none"
             >
               {tab.name}
             </button>
@@ -441,10 +440,9 @@ const NoteEditor = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className="px-2 sm:px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-xs sm:text-sm font-medium focus:outline-none whitespace-nowrap"
+          className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-medium focus:outline-none whitespace-nowrap"
         >
-          <span className="sm:hidden">+</span>
-          <span className="hidden sm:inline">+ Add Tab</span>
+          + Add Tab
         </button>
         </div>
       </div>
@@ -523,7 +521,7 @@ const NoteEditor = () => {
         title="Scroll to Top"
       >
         <span>⬆️</span>
-        <span className="hidden sm:inline">Top</span>
+        <span>Top</span>
       </button>
     </div>
   );
