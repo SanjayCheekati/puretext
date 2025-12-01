@@ -362,47 +362,48 @@ const NoteEditor = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Header */}
-      <div className="bg-blue-900 border-b border-blue-800 px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-white">Puretext</h1>
-            <span className="text-gray-400">/ {noteName}</span>
-            <span className="text-xs text-gray-500">| Sanjay [Developer]</span>
+      <div className="bg-blue-900 border-b border-blue-800 px-2 sm:px-4 py-2 sm:py-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <h1 className="text-lg sm:text-xl font-bold text-white">Puretext</h1>
+            <span className="text-gray-400 text-sm sm:text-base truncate max-w-[150px] sm:max-w-none">/ {noteName}</span>
+            <span className="hidden md:inline text-xs text-gray-500">| Sanjay [Developer]</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
             {isDirty && (
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm disabled:bg-gray-400"
+                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm disabled:bg-gray-400 whitespace-nowrap"
               >
-                {isSaving ? '⟳ Saving...' : '💾 Save'}
+                {isSaving ? '⟳' : '💾'} <span className="hidden sm:inline">{isSaving ? 'Saving...' : 'Save'}</span>
               </button>
             )}
 
             <button
               onClick={handleCopyURL}
-              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+              className="px-2 sm:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap"
             >
-              Share
+              <span className="sm:hidden">📤</span>
+              <span className="hidden sm:inline">Share</span>
             </button>
 
             {!isLocked && !password && (
               <button
                 onClick={handleLockNote}
-                className="px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm"
+                className="px-2 sm:px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-xs sm:text-sm whitespace-nowrap"
               >
-                🔓 Lock
+                🔓 <span className="hidden sm:inline">Lock</span>
               </button>
             )}
 
             {password && (
               <button
                 onClick={handleChangePassword}
-                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap"
               >
-                🔒 Change Password
+                🔒 <span className="hidden sm:inline">Change Password</span>
               </button>
             )}
           </div>
@@ -410,12 +411,12 @@ const NoteEditor = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-gray-200 border-b border-gray-300 px-4 py-2 flex justify-center">
-        <div className="flex flex-wrap items-center gap-2 max-w-4xl w-full">
+      <div className="bg-gray-200 border-b border-gray-300 px-2 sm:px-4 py-2 flex justify-center overflow-x-auto">
+        <div className="flex flex-wrap items-center gap-1 sm:gap-2 max-w-4xl w-full">
         {noteData.tabs.map((tab, index) => (
           <div
             key={tab.id}
-            className={`flex items-center gap-2 px-3 py-1 rounded ${
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${
               index === noteData.activeTab
                 ? 'bg-white text-gray-900 border border-gray-400'
                 : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
@@ -423,7 +424,7 @@ const NoteEditor = () => {
           >
             <button
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
-              className="font-medium focus:outline-none"
+              className="font-medium focus:outline-none truncate max-w-[100px] sm:max-w-none"
             >
               {tab.name}
             </button>
@@ -440,18 +441,19 @@ const NoteEditor = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-medium focus:outline-none"
+          className="px-2 sm:px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-xs sm:text-sm font-medium focus:outline-none whitespace-nowrap"
         >
-          + Add Tab
+          <span className="sm:hidden">+</span>
+          <span className="hidden sm:inline">+ Add Tab</span>
         </button>
         </div>
       </div>
 
       {/* Editor */}
-      <div className="flex-1 p-4 flex justify-center bg-gray-100">
-        <div className="w-full max-w-4xl h-full flex gap-4">
+      <div className="flex-1 p-2 sm:p-4 flex justify-center bg-gray-100">
+        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4">
           {/* Line numbers */}
-          <div className="flex-shrink-0 pt-6 pr-2 text-right text-gray-400 text-lg font-mono leading-relaxed select-none">
+          <div className="hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right text-gray-400 text-lg font-mono leading-relaxed select-none flex-col">
             {currentTab.content.split('\n').map((_, i) => (
               <div key={i}>{i + 1}</div>
             ))}
@@ -460,7 +462,7 @@ const NoteEditor = () => {
           <textarea
             value={currentTab.content}
             onChange={(e) => handleContentChange(e.target.value)}
-            className="flex-1 h-full p-6 pl-2 bg-white text-gray-900 border-0 rounded-lg focus:outline-none resize-none font-mono text-lg leading-relaxed shadow-sm"
+            className="flex-1 h-full p-3 sm:p-6 sm:pl-2 bg-white text-gray-900 border-0 rounded-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm"
             placeholder="Start typing..."
             disabled={isLocked}
           />
@@ -517,11 +519,11 @@ const NoteEditor = () => {
       {/* Scroll to Top Button */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 shadow-lg flex items-center gap-2 focus:outline-none"
+        className="fixed bottom-4 right-4 bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 shadow-lg flex items-center gap-1 sm:gap-2 focus:outline-none text-sm sm:text-base"
         title="Scroll to Top"
       >
         <span>⬆️</span>
-        <span>Top</span>
+        <span className="hidden sm:inline">Top</span>
       </button>
     </div>
   );
