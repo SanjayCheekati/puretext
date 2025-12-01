@@ -57,9 +57,14 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Your data is encrypted in your browser.
-        </p>
+        <div className="text-center mt-6">
+          <p className="text-sm text-gray-600">
+            Your data is encrypted in your browser.
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            Built by Cheekati Sanjay Goud [Developer]
+          </p>
+        </div>
       </div>
     </div>
   );
