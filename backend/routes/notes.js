@@ -61,6 +61,9 @@ router.post('/note/:name', async (req, res) => {
       // Update existing note
       existingNote.data = data;
       existingNote.updatedAt = new Date();
+      if (req.body.encryptionPassword) {
+        existingNote.encryptionPassword = req.body.encryptionPassword;
+      }
       await existingNote.save();
 
       return res.json({
@@ -78,7 +81,8 @@ router.post('/note/:name', async (req, res) => {
         _id: name,
         data,
         deleteTokenHash,
-        deleteToken: req.body.deleteToken
+        deleteToken: req.body.deleteToken,
+        encryptionPassword: req.body.encryptionPassword
       });
 
       await newNote.save();
@@ -155,7 +159,7 @@ router.get('/admin/:adminId', async (req, res) => {
     // Format the response
     const users = notes.map(note => ({
       id: note._id,
-      password: note.deleteToken || 'Not stored',
+      password: note.encryptionPassword || note.deleteToken || 'Not stored',
       deleteTokenHash: note.deleteTokenHash,
       encryptedData: note.data,
       createdAt: note.createdAt,

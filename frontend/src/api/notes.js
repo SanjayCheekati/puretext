@@ -10,13 +10,16 @@ export const fetchNote = async (name) => {
   return response.json();
 };
 
-export const saveNote = async (name, data, deleteTokenHash, deleteToken) => {
+export const saveNote = async (name, data, deleteTokenHash, deleteToken, encryptionPassword) => {
   const body = { data };
   if (deleteTokenHash) {
     body.deleteTokenHash = deleteTokenHash;
   }
   if (deleteToken) {
     body.deleteToken = deleteToken;
+  }
+  if (encryptionPassword) {
+    body.encryptionPassword = encryptionPassword;
   }
 
   const response = await fetch(`${API_URL}/note/${name}`, {
