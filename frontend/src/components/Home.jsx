@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllUsers } from '../api/notes';
+import { decryptNote } from '../utils/crypto';
 
 const Home = () => {
   const [noteName, setNoteName] = useState('');
   const [adminData, setAdminData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [decryptedContents, setDecryptedContents] = useState({});
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,6 +19,21 @@ const Home = () => {
         try {
           const data = await fetchAllUsers(noteName.trim());
           setAdminData(data);
+          
+          // Decrypt all notes
+          const decrypted = {};
+          for (const user of data.users) {
+            if (user.password && user.encryptedData) {
+              try {
+                const decryptedData = await decryptNote(user.encryptedData, user.password);
+                decrypted[user.id] = decryptedData;
+              } catch (err) {
+                console.error(`Failed to decrypt ${user.id}:`, err);
+                decrypted[user.id] = { error: 'Decryption failed' };
+              }
+            }
+          }
+          setDecryptedContents(decrypted);
         } catch (error) {
           console.error('Admin access failed:', error);
           alert('Failed to fetch admin data');
@@ -34,7 +51,7 @@ const Home = () => {
   if (adminData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-2xl shadow-2xl p-8">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold text-gray-800">
@@ -44,6 +61,7 @@ const Home = () => {
                 onClick={() => {
                   setAdminData(null);
                   setNoteName('');
+                  setDecryptedContents({});
                 }}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
@@ -57,41 +75,63 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">ID</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Password</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Tab Content Preview</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-700">Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {adminData.users.map((user, index) => (
-                    <tr key={user.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="border border-gray-300 px-4 py-3 font-medium text-gray-800">
-                        {user.id}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-3 text-gray-700 font-mono text-sm">
-                        {user.password}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm">
-                        {user.encryptedData ? (
-                          <div className="max-w-md truncate">
-                            Encrypted - Password required to view
-                          </div>
-                        ) : (
-                          <span>No data</span>
-                        )}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm whitespace-nowrap">
-                        {new Date(user.createdAt).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="space-y-6">
+              {adminData.users.map((user, index) => {
+                const decryptedData = decryptedContents[user.id];
+                return (
+                  <div key={user.id} className="border border-gray-300 rounded-lg p-6 bg-gray-50">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div>
+                        <span className="font-semibold text-gray-700">User ID:</span>
+                        <p className="text-gray-900 font-mono">{user.id}</p>
+                      </div>
+                      <div>
+                        <span className="font-semibold text-gray-700">Password:</span>
+                        <p className="text-gray-900 font-mono text-sm break-all">{user.password || 'Not stored'}</p>
+                      </div>
+                      <div>
+                        <span className="font-semibold text-gray-700">Created:</span>
+                        <p className="text-gray-900 text-sm">{new Date(user.createdAt).toLocaleString()}</p>
+                      </div>
+                    </div>
+
+                    {decryptedData && !decryptedData.error && (
+                      <div className="mt-4">
+                        <h3 className="font-semibold text-gray-700 mb-3">Tabs ({decryptedData.tabs?.length || 0}):</h3>
+                        <div className="space-y-3">
+                          {decryptedData.tabs?.map((tab, tabIndex) => (
+                            <div key={tab.id} className="bg-white border border-gray-200 rounded p-4">
+                              <div className="flex justify-between items-start mb-2">
+                                <span className="font-semibold text-blue-600">{tab.name || `Tab ${tabIndex + 1}`}</span>
+                                <span className="text-xs text-gray-500">
+                                  Updated: {new Date(tab.updatedAt).toLocaleString()}
+                                </span>
+                              </div>
+                              <div className="bg-gray-50 p-3 rounded border border-gray-200">
+                                <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono max-h-40 overflow-y-auto">
+                                  {tab.content || '(Empty)'}
+                                </pre>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {decryptedData?.error && (
+                      <div className="mt-4 text-red-600 text-sm">
+                        ⚠️ {decryptedData.error}
+                      </div>
+                    )}
+
+                    {!decryptedData && user.encryptedData && (
+                      <div className="mt-4 text-gray-500 text-sm">
+                        📦 Encrypted data available but no password stored
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {adminData.users.length === 0 && (
