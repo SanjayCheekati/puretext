@@ -367,7 +367,7 @@ const NoteEditor = () => {
           <div className="flex items-center gap-2 sm:gap-4">
             <h1 className="text-lg sm:text-xl font-bold text-white">Puretext</h1>
             <span className="text-gray-400 text-sm sm:text-base truncate max-w-[150px] sm:max-w-none">/ {noteName}</span>
-            <span className="hidden md:inline text-xs text-gray-500">| Sanjay [Developer]</span>
+            <span className="hidden md:inline text-xs text-gray-500">| Built by San</span>
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2 flex-wrap">

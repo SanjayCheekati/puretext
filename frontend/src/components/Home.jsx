@@ -62,7 +62,7 @@ const Home = () => {
             Your data is encrypted in your browser.
           </p>
           <p className="text-xs text-gray-500 mt-2">
-            Sanjay [Developer]
+            Built by San
           </p>
         </div>
       </div>
