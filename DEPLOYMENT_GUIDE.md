@@ -87,7 +87,7 @@ git push origin master
    
    | Name | Value |
    |------|-------|
-   | `MONGODB_URI` | `mongodb+srv://sanjay:ExEXAzADPcwLDRyg@privatetext.q4ccfax.mongodb.net/?appName=privatetext` |
+   | `MONGODB_URI` | Your MongoDB Atlas connection string (from MongoDB Atlas dashboard) |
    | `PORT` | `5000` |
    | `NODE_ENV` | `production` |
 
@@ -111,7 +111,7 @@ const API_URL = import.meta.env.PROD
   ? 'https://your-backend-url.vercel.app/api'  // Replace with your actual backend URL
   : 'http://localhost:5000/api';
 ```
-
+ 
 2. **Create `vercel.json` in the frontend folder**
 
 Create file: `frontend/vercel.json`
