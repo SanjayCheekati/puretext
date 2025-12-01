@@ -8,14 +8,14 @@ dotenv.config();
 
 const app = express();
 
-// CORS Configuration
+// CORS Configuration - Allow all origins for Vercel deployments
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3001',
   'https://puretext.me',
   'https://www.puretext.me',
-  'https://puretext-frontend.vercel.app',
-  'https://puretext-backend.vercel.app',
-  /https:\/\/puretext-.*\.vercel\.app$/  // Allow all Vercel preview deployments
+  /^https:\/\/puretext.*\.vercel\.app$/,  // All Vercel deployments (production & preview)
+  /^https:\/\/.*\.vercel\.app$/  // All Vercel preview URLs
 ];
 
 app.use(cors({
