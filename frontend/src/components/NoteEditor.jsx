@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { NoteData, Tab } from '../types';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -8,30 +7,30 @@ import PasswordDialog from './PasswordDialog';
 import ConfirmDialog from './ConfirmDialog';
 import TextInputDialog from './TextInputDialog';
 
-const NoteEditor: React.FC = () => {
-  const { noteName } = useParams<{ noteName: string }>();
+const NoteEditor = () => {
+  const { noteName } = useParams();
   const navigate = useNavigate();
 
   // State
-  const [noteData, setNoteData] = useState<NoteData | null>(null);
+  const [noteData, setNoteData] = useState(null);
   const [isLocked, setIsLocked] = useState(true);
-  const [password, setPassword] = useState<string>('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
 
   // Dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  const [passwordDialogMode, setPasswordDialogMode] = useState<'unlock' | 'lock' | 'change'>('unlock');
+  const [passwordDialogMode, setPasswordDialogMode] = useState('unlock');
   const [passwordError, setPasswordError] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showTabNameDialog, setShowTabNameDialog] = useState(false);
-  const [tabNameDialogMode, setTabNameDialogMode] = useState<'add' | 'rename'>('add');
-  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
+  const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const isPasswordProcessing = useRef(false);
-  const autoSaveTimeoutRef = useRef<number | null>(null);
+  const autoSaveTimeoutRef = useRef(null);
 
   // Load note on mount
   useEffect(() => {
@@ -62,7 +61,7 @@ const NoteEditor: React.FC = () => {
   const loadNote = async () => {
     try {
       setIsLoading(true);
-      const response = await fetchNote(noteName!);
+      const response = await fetchNote(noteName);
 
       if (response.exists && response.data) {
         // Note exists and is encrypted - need password
@@ -70,7 +69,7 @@ const NoteEditor: React.FC = () => {
         setPasswordDialogMode('unlock');
       } else {
         // New note - create default structure
-        const newNote: NoteData = {
+        const newNote = {
           tabs: [{
             id: crypto.randomUUID(),
             name: 'Tab 1',
@@ -91,7 +90,7 @@ const NoteEditor: React.FC = () => {
     }
   };
 
-  const handlePasswordSubmit = async (inputPassword: string) => {
+  const handlePasswordSubmit = async (inputPassword) => {
     if (isPasswordProcessing.current) return;
     isPasswordProcessing.current = true;
 
@@ -100,7 +99,7 @@ const NoteEditor: React.FC = () => {
 
       if (passwordDialogMode === 'unlock') {
         // Decrypt existing note
-        const response = await fetchNote(noteName!);
+        const response = await fetchNote(noteName);
         if (response.exists && response.data) {
           // Try to decrypt with user password first
           try {
@@ -147,7 +146,7 @@ const NoteEditor: React.FC = () => {
     }
   };
 
-  const saveNoteWithPassword = async (pwd: string) => {
+  const saveNoteWithPassword = async (pwd) => {
     if (!noteData || !noteName) return;
 
     try {
@@ -155,7 +154,7 @@ const NoteEditor: React.FC = () => {
       const encrypted = await encryptNote(noteData, pwd);
 
       // Check if we need to create delete token
-      let deleteTokenHash: string | undefined;
+      let deleteTokenHash;
       let existingToken = getDeleteToken(noteName);
 
       if (!existingToken) {
@@ -189,7 +188,7 @@ const NoteEditor: React.FC = () => {
       const encrypted = await encryptNote(noteData, defaultPassword);
 
       // Check if we need to create delete token
-      let deleteTokenHash: string | undefined;
+      let deleteTokenHash;
       let existingToken = getDeleteToken(noteName);
 
       if (!existingToken) {
@@ -208,7 +207,7 @@ const NoteEditor: React.FC = () => {
     }
   };
 
-  const handleContentChange = (content: string) => {
+  const handleContentChange = (content) => {
     if (!noteData) return;
 
     const updatedTabs = [...noteData.tabs];
@@ -234,7 +233,7 @@ const NoteEditor: React.FC = () => {
     if (!noteData) return;
     
     const newTabNumber = noteData.tabs.length + 1;
-    const newTab: Tab = {
+    const newTab = {
       id: crypto.randomUUID(),
       name: `Tab ${newTabNumber}`,
       content: '',
@@ -250,7 +249,7 @@ const NoteEditor: React.FC = () => {
     setIsDirty(true);
   };
 
-  const handleTabNameSubmit = (name: string) => {
+  const handleTabNameSubmit = (name) => {
     if (!noteData) return;
 
     if (tabNameDialogMode === 'rename') {
@@ -271,7 +270,7 @@ const NoteEditor: React.FC = () => {
     setShowTabNameDialog(false);
   };
 
-  const handleDeleteTab = (index: number) => {
+  const handleDeleteTab = (index) => {
     if (!noteData || noteData.tabs.length === 1) return;
 
     const updatedTabs = noteData.tabs.filter((_, i) => i !== index);
@@ -312,7 +311,7 @@ const NoteEditor: React.FC = () => {
       await deleteNote(noteName, token);
       removeDeleteToken(noteName);
       navigate('/');
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || 'Failed to delete note');
     } finally {
       setShowDeleteDialog(false);

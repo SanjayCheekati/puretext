@@ -12,21 +12,21 @@ const IV_LENGTH = 12;
 /**
  * Generate a random salt
  */
-export const generateSalt = (): Uint8Array => {
+export const generateSalt = () => {
   return crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
 };
 
 /**
  * Generate a random IV (Initialization Vector)
  */
-export const generateIV = (): Uint8Array => {
+export const generateIV = () => {
   return crypto.getRandomValues(new Uint8Array(IV_LENGTH));
 };
 
 /**
  * Generate a random delete token (32 bytes = 256 bits)
  */
-export const generateDeleteToken = (): string => {
+export const generateDeleteToken = () => {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   return arrayBufferToBase64(bytes);
 };
@@ -34,7 +34,7 @@ export const generateDeleteToken = (): string => {
 /**
  * Convert ArrayBuffer to Base64 string
  */
-export const arrayBufferToBase64 = (buffer: ArrayBuffer | Uint8Array): string => {
+export const arrayBufferToBase64 = (buffer) => {
   const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
   let binary = '';
   for (let i = 0; i < bytes.byteLength; i++) {
@@ -46,7 +46,7 @@ export const arrayBufferToBase64 = (buffer: ArrayBuffer | Uint8Array): string =>
 /**
  * Convert Base64 string to Uint8Array
  */
-export const base64ToArrayBuffer = (base64: string): Uint8Array => {
+export const base64ToArrayBuffer = (base64) => {
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
@@ -57,14 +57,8 @@ export const base64ToArrayBuffer = (base64: string): Uint8Array => {
 
 /**
  * Derive a cryptographic key from a password using PBKDF2
- * @param password - The user's password
- * @param salt - Salt for key derivation
- * @returns CryptoKey for AES-GCM encryption
  */
-export const deriveKey = async (
-  password: string,
-  salt: Uint8Array
-): Promise<CryptoKey> => {
+export const deriveKey = async (password, salt) => {
   const encoder = new TextEncoder();
   const passwordBuffer = encoder.encode(password);
 
@@ -96,16 +90,8 @@ export const deriveKey = async (
 
 /**
  * Encrypt data using AES-GCM
- * @param key - The encryption key
- * @param iv - Initialization vector
- * @param data - The plaintext to encrypt (as string)
- * @returns Encrypted ciphertext as Base64
  */
-export const encrypt = async (
-  key: CryptoKey,
-  iv: Uint8Array,
-  data: string
-): Promise<string> => {
+export const encrypt = async (key, iv, data) => {
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(data);
 
@@ -123,16 +109,8 @@ export const encrypt = async (
 
 /**
  * Decrypt data using AES-GCM
- * @param key - The decryption key
- * @param iv - Initialization vector
- * @param ciphertext - The ciphertext to decrypt (Base64)
- * @returns Decrypted plaintext as string
  */
-export const decrypt = async (
-  key: CryptoKey,
-  iv: Uint8Array,
-  ciphertext: string
-): Promise<string> => {
+export const decrypt = async (key, iv, ciphertext) => {
   const ciphertextBuffer = base64ToArrayBuffer(ciphertext);
 
   const decryptedBuffer = await crypto.subtle.decrypt(
@@ -150,19 +128,8 @@ export const decrypt = async (
 
 /**
  * Encrypt an entire note object
- * @param noteData - The note data to encrypt
- * @param password - The user's password
- * @returns Encrypted data bundle with salt, iv, and ciphertext
  */
-export const encryptNote = async (
-  noteData: any,
-  password: string
-): Promise<{
-  version: number;
-  salt: string;
-  iv: string;
-  ciphertext: string;
-}> => {
+export const encryptNote = async (noteData, password) => {
   const salt = generateSalt();
   const iv = generateIV();
   const key = await deriveKey(password, salt);
@@ -180,19 +147,8 @@ export const encryptNote = async (
 
 /**
  * Decrypt an entire note object
- * @param encryptedData - The encrypted data bundle
- * @param password - The user's password
- * @returns Decrypted note data
  */
-export const decryptNote = async (
-  encryptedData: {
-    version: number;
-    salt: string;
-    iv: string;
-    ciphertext: string;
-  },
-  password: string
-): Promise<any> => {
+export const decryptNote = async (encryptedData, password) => {
   const salt = new Uint8Array(base64ToArrayBuffer(encryptedData.salt));
   const iv = new Uint8Array(base64ToArrayBuffer(encryptedData.iv));
   const key = await deriveKey(password, salt);

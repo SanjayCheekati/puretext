@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 
-interface TextInputDialogProps {
-  isOpen: boolean;
-  onSubmit: (value: string) => void;
-  onCancel: () => void;
-  title: string;
-  message: string;
-  placeholder?: string;
-  defaultValue?: string;
-}
-
-const TextInputDialog: React.FC<TextInputDialogProps> = ({
+const TextInputDialog = ({
   isOpen,
   onSubmit,
   onCancel,
@@ -23,7 +13,7 @@ const TextInputDialog: React.FC<TextInputDialogProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (value.trim()) {
       onSubmit(value.trim());

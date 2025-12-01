@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Home: React.FC = () => {
+const Home = () => {
   const [noteName, setNoteName] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (noteName.trim()) {
       const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');

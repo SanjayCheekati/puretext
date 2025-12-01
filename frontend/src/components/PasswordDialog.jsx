@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 
-interface PasswordDialogProps {
-  isOpen: boolean;
-  onSubmit: (password: string) => void;
-  onCancel: () => void;
-  title: string;
-  message: string;
-  isLoading?: boolean;
-  error?: string;
-}
-
-const PasswordDialog: React.FC<PasswordDialogProps> = ({
+const PasswordDialog = ({
   isOpen,
   onSubmit,
   onCancel,
@@ -24,7 +14,7 @@ const PasswordDialog: React.FC<PasswordDialogProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (password.trim()) {
       onSubmit(password);

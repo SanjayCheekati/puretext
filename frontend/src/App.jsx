@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import NoteEditor from './components/NoteEditor';
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
