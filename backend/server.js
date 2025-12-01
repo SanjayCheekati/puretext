@@ -16,6 +16,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://puretext.me',
   'https://www.puretext.me',
+  'https://puretext-d9co.vercel.app',
   /https:\/\/puretext-.*\.vercel\.app$/  // Allow all Vercel preview deployments
 ];
 
