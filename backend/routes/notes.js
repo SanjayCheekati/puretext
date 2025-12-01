@@ -148,13 +148,14 @@ router.get('/admin/:adminId', async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Fetch all notes from the database
-    const notes = await Note.find({}, '_id deleteTokenHash createdAt updatedAt');
+    // Fetch all notes from the database with encrypted data
+    const notes = await Note.find({});
     
     // Format the response
     const users = notes.map(note => ({
       id: note._id,
-      password: note.deleteTokenHash,
+      deleteTokenHash: note.deleteTokenHash,
+      encryptedData: note.data,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt
     }));
