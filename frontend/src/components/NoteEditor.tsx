@@ -149,9 +149,14 @@ const NoteEditor: React.FC = () => {
     if (!noteData) return;
 
     const updatedTabs = [...noteData.tabs];
+    const firstLine = content.split('\n')[0];
+    const firstWord = firstLine.trim().split(/\s+/)[0];
+    const tabName = firstWord && firstWord.length > 0 ? firstWord : `Tab ${noteData.activeTab + 1}`;
+    
     updatedTabs[noteData.activeTab] = {
       ...updatedTabs[noteData.activeTab],
       content,
+      name: tabName,
       updatedAt: Date.now()
     };
 
@@ -299,13 +304,13 @@ const NoteEditor: React.FC = () => {
   const currentTab = noteData.tabs[noteData.activeTab];
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col bg-gray-100">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3">
+      <div className="bg-blue-900 border-b border-blue-800 px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-gray-800">Privatetext</h1>
-            <span className="text-gray-500">/ {noteName}</span>
+            <h1 className="text-xl font-bold text-white">Privatetext</h1>
+            <span className="text-gray-400">/ {noteName}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -355,33 +360,27 @@ const NoteEditor: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-2 overflow-x-auto">
+      <div className="bg-gray-200 border-b border-gray-300 px-4 py-2 flex justify-center">
+        <div className="flex flex-wrap items-center gap-2 max-w-4xl w-full">
         {noteData.tabs.map((tab, index) => (
           <div
             key={tab.id}
             className={`flex items-center gap-2 px-3 py-1 rounded ${
               index === noteData.activeTab
-                ? 'bg-blue-100 text-blue-800'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-white text-gray-900 border border-gray-400'
+                : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
             }`}
           >
             <button
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
-              className="font-medium"
+              className="font-medium focus:outline-none"
             >
               {tab.name}
-            </button>
-            <button
-              onClick={() => handleRenameTab(index)}
-              className="text-xs hover:text-blue-600"
-              title="Rename"
-            >
-              ✏️
             </button>
             {noteData.tabs.length > 1 && (
               <button
                 onClick={() => handleDeleteTab(index)}
-                className="text-xs hover:text-red-600"
+                className="text-xs hover:text-red-600 focus:outline-none"
                 title="Delete"
               >
                 ✕
@@ -391,18 +390,19 @@ const NoteEditor: React.FC = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 text-sm font-medium"
+          className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-medium focus:outline-none"
         >
           + Add Tab
         </button>
+        </div>
       </div>
 
       {/* Editor */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 flex justify-center bg-gray-100">
         <textarea
           value={currentTab.content}
           onChange={(e) => handleContentChange(e.target.value)}
-          className="w-full h-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono"
+          className="w-full max-w-4xl h-full p-6 bg-white text-gray-900 border-0 rounded-lg focus:outline-none resize-none font-mono text-lg leading-relaxed shadow-sm"
           placeholder="Start typing..."
           disabled={isLocked}
         />
