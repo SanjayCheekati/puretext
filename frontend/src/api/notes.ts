@@ -1,5 +1,5 @@
 const API_URL = import.meta.env.PROD 
-  ? 'https://puretext-sepia.vercel.app/api'
+  ? 'https://puretext-backend.vercel.app/api'
   : 'http://localhost:5000/api';
 
 export interface EncryptedData {
