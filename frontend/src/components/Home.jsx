@@ -32,7 +32,7 @@ const Home = () => {
                 type="text"
                 value={noteName}
                 onChange={(e) => setNoteName(e.target.value)}
-                placeholder="Enter note name"
+                placeholder="Enter id or name"
                 className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-lg"
                 autoFocus
               />
