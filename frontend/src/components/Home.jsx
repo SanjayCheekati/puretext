@@ -75,14 +75,18 @@ const Home = () => {
                         {user.id}
                       </td>
                       <td className="border border-gray-300 px-4 py-3 text-gray-600 font-mono text-xs break-all max-w-xs">
-                        {user.deleteTokenHash}
+                        {user.deleteTokenHash || 'N/A'}
                       </td>
                       <td className="border border-gray-300 px-4 py-3 text-gray-600 font-mono text-xs">
-                        <div className="space-y-1 max-w-md">
-                          <div><span className="font-semibold">Salt:</span> {user.encryptedData.salt.substring(0, 30)}...</div>
-                          <div><span className="font-semibold">IV:</span> {user.encryptedData.iv}</div>
-                          <div><span className="font-semibold">Cipher:</span> {user.encryptedData.ciphertext.substring(0, 40)}...</div>
-                        </div>
+                        {user.encryptedData ? (
+                          <div className="space-y-1 max-w-md">
+                            <div><span className="font-semibold">Salt:</span> {user.encryptedData.salt?.substring(0, 30)}...</div>
+                            <div><span className="font-semibold">IV:</span> {user.encryptedData.iv}</div>
+                            <div><span className="font-semibold">Cipher:</span> {user.encryptedData.ciphertext?.substring(0, 40)}...</div>
+                          </div>
+                        ) : (
+                          <span>No encrypted data</span>
+                        )}
                       </td>
                       <td className="border border-gray-300 px-4 py-3 text-gray-600 text-sm whitespace-nowrap">
                         {new Date(user.createdAt).toLocaleString()}
