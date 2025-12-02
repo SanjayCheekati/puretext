@@ -39,15 +39,19 @@ const NoteEditor = () => {
     }
   }, [noteName]);
 
-  // Auto-save when no password and content changes
+  // Auto-save when content changes (with or without password)
   useEffect(() => {
-    if (noteData && !password && isDirty && !isLocked) {
+    if (noteData && isDirty && !isLocked) {
       if (autoSaveTimeoutRef.current) {
         window.clearTimeout(autoSaveTimeoutRef.current);
       }
 
       autoSaveTimeoutRef.current = window.setTimeout(() => {
-        handleSaveWithoutPassword();
+        if (password) {
+          saveNoteWithPassword(password);
+        } else {
+          handleSaveWithoutPassword();
+        }
       }, 1500);
     }
 
