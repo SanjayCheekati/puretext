@@ -29,6 +29,10 @@ const NoteEditor = () => {
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [draggedTabIndex, setDraggedTabIndex] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('editorDarkMode');
+    return saved !== null ? JSON.parse(saved) : true; // Default to dark mode
+  });
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
@@ -344,6 +348,12 @@ const NoteEditor = () => {
     setShowPasswordDialog(true);
   };
 
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    localStorage.setItem('editorDarkMode', JSON.stringify(newMode));
+  };
+
   const handleDeleteNote = async () => {
     if (!noteName) return;
 
@@ -428,6 +438,14 @@ const NoteEditor = () => {
             )}
 
             <button
+              onClick={toggleDarkMode}
+              className="px-2 sm:px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 text-xs sm:text-sm whitespace-nowrap"
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+            </button>
+
+            <button
               onClick={handleCopyURL}
               className="px-2 sm:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap"
             >
@@ -499,10 +517,10 @@ const NoteEditor = () => {
       </div>
 
       {/* Editor */}
-      <div className="flex-1 p-2 sm:p-4 flex justify-center bg-gray-100">
+      <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
         <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4">
           {/* Line numbers */}
-          <div className="hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right text-gray-400 text-lg font-mono leading-relaxed select-none flex-col">
+          <div className={`hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right ${isDarkMode ? 'text-gray-600' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
             {currentTab.content.split('\n').map((_, i) => (
               <div key={i}>{i + 1}</div>
             ))}
@@ -511,7 +529,11 @@ const NoteEditor = () => {
           <textarea
             value={currentTab.content}
             onChange={(e) => handleContentChange(e.target.value)}
-            className="flex-1 h-full p-3 sm:p-6 sm:pl-2 bg-white text-gray-900 border-0 rounded-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm"
+            className={`flex-1 h-full p-3 sm:p-6 sm:pl-2 ${
+              isDarkMode 
+                ? 'bg-gray-800 text-gray-100 placeholder-gray-500' 
+                : 'bg-white text-gray-900 placeholder-gray-400'
+            } border-0 rounded-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm`}
             placeholder="Start typing..."
             disabled={isLocked}
           />
