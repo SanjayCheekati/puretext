@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -431,42 +432,47 @@ const NoteEditor = () => {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm disabled:bg-gray-400 whitespace-nowrap"
+                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm disabled:bg-gray-400 whitespace-nowrap flex items-center gap-1"
               >
-                {isSaving ? '⟳ Saving...' : '💾 Save'}
+                <Save size={16} />
+                <span>{isSaving ? 'Saving...' : 'Save'}</span>
               </button>
             )}
 
             <button
               onClick={toggleDarkMode}
-              className="px-2 sm:px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 text-xs sm:text-sm whitespace-nowrap"
+              className="px-2 sm:px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+              {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+              <span>{isDarkMode ? 'Light' : 'Dark'}</span>
             </button>
 
             <button
               onClick={handleCopyURL}
-              className="px-2 sm:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap"
+              className="px-2 sm:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
             >
-              Share
+              <Share2 size={16} />
+              <span>Share</span>
             </button>
 
             {!isLocked && !password && (
               <button
                 onClick={handleLockNote}
-                className="px-2 sm:px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-xs sm:text-sm whitespace-nowrap"
+                className="px-2 sm:px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
               >
-                🔓 Lock
+                <Lock size={16} />
+                <span>Lock</span>
               </button>
             )}
 
             {password && (
               <button
                 onClick={handleChangePassword}
-                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap"
+                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
               >
-                🔒 Change Password
+                <Key size={16} />
+                <span>Change Password</span>
               </button>
             )}
           </div>
