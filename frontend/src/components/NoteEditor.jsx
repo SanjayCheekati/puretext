@@ -34,6 +34,7 @@ const NoteEditor = () => {
     const saved = localStorage.getItem('editorDarkMode');
     return saved !== null ? JSON.parse(saved) : true; // Default to dark mode
   });
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
@@ -385,7 +386,10 @@ const NoteEditor = () => {
     const currentTab = noteData.tabs[noteData.activeTab];
     if (currentTab && currentTab.content) {
       navigator.clipboard.writeText(currentTab.content);
-      alert('Tab content copied to clipboard!');
+      setShowCopiedMessage(true);
+      setTimeout(() => {
+        setShowCopiedMessage(false);
+      }, 2000);
     }
   };
 
@@ -544,17 +548,26 @@ const NoteEditor = () => {
       <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
         <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4 relative">
           {/* Copy button */}
-          <button
-            onClick={handleCopyContent}
-            className={`absolute top-2 right-2 p-2 rounded-lg transition-colors z-10 ${
-              isDarkMode 
-                ? 'text-white hover:bg-zinc-800' 
-                : 'text-gray-900 hover:bg-gray-200'
-            }`}
-            title="Copy tab content"
-          >
-            <Copy size={18} />
-          </button>
+          <div className="absolute top-2 right-2 flex items-center gap-2 z-10">
+            <button
+              onClick={handleCopyContent}
+              className={`p-2 rounded-lg transition-colors ${
+                isDarkMode 
+                  ? 'text-white hover:bg-zinc-800' 
+                  : 'text-gray-900 hover:bg-gray-200'
+              }`}
+              title="Copy tab content"
+            >
+              <Copy size={18} />
+            </button>
+            {showCopiedMessage && (
+              <span className={`text-sm font-medium ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}>
+                Copied
+              </span>
+            )}
+          </div>
           
           {/* Line numbers */}
           <div className={`hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
