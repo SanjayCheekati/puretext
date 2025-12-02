@@ -480,7 +480,7 @@ const NoteEditor = () => {
       </div>
 
       {/* Tabs */}
-      <div className="bg-gray-200 border-b border-gray-300 px-2 sm:px-4 py-2 relative z-10">
+      <div className={`border-b px-2 sm:px-4 py-2 relative z-10 ${isDarkMode ? 'bg-black border-gray-800' : 'bg-gray-200 border-gray-300'}`}>
         <div className="flex flex-wrap items-center gap-2 justify-center min-h-[40px]">
         {noteData.tabs.map((tab, index) => (
           <div
@@ -491,7 +491,11 @@ const NoteEditor = () => {
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
             className={`flex items-center gap-2 px-3 py-1 rounded cursor-move ${
-              index === noteData.activeTab
+              isDarkMode
+                ? index === noteData.activeTab
+                  ? 'bg-zinc-900 text-white border border-zinc-700'
+                  : 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
+                : index === noteData.activeTab
                 ? 'bg-white text-gray-900 border border-gray-400'
                 : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
             } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
@@ -505,7 +509,9 @@ const NoteEditor = () => {
             {noteData.tabs.length > 1 && (
               <button
                 onClick={() => handleDeleteTab(index)}
-                className="text-xs hover:text-red-600 focus:outline-none"
+                className={`text-xs focus:outline-none ${
+                  isDarkMode ? 'hover:text-red-400' : 'hover:text-red-600'
+                }`}
                 title="Delete"
               >
                 ✕
@@ -515,7 +521,11 @@ const NoteEditor = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm font-medium focus:outline-none whitespace-nowrap"
+          className={`px-3 py-1 rounded text-sm font-medium focus:outline-none whitespace-nowrap ${
+            isDarkMode
+              ? 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
+              : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+          }`}
         >
           + Add Tab
         </button>
@@ -523,10 +533,10 @@ const NoteEditor = () => {
       </div>
 
       {/* Editor */}
-      <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+      <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
         <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4">
           {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right ${isDarkMode ? 'text-gray-600' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
+          <div className={`hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
             {currentTab.content.split('\n').map((_, i) => (
               <div key={i}>{i + 1}</div>
             ))}
@@ -537,7 +547,7 @@ const NoteEditor = () => {
             onChange={(e) => handleContentChange(e.target.value)}
             className={`flex-1 h-full p-3 sm:p-6 sm:pl-2 ${
               isDarkMode 
-                ? 'bg-gray-800 text-gray-100 placeholder-gray-500' 
+                ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
                 : 'bg-white text-gray-900 placeholder-gray-400'
             } border-0 rounded-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm`}
             placeholder="Start typing..."
