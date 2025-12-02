@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon } from 'lucide-react';
+import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -381,6 +381,14 @@ const NoteEditor = () => {
     alert('URL copied to clipboard!');
   };
 
+  const handleCopyContent = () => {
+    const currentTab = noteData.tabs[noteData.activeTab];
+    if (currentTab && currentTab.content) {
+      navigator.clipboard.writeText(currentTab.content);
+      alert('Tab content copied to clipboard!');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -534,7 +542,20 @@ const NoteEditor = () => {
 
       {/* Editor */}
       <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
-        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4">
+        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4 relative">
+          {/* Copy button */}
+          <button
+            onClick={handleCopyContent}
+            className={`absolute top-2 right-2 p-2 rounded-lg transition-colors z-10 ${
+              isDarkMode 
+                ? 'text-white hover:bg-zinc-800' 
+                : 'text-gray-900 hover:bg-gray-200'
+            }`}
+            title="Copy tab content"
+          >
+            <Copy size={18} />
+          </button>
+          
           {/* Line numbers */}
           <div className={`hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
             {currentTab.content.split('\n').map((_, i) => (
