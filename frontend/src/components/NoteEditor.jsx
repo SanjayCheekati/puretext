@@ -28,6 +28,7 @@ const NoteEditor = () => {
   const [showTabNameDialog, setShowTabNameDialog] = useState(false);
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [draggedTabIndex, setDraggedTabIndex] = useState(null);
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
@@ -294,6 +295,45 @@ const NoteEditor = () => {
     setIsDirty(true);
   };
 
+  const handleDragStart = (index) => {
+    setDraggedTabIndex(index);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedTabIndex === null || draggedTabIndex === dropIndex) return;
+
+    const updatedTabs = [...noteData.tabs];
+    const [draggedTab] = updatedTabs.splice(draggedTabIndex, 1);
+    updatedTabs.splice(dropIndex, 0, draggedTab);
+
+    // Update active tab index
+    let newActiveTab = noteData.activeTab;
+    if (noteData.activeTab === draggedTabIndex) {
+      newActiveTab = dropIndex;
+    } else if (draggedTabIndex < noteData.activeTab && dropIndex >= noteData.activeTab) {
+      newActiveTab = noteData.activeTab - 1;
+    } else if (draggedTabIndex > noteData.activeTab && dropIndex <= noteData.activeTab) {
+      newActiveTab = noteData.activeTab + 1;
+    }
+
+    setNoteData({
+      ...noteData,
+      tabs: updatedTabs,
+      activeTab: newActiveTab
+    });
+    setDraggedTabIndex(null);
+    setIsDirty(true);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTabIndex(null);
+  };
+
   const handleLockNote = () => {
     setPasswordDialogMode('lock');
     setShowPasswordDialog(true);
@@ -421,11 +461,16 @@ const NoteEditor = () => {
         {noteData.tabs.map((tab, index) => (
           <div
             key={tab.id}
-            className={`flex items-center gap-2 px-3 py-1 rounded ${
+            draggable
+            onDragStart={() => handleDragStart(index)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, index)}
+            onDragEnd={handleDragEnd}
+            className={`flex items-center gap-2 px-3 py-1 rounded cursor-move ${
               index === noteData.activeTab
                 ? 'bg-white text-gray-900 border border-gray-400'
                 : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-            }`}
+            } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
           >
             <button
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
