@@ -683,11 +683,10 @@ const NoteEditor = () => {
       {/* Scroll to Top Button */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 shadow-lg flex items-center gap-1 sm:gap-2 focus:outline-none text-sm sm:text-base"
+        className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 shadow-lg focus:outline-none transition-colors"
         title="Scroll to Top"
       >
-        <span>⬆️</span>
-        <span>Top</span>
+        <ArrowUpCircle size={24} />
       </button>
     </div>
   );
