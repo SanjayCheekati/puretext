@@ -669,7 +669,7 @@ const NoteEditor = () => {
               : 'bg-white border border-gray-200'
           }`}>
             {/* Title input with icons */}
-            <div className={`flex items-center gap-3 px-4 sm:px-6 py-3 border-b ${
+            <div className={`flex items-center gap-3 px-4 sm:px-6 py-2 sm:py-3 border-b ${
               isDarkMode ? 'border-zinc-800' : 'border-gray-200'
             }`}>
               <input
@@ -677,7 +677,7 @@ const NoteEditor = () => {
                 value={currentTab.title || ''}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Title or program name..."
-                className={`flex-1 outline-none border-0 font-mono text-base sm:text-xl font-semibold bg-transparent ${
+                className={`flex-1 outline-none border-0 font-mono text-sm sm:text-xl font-semibold bg-transparent ${
                   isDarkMode 
                     ? 'text-zinc-100 placeholder-zinc-700' 
                     : 'text-gray-900 placeholder-gray-400'
@@ -721,7 +721,7 @@ const NoteEditor = () => {
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`w-full px-4 sm:px-6 py-6 outline-none border-0 resize-none font-mono text-sm sm:text-lg leading-[24px] sm:leading-[28px] scrollbar-hide min-h-[500px] ${
+              className={`w-full px-4 sm:px-6 py-4 sm:py-6 outline-none border-0 resize-none font-mono text-sm sm:text-lg leading-[24px] sm:leading-[28px] scrollbar-hide min-h-[500px] ${
                 isDarkMode 
                   ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
