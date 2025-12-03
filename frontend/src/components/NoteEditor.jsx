@@ -648,7 +648,6 @@ const NoteEditor = () => {
               ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border-slate-600/30 hover:border-slate-500/50'
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 hover:border-slate-300'
           } hover:scale-105 active:scale-95`}
-          }`}
         >
           + Add Tab
         </button>
