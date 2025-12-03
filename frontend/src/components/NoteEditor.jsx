@@ -84,6 +84,7 @@ const NoteEditor = () => {
           tabs: [{
             id: crypto.randomUUID(),
             name: 'Tab 1',
+            title: '',
             content: '',
             createdAt: Date.now(),
             updatedAt: Date.now()
@@ -224,13 +225,29 @@ const NoteEditor = () => {
     if (!noteData) return;
 
     const updatedTabs = [...noteData.tabs];
-    const firstLine = content.split('\n')[0];
-    const firstWord = firstLine.trim().split(/\s+/)[0];
-    const tabName = firstWord && firstWord.length > 0 ? firstWord : `Tab ${noteData.activeTab + 1}`;
     
     updatedTabs[noteData.activeTab] = {
       ...updatedTabs[noteData.activeTab],
       content,
+      updatedAt: Date.now()
+    };
+
+    setNoteData({
+      ...noteData,
+      tabs: updatedTabs
+    });
+    setIsDirty(true);
+  };
+
+  const handleTitleChange = (title) => {
+    if (!noteData) return;
+
+    const updatedTabs = [...noteData.tabs];
+    const tabName = title.trim() || `Tab ${noteData.activeTab + 1}`;
+    
+    updatedTabs[noteData.activeTab] = {
+      ...updatedTabs[noteData.activeTab],
+      title: title,
       name: tabName,
       updatedAt: Date.now()
     };
@@ -249,6 +266,7 @@ const NoteEditor = () => {
     const newTab = {
       id: crypto.randomUUID(),
       name: `Tab ${newTabNumber}`,
+      title: '',
       content: '',
       createdAt: Date.now(),
       updatedAt: Date.now()
@@ -546,60 +564,69 @@ const NoteEditor = () => {
 
       {/* Editor */}
       <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
-        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4 flex-col">
-          {/* Title/Header Line with Copy Icon */}
-          <div className={`flex items-center justify-between px-3 sm:px-6 py-2 rounded-t-lg ${
-            isDarkMode ? 'bg-zinc-950' : 'bg-white'
-          }`}>
-            <input
-              type="text"
-              placeholder="Title or program name..."
-              className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg ${
-                isDarkMode 
-                  ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
-                  : 'bg-white text-gray-900 placeholder-gray-400'
-              }`}
-              disabled={isLocked}
-            />
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleCopyContent}
-                className={`p-1.5 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'text-white hover:bg-zinc-800' 
-                    : 'text-gray-900 hover:bg-gray-200'
-                }`}
-                title="Copy tab content"
-              >
-                <Copy size={18} />
-              </button>
-              {showCopiedMessage && (
-                <span className={`text-sm font-medium ${
-                  isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}>
-                  Copied
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Editor Content */}
-          <div className="flex-1 flex gap-1 sm:gap-4 overflow-hidden">
-            {/* Line numbers */}
-            <div className={`hidden sm:flex flex-shrink-0 pt-3 pr-2 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
+        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4">
+          {/* Line numbers - starts from content area */}
+          <div className={`hidden sm:flex flex-shrink-0 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
+            <div className="h-[46px]"></div>
+            <div className={`border-t ${isDarkMode ? 'border-zinc-800' : 'border-gray-300'} pt-3 pr-2`}>
               {currentTab.content.split('\n').map((_, i) => (
                 <div key={i}>{i + 1}</div>
               ))}
             </div>
-            {/* Text area */}
+          </div>
+
+          {/* Editor container */}
+          <div className={`flex-1 flex flex-col rounded-lg overflow-hidden shadow-sm ${
+            isDarkMode ? 'bg-zinc-950' : 'bg-white'
+          }`}>
+            {/* Title input with copy icon */}
+            <div className="flex items-center gap-2 px-3 sm:px-6 sm:pl-2 py-2">
+              <input
+                type="text"
+                value={currentTab.title || ''}
+                onChange={(e) => handleTitleChange(e.target.value)}
+                placeholder="Title or program name..."
+                className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg ${
+                  isDarkMode 
+                    ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
+                    : 'bg-white text-gray-900 placeholder-gray-400'
+                }`}
+                disabled={isLocked}
+              />
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyContent}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    isDarkMode 
+                      ? 'text-white hover:bg-zinc-800' 
+                      : 'text-gray-900 hover:bg-gray-200'
+                  }`}
+                  title="Copy tab content"
+                >
+                  <Copy size={18} />
+                </button>
+                {showCopiedMessage && (
+                  <span className={`text-sm font-medium ${
+                    isDarkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    Copied
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Horizontal divider */}
+            <hr className={`border-0 ${isDarkMode ? 'border-t border-zinc-800' : 'border-t border-gray-300'}`} />
+
+            {/* Content textarea */}
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`flex-1 h-full p-3 sm:p-6 sm:pl-2 ${
+              className={`flex-1 p-3 sm:p-6 sm:pl-2 outline-none border-0 resize-none font-mono text-sm sm:text-lg leading-relaxed ${
                 isDarkMode 
                   ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
-              } border-0 rounded-b-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm`}
+              }`}
               placeholder="Start typing..."
               disabled={isLocked}
             />
