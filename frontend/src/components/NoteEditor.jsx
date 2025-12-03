@@ -478,71 +478,119 @@ const NoteEditor = () => {
   const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className={`h-screen flex flex-col ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900' 
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50'
+    }`}>
       {/* Header */}
-      <div className="bg-blue-900 border-b border-blue-800 px-2 sm:px-4 py-2 sm:py-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-4">
-            <h1 className="text-lg sm:text-xl font-bold text-white">Puretext</h1>
-            <span className="text-gray-400 text-sm sm:text-base truncate max-w-[150px] sm:max-w-none">/ {noteName}</span>
-            <span className="hidden md:inline text-xs text-gray-500">| Built by Sanjay [MGIT]</span>
+      <div className={`backdrop-blur-md border-b px-4 sm:px-6 py-3 sm:py-4 ${
+        isDarkMode 
+          ? 'bg-slate-800/80 border-slate-700/50 shadow-lg shadow-slate-900/20' 
+          : 'bg-white/80 border-slate-200/50 shadow-sm'
+      }`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <h1 className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${
+              isDarkMode 
+                ? 'from-blue-400 to-violet-400' 
+                : 'from-blue-600 to-violet-600'
+            } bg-clip-text text-transparent`}>
+              Puretext
+            </h1>
+            <span className={`text-sm sm:text-base truncate max-w-[150px] sm:max-w-none ${
+              isDarkMode ? 'text-slate-400' : 'text-slate-600'
+            }`}>
+              / {noteName}
+            </span>
+            <span className={`hidden md:inline text-xs ${
+              isDarkMode ? 'text-slate-500' : 'text-slate-400'
+            }`}>
+              | Built by Sanjay [MGIT]
+            </span>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
             <a
               href="https://puretext.me"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+              className={`p-2.5 rounded-xl transition-all duration-200 ${
+                isDarkMode 
+                  ? 'bg-slate-700/50 hover:bg-slate-600/50 text-slate-300 hover:text-white' 
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900'
+              } hover:scale-105 active:scale-95`}
               title="Open Puretext Homepage"
             >
-              <Home size={20} />
+              <Home size={18} />
             </a>
 
             {isDirty && (
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="px-3 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 disabled:bg-gray-400 transition-colors flex items-center gap-2"
+                className={`px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all duration-200 shadow-md ${
+                  isSaving
+                    ? isDarkMode
+                      ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                      : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white hover:scale-105 active:scale-95 hover:shadow-lg'
+                }`}
               >
-                <Save size={18} />
-                <span className="text-sm font-medium">{isSaving ? 'Saving...' : 'Save'}</span>
+                <Save size={16} />
+                <span>{isSaving ? 'Saving...' : 'Save'}</span>
               </button>
             )}
 
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+              className={`p-2.5 rounded-xl transition-all duration-200 ${
+                isDarkMode 
+                  ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300' 
+                  : 'bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700'
+              } hover:scale-105 active:scale-95`}
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
             <button
               onClick={handleCopyURL}
-              className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+              className={`p-2.5 rounded-xl transition-all duration-200 ${
+                isDarkMode 
+                  ? 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 hover:text-blue-300' 
+                  : 'bg-blue-100 hover:bg-blue-200 text-blue-600 hover:text-blue-700'
+              } hover:scale-105 active:scale-95`}
               title="Share URL"
             >
-              <Share2 size={20} />
+              <Share2 size={18} />
             </button>
 
             {!isLocked && !password && (
               <button
                 onClick={handleLockNote}
-                className="p-2 rounded-full bg-yellow-600 text-white hover:bg-yellow-700 transition-colors"
+                className={`p-2.5 rounded-xl transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300' 
+                    : 'bg-amber-100 hover:bg-amber-200 text-amber-600 hover:text-amber-700'
+                } hover:scale-105 active:scale-95`}
                 title="Lock Note"
               >
-                <Lock size={20} />
+                <Lock size={18} />
               </button>
             )}
 
             {password && (
               <button
                 onClick={handleChangePassword}
-                className="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors"
+                className={`p-2.5 rounded-xl transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'bg-violet-500/20 hover:bg-violet-500/30 text-violet-400 hover:text-violet-300' 
+                    : 'bg-violet-100 hover:bg-violet-200 text-violet-600 hover:text-violet-700'
+                } hover:scale-105 active:scale-95`}
                 title="Change Password"
               >
-                <Key size={20} />
+                <Key size={18} />
               </button>
             )}
           </div>
@@ -550,7 +598,11 @@ const NoteEditor = () => {
       </div>
 
       {/* Tabs */}
-      <div className={`border-b px-2 sm:px-4 py-2 relative z-10 ${isDarkMode ? 'bg-black border-gray-800' : 'bg-gray-200 border-gray-300'}`}>
+      <div className={`backdrop-blur-sm border-b px-3 sm:px-6 py-3 ${
+        isDarkMode 
+          ? 'bg-slate-800/50 border-slate-700/30' 
+          : 'bg-white/50 border-slate-200/30'
+      }`}>
         <div className="flex flex-wrap items-center gap-2 justify-center min-h-[40px]">
         {noteData.tabs.map((tab, index) => (
           <div
@@ -560,15 +612,15 @@ const NoteEditor = () => {
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
-            className={`flex items-center gap-2 px-3 py-1 rounded cursor-move ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-move transition-all duration-200 ${
               isDarkMode
                 ? index === noteData.activeTab
-                  ? 'bg-zinc-900 text-white border border-zinc-700'
-                  : 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
+                  ? 'bg-gradient-to-r from-blue-500/20 to-violet-500/20 text-white border border-blue-500/30 shadow-lg shadow-blue-500/10'
+                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border border-slate-600/30'
                 : index === noteData.activeTab
-                ? 'bg-white text-gray-900 border border-gray-400'
-                : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-            } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
+                ? 'bg-gradient-to-r from-blue-50 to-violet-50 text-slate-900 border border-blue-200 shadow-md'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+            } ${draggedTabIndex === index ? 'opacity-50' : ''} hover:scale-105 active:scale-95`}
           >
             <button
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
@@ -579,7 +631,7 @@ const NoteEditor = () => {
             {noteData.tabs.length > 1 && (
               <button
                 onClick={() => handleDeleteTab(index)}
-                className={`text-xs focus:outline-none ${
+                className={`text-xs focus:outline-none transition-colors ${
                   isDarkMode ? 'hover:text-red-400' : 'hover:text-red-600'
                 }`}
                 title="Delete"
@@ -591,10 +643,11 @@ const NoteEditor = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className={`px-3 py-1 rounded text-sm font-medium focus:outline-none whitespace-nowrap ${
+          className={`px-4 py-2 rounded-lg text-sm font-medium focus:outline-none whitespace-nowrap transition-all duration-200 border ${
             isDarkMode
-              ? 'bg-zinc-800 text-gray-300 hover:bg-zinc-700'
-              : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+              ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border-slate-600/30 hover:border-slate-500/50'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 hover:border-slate-300'
+          } hover:scale-105 active:scale-95`}
           }`}
         >
           + Add Tab
@@ -603,12 +656,14 @@ const NoteEditor = () => {
       </div>
 
       {/* Editor */}
-      <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
-        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4">
-          {/* Line numbers - starts from content area */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
-            <div className="h-[46px]"></div>
-            <div className="pt-3 pr-2">
+      <div className={`flex-1 p-4 sm:p-6 flex justify-center overflow-hidden`}>
+        <div className="w-full max-w-5xl h-full flex gap-3 sm:gap-6">
+          {/* Line numbers */}
+          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col ${
+            isDarkMode ? 'text-slate-600' : 'text-slate-400'
+          }`}>
+            <div className="h-[52px]"></div>
+            <div className="pt-4 pr-3">
               {currentTab.content.split('\n').map((_, i) => (
                 <div key={i}>{i + 1}</div>
               ))}
@@ -616,67 +671,68 @@ const NoteEditor = () => {
           </div>
 
           {/* Editor container */}
-          <div className={`flex-1 flex flex-col rounded-lg overflow-hidden shadow-sm ${
-            isDarkMode ? 'bg-zinc-950' : 'bg-white'
+          <div className={`flex-1 flex flex-col rounded-2xl overflow-hidden backdrop-blur-sm border ${
+            isDarkMode 
+              ? 'bg-slate-800/40 border-slate-700/50 shadow-2xl shadow-slate-900/50' 
+              : 'bg-white/60 border-slate-200/50 shadow-xl'
           }`}>
-            {/* Title input with copy icon */}
-            <div className="flex items-center gap-2 px-3 sm:px-6 sm:pl-2 py-2">
+            {/* Title input with icons */}
+            <div className={`flex items-center gap-3 px-4 sm:px-6 py-3 border-b ${
+              isDarkMode ? 'border-slate-700/50' : 'border-slate-200/50'
+            }`}>
               <input
                 type="text"
                 value={currentTab.title || ''}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Title or program name..."
-                className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg ${
+                className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg bg-transparent ${
                   isDarkMode 
-                    ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
-                    : 'bg-white text-gray-900 placeholder-gray-400'
+                    ? 'text-slate-100 placeholder-slate-600' 
+                    : 'text-slate-900 placeholder-slate-400'
                 }`}
                 disabled={isLocked}
               />
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleDownload}
-                  className={`p-1.5 rounded-lg transition-colors ${
+                  className={`p-2 rounded-lg transition-all duration-200 ${
                     isDarkMode 
-                      ? 'text-white hover:bg-zinc-800' 
-                      : 'text-gray-900 hover:bg-gray-200'
-                  }`}
+                      ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50' 
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  } hover:scale-110 active:scale-95`}
                   title="Download as .txt"
                 >
                   <Download size={18} />
                 </button>
                 <button
                   onClick={handleCopyContent}
-                  className={`p-1.5 rounded-lg transition-colors ${
+                  className={`p-2 rounded-lg transition-all duration-200 ${
                     showCopiedMessage
-                      ? 'text-green-500 hover:bg-green-500/10'
+                      ? 'text-emerald-500 hover:bg-emerald-500/10 scale-110'
                       : isDarkMode 
-                        ? 'text-white hover:bg-zinc-800' 
-                        : 'text-gray-900 hover:bg-gray-200'
-                  }`}
+                        ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50' 
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  } ${!showCopiedMessage && 'hover:scale-110 active:scale-95'}`}
                   title="Copy tab content"
                 >
                   <Copy size={18} />
                 </button>
                 {showCopiedMessage && (
-                  <span className="text-sm font-medium text-green-500">
+                  <span className="text-sm font-medium text-emerald-500 animate-pulse">
                     Copied
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Horizontal divider */}
-            <hr className={`border-0 ${isDarkMode ? 'border-t border-zinc-800' : 'border-t border-gray-300'}`} />
-
             {/* Content textarea */}
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`flex-1 p-3 sm:p-6 sm:pl-2 outline-none border-0 resize-none font-mono text-sm sm:text-lg leading-relaxed ${
+              className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed bg-transparent ${
                 isDarkMode 
-                  ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
-                  : 'bg-white text-gray-900 placeholder-gray-400'
+                  ? 'text-slate-100 placeholder-slate-600' 
+                  : 'text-slate-900 placeholder-slate-400'
               }`}
               placeholder="Start typing..."
               disabled={isLocked}
@@ -727,7 +783,11 @@ const NoteEditor = () => {
       />
 
       {error && (
-        <div className="fixed bottom-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded">
+        <div className={`fixed bottom-20 right-4 px-5 py-3 rounded-xl shadow-lg border backdrop-blur-sm ${
+          isDarkMode 
+            ? 'bg-red-500/20 border-red-500/50 text-red-300' 
+            : 'bg-red-50 border-red-300 text-red-700'
+        }`}>
           {error}
         </div>
       )}
@@ -735,7 +795,11 @@ const NoteEditor = () => {
       {/* Scroll to Top Button */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 shadow-lg focus:outline-none transition-colors"
+        className={`fixed bottom-6 right-6 p-4 rounded-2xl shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+          isDarkMode
+            ? 'bg-gradient-to-r from-blue-500/30 to-violet-500/30 hover:from-blue-500/40 hover:to-violet-500/40 text-blue-300 border border-blue-500/30'
+            : 'bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white'
+        }`}
         title="Scroll to Top"
       >
         <ArrowUpCircle size={24} />
