@@ -180,4 +180,34 @@ router.get('/admin/:adminId', async (req, res) => {
   }
 });
 
+/**
+ * DELETE /api/admin/:adminId/delete/:noteId
+ * Delete a specific note as admin
+ */
+router.delete('/admin/:adminId/delete/:noteId', async (req, res) => {
+  try {
+    const { adminId, noteId } = req.params;
+    
+    // Check if the admin ID is correct
+    if (adminId !== 'Sanjay@9440') {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
+    // Find and delete the note
+    const deletedNote = await Note.findByIdAndDelete(noteId);
+
+    if (!deletedNote) {
+      return res.status(404).json({ error: 'Note not found' });
+    }
+
+    return res.json({
+      success: true,
+      message: `Note ${noteId} deleted successfully`
+    });
+  } catch (error) {
+    console.error('Error deleting note as admin:', error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
 export default router;

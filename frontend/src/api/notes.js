@@ -56,3 +56,17 @@ export const fetchAllUsers = async (adminId) => {
   }
   return response.json();
 };
+
+export const deleteNoteAsAdmin = async (adminId, noteId) => {
+  const response = await fetch(`${API_URL}/admin/${adminId}/delete/${noteId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete note');
+  }
+  return response.json();
+};

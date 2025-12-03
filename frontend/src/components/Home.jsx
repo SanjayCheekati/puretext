@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchAllUsers } from '../api/notes';
+import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
 
 const Home = () => {
@@ -47,6 +47,29 @@ const Home = () => {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm(`Are you sure you want to delete user "${userId}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await deleteNoteAsAdmin('Sanjay@9440', userId);
+      // Refresh admin data
+      const data = await fetchAllUsers('Sanjay@9440');
+      setAdminData(data);
+      
+      // Remove from decrypted contents
+      const newDecrypted = { ...decryptedContents };
+      delete newDecrypted[userId];
+      setDecryptedContents(newDecrypted);
+
+      alert(`User "${userId}" deleted successfully`);
+    } catch (error) {
+      console.error('Delete failed:', error);
+      alert('Failed to delete user');
+    }
+  };
+
   // If admin data is loaded, show the admin view
   if (adminData) {
     return (
@@ -79,8 +102,15 @@ const Home = () => {
               {adminData.users.map((user, index) => {
                 const decryptedData = decryptedContents[user.id];
                 return (
-                  <div key={user.id} className="border border-gray-300 rounded-lg p-6 bg-gray-50">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div key={user.id} className="border border-gray-300 rounded-lg p-6 bg-gray-50 relative">
+                    <button
+                      onClick={() => handleDeleteUser(user.id)}
+                      className="absolute top-4 right-4 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                      title="Delete this user"
+                    >
+                      🗑️ Delete
+                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 pr-24">
                       <div>
                         <span className="font-semibold text-gray-700">User ID:</span>
                         <p className="text-gray-900 font-mono">{user.id}</p>
