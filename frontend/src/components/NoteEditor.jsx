@@ -788,7 +788,7 @@ const NoteEditor = () => {
 
       {/* Scroll to Top Button */}
       <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         className={`fixed bottom-6 right-6 p-3 sm:p-4 rounded-full shadow-xl transition-colors ${
           isDarkMode
             ? 'bg-blue-600 hover:bg-blue-700 text-white'
