@@ -480,13 +480,13 @@ const NoteEditor = () => {
   return (
     <div className={`h-screen flex flex-col ${
       isDarkMode 
-        ? 'bg-gray-900' 
+        ? 'bg-black' 
         : 'bg-gray-50'
     }`}>
       {/* Header */}
       <div className={`border-b px-4 sm:px-6 py-3 sm:py-4 ${
         isDarkMode 
-          ? 'bg-gray-800 border-gray-700' 
+          ? 'bg-black border-zinc-800' 
           : 'bg-white border-gray-200 shadow-sm'
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -517,7 +517,7 @@ const NoteEditor = () => {
               rel="noopener noreferrer"
               className={`p-2 rounded-lg transition-colors ${
                 isDarkMode 
-                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                  ? 'bg-zinc-900 hover:bg-zinc-800 text-zinc-400' 
                   : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
               }`}
               title="Open Puretext Homepage"
@@ -598,7 +598,7 @@ const NoteEditor = () => {
       {/* Tabs */}
       <div className={`border-b px-3 sm:px-6 py-3 ${
         isDarkMode 
-          ? 'bg-gray-800 border-gray-700' 
+          ? 'bg-black border-zinc-800' 
           : 'bg-white border-gray-200'
       }`}>
         <div className="flex flex-wrap items-center gap-2 justify-center min-h-[40px]">
@@ -614,7 +614,7 @@ const NoteEditor = () => {
               isDarkMode
                 ? index === noteData.activeTab
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
                 : index === noteData.activeTab
                 ? 'bg-blue-600 text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -641,7 +641,7 @@ const NoteEditor = () => {
           onClick={handleAddTab}
           className={`px-4 py-2 rounded-lg text-sm font-medium focus:outline-none whitespace-nowrap transition-colors ${
             isDarkMode
-              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              ? 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
         >
@@ -655,7 +655,7 @@ const NoteEditor = () => {
         <div className="w-full max-w-5xl h-full flex gap-3 sm:gap-6">
           {/* Line numbers */}
           <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col ${
-            isDarkMode ? 'text-gray-600' : 'text-gray-400'
+            isDarkMode ? 'text-zinc-700' : 'text-gray-400'
           }`}>
             <div className="h-[52px]"></div>
             <div className="pt-4 pr-3">
@@ -668,12 +668,12 @@ const NoteEditor = () => {
           {/* Editor container */}
           <div className={`flex-1 flex flex-col rounded-lg overflow-hidden shadow-lg ${
             isDarkMode 
-              ? 'bg-gray-800 border border-gray-700' 
+              ? 'bg-zinc-950 border border-zinc-800' 
               : 'bg-white border border-gray-200'
           }`}>
             {/* Title input with icons */}
             <div className={`flex items-center gap-3 px-4 sm:px-6 py-3 border-b ${
-              isDarkMode ? 'border-gray-700' : 'border-gray-200'
+              isDarkMode ? 'border-zinc-800' : 'border-gray-200'
             }`}>
               <input
                 type="text"
@@ -682,7 +682,7 @@ const NoteEditor = () => {
                 placeholder="Title or program name..."
                 className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg bg-transparent ${
                   isDarkMode 
-                    ? 'text-gray-100 placeholder-gray-600' 
+                    ? 'text-zinc-100 placeholder-zinc-700' 
                     : 'text-gray-900 placeholder-gray-400'
                 }`}
                 disabled={isLocked}
@@ -692,7 +692,7 @@ const NoteEditor = () => {
                   onClick={handleDownload}
                   className={`p-2 rounded-lg transition-colors ${
                     isDarkMode 
-                      ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                      ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' 
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                   title="Download as .txt"
@@ -705,7 +705,7 @@ const NoteEditor = () => {
                     showCopiedMessage
                       ? 'text-green-500 hover:bg-green-500/10'
                       : isDarkMode 
-                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                        ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' 
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                   title="Copy tab content"
@@ -726,7 +726,7 @@ const NoteEditor = () => {
               onChange={(e) => handleContentChange(e.target.value)}
               className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed ${
                 isDarkMode 
-                  ? 'bg-gray-800 text-gray-100 placeholder-gray-600' 
+                  ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
               }`}
               placeholder="Start typing..."
