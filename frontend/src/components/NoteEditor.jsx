@@ -478,7 +478,7 @@ const NoteEditor = () => {
   const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
 
   return (
-    <div className={`h-screen flex flex-col ${
+    <div className={`min-h-screen flex flex-col ${
       isDarkMode 
         ? 'bg-black' 
         : 'bg-gray-50'
@@ -651,8 +651,8 @@ const NoteEditor = () => {
       </div>
 
       {/* Editor */}
-      <div className="flex-1 p-4 sm:p-6 flex justify-center overflow-hidden">
-        <div className="w-full max-w-5xl h-full flex gap-3 sm:gap-6">
+      <div className="p-4 sm:p-6 flex justify-center">
+        <div className="w-full max-w-5xl flex gap-3 sm:gap-6">
           {/* Line numbers */}
           <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col pt-[73px] pr-3 ${
             isDarkMode ? 'text-zinc-700' : 'text-gray-400'
@@ -721,7 +721,7 @@ const NoteEditor = () => {
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed scrollbar-hide ${
+              className={`w-full p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed scrollbar-hide min-h-[500px] ${
                 isDarkMode 
                   ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
@@ -729,6 +729,7 @@ const NoteEditor = () => {
               placeholder="Start typing..."
               disabled={isLocked}
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              rows={Math.max(20, currentTab.content.split('\n').length)}
             />
           </div>
         </div>
