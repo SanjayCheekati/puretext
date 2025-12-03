@@ -654,15 +654,12 @@ const NoteEditor = () => {
       <div className="flex-1 p-4 sm:p-6 flex justify-center overflow-hidden">
         <div className="w-full max-w-5xl h-full flex gap-3 sm:gap-6">
           {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col ${
+          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col pt-[73px] pr-3 ${
             isDarkMode ? 'text-zinc-700' : 'text-gray-400'
           }`}>
-            <div className="h-[52px]"></div>
-            <div className="pt-4 pr-3">
-              {currentTab.content.split('\n').map((_, i) => (
-                <div key={i}>{i + 1}</div>
-              ))}
-            </div>
+            {currentTab.content.split('\n').map((_, i) => (
+              <div key={i} className="h-[28px]">{i + 1}</div>
+            ))}
           </div>
 
           {/* Editor container */}
@@ -724,13 +721,14 @@ const NoteEditor = () => {
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed ${
+              className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed scrollbar-hide ${
                 isDarkMode 
                   ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
               }`}
               placeholder="Start typing..."
               disabled={isLocked}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             />
           </div>
         </div>
