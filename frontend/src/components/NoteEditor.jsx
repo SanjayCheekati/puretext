@@ -522,7 +522,7 @@ const NoteEditor = () => {
               }`}
               title="Open Puretext Homepage"
             >
-              <Home size={18} />
+              <Home size={16} />
             </a>
 
             {isDirty && (
@@ -549,7 +549,7 @@ const NoteEditor = () => {
               }`}
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+              {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
             <button
@@ -561,7 +561,7 @@ const NoteEditor = () => {
               }`}
               title="Share URL"
             >
-              <Share2 size={18} />
+              <Share2 size={16} />
             </button>
 
             {!isLocked && !password && (
@@ -574,7 +574,7 @@ const NoteEditor = () => {
                 }`}
                 title="Lock Note"
               >
-                <Lock size={18} />
+                <Lock size={16} />
               </button>
             )}
 
@@ -588,7 +588,7 @@ const NoteEditor = () => {
                 }`}
                 title="Change Password"
               >
-                <Key size={18} />
+                <Key size={16} />
               </button>
             )}
           </div>
@@ -639,7 +639,7 @@ const NoteEditor = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className={`px-4 py-2 rounded-lg text-sm font-medium focus:outline-none whitespace-nowrap transition-colors ${
+          className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg text-xs sm:text-base font-medium focus:outline-none whitespace-nowrap transition-colors ${
             isDarkMode
               ? 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
