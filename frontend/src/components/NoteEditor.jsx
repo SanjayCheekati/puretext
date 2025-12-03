@@ -654,7 +654,7 @@ const NoteEditor = () => {
       <div className="p-4 sm:p-6 flex justify-center">
         <div className="w-full max-w-5xl flex gap-3 sm:gap-6">
           {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base select-none flex-col pt-[77px] pr-3 leading-[28px] ${
+          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base sm:text-lg select-none flex-col pt-[73px] pr-3 leading-[28px] ${
             isDarkMode ? 'text-zinc-700' : 'text-gray-400'
           }`}>
             {currentTab.content.split('\n').map((_, i) => (
