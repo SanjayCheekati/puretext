@@ -480,31 +480,31 @@ const NoteEditor = () => {
   return (
     <div className={`h-screen flex flex-col ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900' 
-        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50'
+        ? 'bg-gray-900' 
+        : 'bg-gray-50'
     }`}>
       {/* Header */}
-      <div className={`backdrop-blur-md border-b px-4 sm:px-6 py-3 sm:py-4 ${
+      <div className={`border-b px-4 sm:px-6 py-3 sm:py-4 ${
         isDarkMode 
-          ? 'bg-slate-800/80 border-slate-700/50 shadow-lg shadow-slate-900/20' 
-          : 'bg-white/80 border-slate-200/50 shadow-sm'
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-200 shadow-sm'
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3 sm:gap-4">
-            <h1 className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${
+            <h1 className={`text-xl sm:text-2xl font-bold ${
               isDarkMode 
-                ? 'from-blue-400 to-violet-400' 
-                : 'from-blue-600 to-violet-600'
-            } bg-clip-text text-transparent`}>
+                ? 'text-blue-400' 
+                : 'text-blue-600'
+            }`}>
               Puretext
             </h1>
             <span className={`text-sm sm:text-base truncate max-w-[150px] sm:max-w-none ${
-              isDarkMode ? 'text-slate-400' : 'text-slate-600'
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
               / {noteName}
             </span>
             <span className={`hidden md:inline text-xs ${
-              isDarkMode ? 'text-slate-500' : 'text-slate-400'
+              isDarkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>
               | Built by Sanjay [MGIT]
             </span>
@@ -515,11 +515,11 @@ const NoteEditor = () => {
               href="https://puretext.me"
               target="_blank"
               rel="noopener noreferrer"
-              className={`p-2.5 rounded-xl transition-all duration-200 ${
+              className={`p-2 rounded-lg transition-colors ${
                 isDarkMode 
-                  ? 'bg-slate-700/50 hover:bg-slate-600/50 text-slate-300 hover:text-white' 
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900'
-              } hover:scale-105 active:scale-95`}
+                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
               title="Open Puretext Homepage"
             >
               <Home size={18} />
@@ -529,12 +529,10 @@ const NoteEditor = () => {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className={`px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all duration-200 shadow-md ${
+                className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition-colors ${
                   isSaving
-                    ? isDarkMode
-                      ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
-                      : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white hover:scale-105 active:scale-95 hover:shadow-lg'
+                    ? 'bg-gray-400 text-white cursor-not-allowed'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
                 }`}
               >
                 <Save size={16} />
@@ -544,11 +542,11 @@ const NoteEditor = () => {
 
             <button
               onClick={toggleDarkMode}
-              className={`p-2.5 rounded-xl transition-all duration-200 ${
+              className={`p-2 rounded-lg transition-colors ${
                 isDarkMode 
-                  ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300' 
-                  : 'bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700'
-              } hover:scale-105 active:scale-95`}
+                  ? 'bg-yellow-600 hover:bg-yellow-700 text-white' 
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              }`}
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
@@ -556,11 +554,11 @@ const NoteEditor = () => {
 
             <button
               onClick={handleCopyURL}
-              className={`p-2.5 rounded-xl transition-all duration-200 ${
+              className={`p-2 rounded-lg transition-colors ${
                 isDarkMode 
-                  ? 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 hover:text-blue-300' 
-                  : 'bg-blue-100 hover:bg-blue-200 text-blue-600 hover:text-blue-700'
-              } hover:scale-105 active:scale-95`}
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                  : 'bg-blue-600 hover:bg-blue-700 text-white'
+              }`}
               title="Share URL"
             >
               <Share2 size={18} />
@@ -569,11 +567,11 @@ const NoteEditor = () => {
             {!isLocked && !password && (
               <button
                 onClick={handleLockNote}
-                className={`p-2.5 rounded-xl transition-all duration-200 ${
+                className={`p-2 rounded-lg transition-colors ${
                   isDarkMode 
-                    ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-300' 
-                    : 'bg-amber-100 hover:bg-amber-200 text-amber-600 hover:text-amber-700'
-                } hover:scale-105 active:scale-95`}
+                    ? 'bg-orange-600 hover:bg-orange-700 text-white' 
+                    : 'bg-orange-600 hover:bg-orange-700 text-white'
+                }`}
                 title="Lock Note"
               >
                 <Lock size={18} />
@@ -583,11 +581,11 @@ const NoteEditor = () => {
             {password && (
               <button
                 onClick={handleChangePassword}
-                className={`p-2.5 rounded-xl transition-all duration-200 ${
+                className={`p-2 rounded-lg transition-colors ${
                   isDarkMode 
-                    ? 'bg-violet-500/20 hover:bg-violet-500/30 text-violet-400 hover:text-violet-300' 
-                    : 'bg-violet-100 hover:bg-violet-200 text-violet-600 hover:text-violet-700'
-                } hover:scale-105 active:scale-95`}
+                    ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+                    : 'bg-purple-600 hover:bg-purple-700 text-white'
+                }`}
                 title="Change Password"
               >
                 <Key size={18} />
@@ -598,10 +596,10 @@ const NoteEditor = () => {
       </div>
 
       {/* Tabs */}
-      <div className={`backdrop-blur-sm border-b px-3 sm:px-6 py-3 ${
+      <div className={`border-b px-3 sm:px-6 py-3 ${
         isDarkMode 
-          ? 'bg-slate-800/50 border-slate-700/30' 
-          : 'bg-white/50 border-slate-200/30'
+          ? 'bg-gray-800 border-gray-700' 
+          : 'bg-white border-gray-200'
       }`}>
         <div className="flex flex-wrap items-center gap-2 justify-center min-h-[40px]">
         {noteData.tabs.map((tab, index) => (
@@ -612,15 +610,15 @@ const NoteEditor = () => {
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-move transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-move transition-colors ${
               isDarkMode
                 ? index === noteData.activeTab
-                  ? 'bg-gradient-to-r from-blue-500/20 to-violet-500/20 text-white border border-blue-500/30 shadow-lg shadow-blue-500/10'
-                  : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border border-slate-600/30'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : index === noteData.activeTab
-                ? 'bg-gradient-to-r from-blue-50 to-violet-50 text-slate-900 border border-blue-200 shadow-md'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
-            } ${draggedTabIndex === index ? 'opacity-50' : ''} hover:scale-105 active:scale-95`}
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
           >
             <button
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
@@ -631,9 +629,7 @@ const NoteEditor = () => {
             {noteData.tabs.length > 1 && (
               <button
                 onClick={() => handleDeleteTab(index)}
-                className={`text-xs focus:outline-none transition-colors ${
-                  isDarkMode ? 'hover:text-red-400' : 'hover:text-red-600'
-                }`}
+                className="text-xs focus:outline-none hover:text-red-400 transition-colors"
                 title="Delete"
               >
                 ✕
@@ -643,11 +639,14 @@ const NoteEditor = () => {
         ))}
         <button
           onClick={handleAddTab}
-          className={`px-4 py-2 rounded-lg text-sm font-medium focus:outline-none whitespace-nowrap transition-all duration-200 border ${
+          className={`px-4 py-2 rounded-lg text-sm font-medium focus:outline-none whitespace-nowrap transition-colors ${
             isDarkMode
-              ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 border-slate-600/30 hover:border-slate-500/50'
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200 hover:border-slate-300'
-          } hover:scale-105 active:scale-95`}
+              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          + Add Tab
+        </button>
         >
           + Add Tab
         </button>
@@ -655,11 +654,11 @@ const NoteEditor = () => {
       </div>
 
       {/* Editor */}
-      <div className={`flex-1 p-4 sm:p-6 flex justify-center overflow-hidden`}>
+      <div className="flex-1 p-4 sm:p-6 flex justify-center overflow-hidden">
         <div className="w-full max-w-5xl h-full flex gap-3 sm:gap-6">
           {/* Line numbers */}
           <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col ${
-            isDarkMode ? 'text-slate-600' : 'text-slate-400'
+            isDarkMode ? 'text-gray-600' : 'text-gray-400'
           }`}>
             <div className="h-[52px]"></div>
             <div className="pt-4 pr-3">
@@ -670,14 +669,14 @@ const NoteEditor = () => {
           </div>
 
           {/* Editor container */}
-          <div className={`flex-1 flex flex-col rounded-2xl overflow-hidden backdrop-blur-sm border ${
+          <div className={`flex-1 flex flex-col rounded-lg overflow-hidden shadow-lg ${
             isDarkMode 
-              ? 'bg-slate-800/40 border-slate-700/50 shadow-2xl shadow-slate-900/50' 
-              : 'bg-white/60 border-slate-200/50 shadow-xl'
+              ? 'bg-gray-800 border border-gray-700' 
+              : 'bg-white border border-gray-200'
           }`}>
             {/* Title input with icons */}
             <div className={`flex items-center gap-3 px-4 sm:px-6 py-3 border-b ${
-              isDarkMode ? 'border-slate-700/50' : 'border-slate-200/50'
+              isDarkMode ? 'border-gray-700' : 'border-gray-200'
             }`}>
               <input
                 type="text"
@@ -686,38 +685,38 @@ const NoteEditor = () => {
                 placeholder="Title or program name..."
                 className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg bg-transparent ${
                   isDarkMode 
-                    ? 'text-slate-100 placeholder-slate-600' 
-                    : 'text-slate-900 placeholder-slate-400'
+                    ? 'text-gray-100 placeholder-gray-600' 
+                    : 'text-gray-900 placeholder-gray-400'
                 }`}
                 disabled={isLocked}
               />
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleDownload}
-                  className={`p-2 rounded-lg transition-all duration-200 ${
+                  className={`p-2 rounded-lg transition-colors ${
                     isDarkMode 
-                      ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50' 
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  } hover:scale-110 active:scale-95`}
+                      ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
                   title="Download as .txt"
                 >
                   <Download size={18} />
                 </button>
                 <button
                   onClick={handleCopyContent}
-                  className={`p-2 rounded-lg transition-all duration-200 ${
+                  className={`p-2 rounded-lg transition-colors ${
                     showCopiedMessage
-                      ? 'text-emerald-500 hover:bg-emerald-500/10 scale-110'
+                      ? 'text-green-500 hover:bg-green-500/10'
                       : isDarkMode 
-                        ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50' 
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  } ${!showCopiedMessage && 'hover:scale-110 active:scale-95'}`}
+                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
                   title="Copy tab content"
                 >
                   <Copy size={18} />
                 </button>
                 {showCopiedMessage && (
-                  <span className="text-sm font-medium text-emerald-500 animate-pulse">
+                  <span className="text-sm font-medium text-green-500">
                     Copied
                   </span>
                 )}
@@ -728,10 +727,10 @@ const NoteEditor = () => {
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed bg-transparent ${
+              className={`flex-1 p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed ${
                 isDarkMode 
-                  ? 'text-slate-100 placeholder-slate-600' 
-                  : 'text-slate-900 placeholder-slate-400'
+                  ? 'bg-gray-800 text-gray-100 placeholder-gray-600' 
+                  : 'bg-white text-gray-900 placeholder-gray-400'
               }`}
               placeholder="Start typing..."
               disabled={isLocked}
@@ -782,10 +781,10 @@ const NoteEditor = () => {
       />
 
       {error && (
-        <div className={`fixed bottom-20 right-4 px-5 py-3 rounded-xl shadow-lg border backdrop-blur-sm ${
+        <div className={`fixed bottom-20 right-4 px-5 py-3 rounded-lg shadow-lg ${
           isDarkMode 
-            ? 'bg-red-500/20 border-red-500/50 text-red-300' 
-            : 'bg-red-50 border-red-300 text-red-700'
+            ? 'bg-red-900 border border-red-700 text-red-200' 
+            : 'bg-red-50 border border-red-300 text-red-700'
         }`}>
           {error}
         </div>
@@ -794,10 +793,10 @@ const NoteEditor = () => {
       {/* Scroll to Top Button */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 p-4 rounded-2xl shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+        className={`fixed bottom-6 right-6 p-4 rounded-full shadow-xl transition-colors ${
           isDarkMode
-            ? 'bg-gradient-to-r from-blue-500/30 to-violet-500/30 hover:from-blue-500/40 hover:to-violet-500/40 text-blue-300 border border-blue-500/30'
-            : 'bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 text-white'
+            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'bg-blue-600 hover:bg-blue-700 text-white'
         }`}
         title="Scroll to Top"
       >
