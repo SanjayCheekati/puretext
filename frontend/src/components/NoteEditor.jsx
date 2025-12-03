@@ -610,7 +610,7 @@ const NoteEditor = () => {
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
-            className={`flex items-center gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg cursor-move transition-colors text-sm sm:text-base ${
+            className={`flex items-center gap-3 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg cursor-move transition-colors text-xs sm:text-base ${
               isDarkMode
                 ? index === noteData.activeTab
                   ? 'bg-blue-600 text-white'
@@ -677,7 +677,7 @@ const NoteEditor = () => {
                 value={currentTab.title || ''}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Title or program name..."
-                className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg bg-transparent ${
+                className={`flex-1 outline-none border-0 font-mono text-lg sm:text-xl font-semibold bg-transparent ${
                   isDarkMode 
                     ? 'text-zinc-100 placeholder-zinc-700' 
                     : 'text-gray-900 placeholder-gray-400'
@@ -788,8 +788,8 @@ const NoteEditor = () => {
 
       {/* Scroll to Top Button */}
       <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 p-4 rounded-full shadow-xl transition-colors ${
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })
+        className={`fixed bottom-6 right-6 p-3 sm:p-4 rounded-full shadow-xl transition-colors ${
           isDarkMode
             ? 'bg-blue-600 hover:bg-blue-700 text-white'
             : 'bg-blue-600 hover:bg-blue-700 text-white'
