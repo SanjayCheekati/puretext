@@ -654,7 +654,7 @@ const NoteEditor = () => {
       <div className="p-4 sm:p-6 flex justify-center">
         <div className="w-full max-w-5xl flex gap-3 sm:gap-6">
           {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base sm:text-lg select-none flex-col pt-[73px] pr-3 leading-[28px] ${
+          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-sm sm:text-lg select-none flex-col pt-[73px] pr-3 leading-[24px] sm:leading-[28px] ${
             isDarkMode ? 'text-zinc-700' : 'text-gray-400'
           }`}>
             {currentTab.content.split('\n').map((_, i) => (
@@ -677,7 +677,7 @@ const NoteEditor = () => {
                 value={currentTab.title || ''}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Title or program name..."
-                className={`flex-1 outline-none border-0 font-mono text-lg sm:text-xl font-semibold bg-transparent ${
+                className={`flex-1 outline-none border-0 font-mono text-base sm:text-xl font-semibold bg-transparent ${
                   isDarkMode 
                     ? 'text-zinc-100 placeholder-zinc-700' 
                     : 'text-gray-900 placeholder-gray-400'
@@ -721,7 +721,7 @@ const NoteEditor = () => {
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`w-full px-4 sm:px-6 py-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-[28px] scrollbar-hide min-h-[500px] ${
+              className={`w-full px-4 sm:px-6 py-6 outline-none border-0 resize-none font-mono text-sm sm:text-lg leading-[24px] sm:leading-[28px] scrollbar-hide min-h-[500px] ${
                 isDarkMode 
                   ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
