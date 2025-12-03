@@ -489,28 +489,28 @@ const NoteEditor = () => {
           ? 'bg-black border-zinc-800' 
           : 'bg-white border-gray-200 shadow-sm'
       }`}>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <h1 className={`text-xl sm:text-2xl font-bold ${
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <h1 className={`text-2xl sm:text-3xl font-extrabold ${
               isDarkMode 
                 ? 'text-blue-400' 
                 : 'text-blue-600'
             }`}>
               Puretext
             </h1>
-            <span className={`text-sm sm:text-base truncate max-w-[150px] sm:max-w-none ${
+            <span className={`text-sm sm:text-base truncate max-w-[120px] sm:max-w-none ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
               / {noteName}
             </span>
-            <span className={`text-xs ${
+            <span className={`hidden sm:inline text-xs ${
               isDarkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>
               | Built by Sanjay [MGIT]
             </span>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
             <a
               href="https://puretext.me"
               target="_blank"
@@ -610,7 +610,7 @@ const NoteEditor = () => {
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
             onDragEnd={handleDragEnd}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-move transition-colors ${
+            className={`flex items-center gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg cursor-move transition-colors text-sm sm:text-base ${
               isDarkMode
                 ? index === noteData.activeTab
                   ? 'bg-blue-600 text-white'
@@ -654,7 +654,7 @@ const NoteEditor = () => {
       <div className="p-4 sm:p-6 flex justify-center">
         <div className="w-full max-w-5xl flex gap-3 sm:gap-6">
           {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base select-none flex-col pt-[73px] pr-3 leading-[28px] ${
+          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base select-none flex-col pt-[77px] pr-3 leading-[28px] ${
             isDarkMode ? 'text-zinc-700' : 'text-gray-400'
           }`}>
             {currentTab.content.split('\n').map((_, i) => (
@@ -721,7 +721,7 @@ const NoteEditor = () => {
             <textarea
               value={currentTab.content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className={`w-full p-4 sm:p-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-relaxed scrollbar-hide min-h-[500px] ${
+              className={`w-full px-4 sm:px-6 py-6 outline-none border-0 resize-none font-mono text-base sm:text-lg leading-[28px] scrollbar-hide min-h-[500px] ${
                 isDarkMode 
                   ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
                   : 'bg-white text-gray-900 placeholder-gray-400'
@@ -796,7 +796,7 @@ const NoteEditor = () => {
         }`}
         title="Scroll to Top"
       >
-        <ArrowUpCircle size={24} />
+        <ArrowUpCircle size={22} />
       </button>
     </div>
   );

@@ -173,11 +173,8 @@ const Home = () => {
             <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
               Puretext
             </h1>
-            <p className="text-gray-600 text-lg mb-1">
+            <p className="text-gray-600 text-lg">
               Secure, encrypted notes. Zero-knowledge.
-            </p>
-            <p className="text-sm text-gray-500">
-              Your private notepad, protected by military-grade encryption
             </p>
           </div>
 
