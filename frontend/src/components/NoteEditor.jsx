@@ -407,7 +407,7 @@ const NoteEditor = () => {
       setShowCopiedMessage(true);
       setTimeout(() => {
         setShowCopiedMessage(false);
-      }, 2000);
+      }, 5000);
     }
   };
 
@@ -568,7 +568,7 @@ const NoteEditor = () => {
           {/* Line numbers - starts from content area */}
           <div className={`hidden sm:flex flex-shrink-0 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
             <div className="h-[46px]"></div>
-            <div className={`border-t ${isDarkMode ? 'border-zinc-800' : 'border-gray-300'} pt-3 pr-2`}>
+            <div className="pt-3 pr-2">
               {currentTab.content.split('\n').map((_, i) => (
                 <div key={i}>{i + 1}</div>
               ))}
@@ -597,18 +597,18 @@ const NoteEditor = () => {
                 <button
                   onClick={handleCopyContent}
                   className={`p-1.5 rounded-lg transition-colors ${
-                    isDarkMode 
-                      ? 'text-white hover:bg-zinc-800' 
-                      : 'text-gray-900 hover:bg-gray-200'
+                    showCopiedMessage
+                      ? 'text-green-500 hover:bg-green-500/10'
+                      : isDarkMode 
+                        ? 'text-white hover:bg-zinc-800' 
+                        : 'text-gray-900 hover:bg-gray-200'
                   }`}
                   title="Copy tab content"
                 >
                   <Copy size={18} />
                 </button>
                 {showCopiedMessage && (
-                  <span className={`text-sm font-medium ${
-                    isDarkMode ? 'text-white' : 'text-gray-900'
-                  }`}>
+                  <span className="text-sm font-medium text-green-500">
                     Copied
                   </span>
                 )}
