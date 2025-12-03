@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy, ArrowUpCircle, Download } from 'lucide-react';
+import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy, ArrowUpCircle, Download, Home } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -489,6 +489,16 @@ const NoteEditor = () => {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <a
+              href="https://puretext.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600 transition-colors"
+              title="Open Puretext Homepage"
+            >
+              <Home size={20} />
+            </a>
+
             {isDirty && (
               <button
                 onClick={handleSave}
