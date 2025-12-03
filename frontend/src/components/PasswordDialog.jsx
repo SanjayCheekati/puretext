@@ -22,7 +22,7 @@ const PasswordDialog = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start pt-20 sm:items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-start pt-20 sm:items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 max-w-sm sm:max-w-md w-full mx-4">
         <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">{title}</h2>
         <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">{message}</p>
