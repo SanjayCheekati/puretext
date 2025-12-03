@@ -453,12 +453,14 @@ const NoteEditor = () => {
   if (isLocked && !noteData) {
     return (
       <>
-        <div className="h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Puretext</h1>
-            <p className="text-gray-600">Loading note...</p>
+        {!showPasswordDialog && (
+          <div className="h-screen flex items-center justify-center bg-gray-50">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Puretext</h1>
+              <p className="text-gray-600">Loading note...</p>
+            </div>
           </div>
-        </div>
+        )}
         <PasswordDialog
           isOpen={showPasswordDialog}
           onSubmit={handlePasswordSubmit}
