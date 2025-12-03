@@ -546,47 +546,64 @@ const NoteEditor = () => {
 
       {/* Editor */}
       <div className={`flex-1 p-2 sm:p-4 flex justify-center ${isDarkMode ? 'bg-black' : 'bg-gray-100'}`}>
-        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4 relative">
-          {/* Copy button */}
-          <div className="absolute top-2 right-2 flex items-center gap-2 z-10">
-            <button
-              onClick={handleCopyContent}
-              className={`p-2 rounded-lg transition-colors ${
+        <div className="w-full max-w-4xl h-full flex gap-1 sm:gap-4 flex-col">
+          {/* Title/Header Line with Copy Icon */}
+          <div className={`flex items-center justify-between px-3 sm:px-6 py-2 rounded-t-lg ${
+            isDarkMode ? 'bg-zinc-950' : 'bg-white'
+          }`}>
+            <input
+              type="text"
+              placeholder="Title or program name..."
+              className={`flex-1 outline-none border-0 font-mono text-base sm:text-lg ${
                 isDarkMode 
-                  ? 'text-white hover:bg-zinc-800' 
-                  : 'text-gray-900 hover:bg-gray-200'
+                  ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
+                  : 'bg-white text-gray-900 placeholder-gray-400'
               }`}
-              title="Copy tab content"
-            >
-              <Copy size={18} />
-            </button>
-            {showCopiedMessage && (
-              <span className={`text-sm font-medium ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}>
-                Copied
-              </span>
-            )}
+              disabled={isLocked}
+            />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCopyContent}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  isDarkMode 
+                    ? 'text-white hover:bg-zinc-800' 
+                    : 'text-gray-900 hover:bg-gray-200'
+                }`}
+                title="Copy tab content"
+              >
+                <Copy size={18} />
+              </button>
+              {showCopiedMessage && (
+                <span className={`text-sm font-medium ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
+                  Copied
+                </span>
+              )}
+            </div>
           </div>
-          
-          {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 pt-6 pr-2 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
-            {currentTab.content.split('\n').map((_, i) => (
-              <div key={i}>{i + 1}</div>
-            ))}
+
+          {/* Editor Content */}
+          <div className="flex-1 flex gap-1 sm:gap-4 overflow-hidden">
+            {/* Line numbers */}
+            <div className={`hidden sm:flex flex-shrink-0 pt-3 pr-2 text-right ${isDarkMode ? 'text-zinc-700' : 'text-gray-400'} text-lg font-mono leading-relaxed select-none flex-col`}>
+              {currentTab.content.split('\n').map((_, i) => (
+                <div key={i}>{i + 1}</div>
+              ))}
+            </div>
+            {/* Text area */}
+            <textarea
+              value={currentTab.content}
+              onChange={(e) => handleContentChange(e.target.value)}
+              className={`flex-1 h-full p-3 sm:p-6 sm:pl-2 ${
+                isDarkMode 
+                  ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
+                  : 'bg-white text-gray-900 placeholder-gray-400'
+              } border-0 rounded-b-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm`}
+              placeholder="Start typing..."
+              disabled={isLocked}
+            />
           </div>
-          {/* Text area */}
-          <textarea
-            value={currentTab.content}
-            onChange={(e) => handleContentChange(e.target.value)}
-            className={`flex-1 h-full p-3 sm:p-6 sm:pl-2 ${
-              isDarkMode 
-                ? 'bg-zinc-950 text-gray-100 placeholder-zinc-700' 
-                : 'bg-white text-gray-900 placeholder-gray-400'
-            } border-0 rounded-lg focus:outline-none resize-none font-mono text-sm sm:text-lg leading-relaxed shadow-sm`}
-            placeholder="Start typing..."
-            disabled={isLocked}
-          />
         </div>
       </div>
 
