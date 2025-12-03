@@ -35,6 +35,10 @@ const noteSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  hasUserPassword: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now

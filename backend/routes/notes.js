@@ -26,6 +26,7 @@ router.get('/note/:name', async (req, res) => {
     return res.json({
       exists: true,
       data: note.data,
+      hasUserPassword: note.hasUserPassword || false,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt
     });
@@ -63,6 +64,7 @@ router.post('/note/:name', async (req, res) => {
       existingNote.updatedAt = new Date();
       if (req.body.encryptionPassword) {
         existingNote.encryptionPassword = req.body.encryptionPassword;
+        existingNote.hasUserPassword = req.body.encryptionPassword !== 'no-password-set';
       }
       await existingNote.save();
 
@@ -82,7 +84,8 @@ router.post('/note/:name', async (req, res) => {
         data,
         deleteTokenHash,
         deleteToken: req.body.deleteToken,
-        encryptionPassword: req.body.encryptionPassword
+        encryptionPassword: req.body.encryptionPassword,
+        hasUserPassword: req.body.encryptionPassword && req.body.encryptionPassword !== 'no-password-set'
       });
 
       await newNote.save();

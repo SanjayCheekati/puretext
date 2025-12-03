@@ -75,9 +75,24 @@ const NoteEditor = () => {
       const response = await fetchNote(noteName);
 
       if (response.exists && response.data) {
-        // Note exists and is encrypted - need password
-        setShowPasswordDialog(true);
-        setPasswordDialogMode('unlock');
+        // Note exists - check if it has user password
+        if (response.hasUserPassword) {
+          // Has user password - need to prompt
+          setShowPasswordDialog(true);
+          setPasswordDialogMode('unlock');
+        } else {
+          // No user password - auto-decrypt with default password
+          try {
+            const decrypted = await decryptNote(response.data, 'no-password-set');
+            setNoteData(decrypted);
+            setPassword('');
+            setIsLocked(false);
+          } catch (err) {
+            // If auto-decrypt fails, ask for password
+            setShowPasswordDialog(true);
+            setPasswordDialogMode('unlock');
+          }
+        }
       } else {
         // New note - create default structure
         const newNote = {
