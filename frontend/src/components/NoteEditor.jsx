@@ -503,7 +503,7 @@ const NoteEditor = () => {
             }`}>
               / {noteName}
             </span>
-            <span className={`hidden md:inline text-xs ${
+            <span className={`text-xs ${
               isDarkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>
               | Built by Sanjay [MGIT]
@@ -517,8 +517,8 @@ const NoteEditor = () => {
               rel="noopener noreferrer"
               className={`p-2 rounded-lg transition-colors ${
                 isDarkMode 
-                  ? 'bg-zinc-900 hover:bg-zinc-800 text-zinc-400' 
-                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                  ? 'bg-zinc-900 hover:bg-zinc-800 text-blue-400 hover:text-blue-300' 
+                  : 'bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700'
               }`}
               title="Open Puretext Homepage"
             >
@@ -654,11 +654,11 @@ const NoteEditor = () => {
       <div className="p-4 sm:p-6 flex justify-center">
         <div className="w-full max-w-5xl flex gap-3 sm:gap-6">
           {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base leading-relaxed select-none flex-col pt-[73px] pr-3 ${
+          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-base select-none flex-col pt-[73px] pr-3 leading-[28px] ${
             isDarkMode ? 'text-zinc-700' : 'text-gray-400'
           }`}>
             {currentTab.content.split('\n').map((_, i) => (
-              <div key={i} className="h-[28px]">{i + 1}</div>
+              <div key={i}>{i + 1}</div>
             ))}
           </div>
 

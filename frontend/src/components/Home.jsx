@@ -166,15 +166,18 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="max-w-md w-full mx-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-blue-100">
           <div className="text-center mb-8">
-            <h1 className="text-5xl font-bold text-gray-800 mb-2">
-              🔒 Puretext
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+              Puretext
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-lg mb-1">
               Secure, encrypted notes. Zero-knowledge.
+            </p>
+            <p className="text-sm text-gray-500">
+              Your private notepad, protected by military-grade encryption
             </p>
           </div>
 
@@ -184,13 +187,13 @@ const Home = () => {
                 type="text"
                 value={noteName}
                 onChange={(e) => setNoteName(e.target.value)}
-                placeholder="Enter id or name"
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-lg"
+                placeholder="Enter note name or ID"
+                className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 text-lg transition-colors bg-white/50"
                 autoFocus
               />
               <button
                 type="submit"
-                className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition-colors disabled:bg-gray-300"
+                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 font-semibold text-lg transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400"
                 disabled={!noteName.trim() || loading}
               >
                 {loading ? 'Loading...' : 'Open Note →'}
@@ -199,22 +202,34 @@ const Home = () => {
           </form>
 
           <div className="border-t border-gray-200 pt-6">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3">Features</h2>
+            <h2 className="text-sm font-semibold text-gray-700 mb-3">✨ Features</h2>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li>✓ Client-side encryption (AES-256)</li>
-              <li>✓ Password protection</li>
-              <li>✓ Multiple tabs</li>
-              <li>✓ Custom URLs</li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-500 mt-0.5">✓</span>
+                <span>Client-side AES-256 encryption</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-500 mt-0.5">✓</span>
+                <span>Password protection & custom URLs</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-500 mt-0.5">✓</span>
+                <span>Multiple tabs & auto-save</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-500 mt-0.5">✓</span>
+                <span>No registration required</span>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="text-center mt-6">
-          <p className="text-sm text-gray-600">
-            Your data is encrypted in your browser.
+          <p className="text-sm text-gray-600 mb-2">
+            🔒 Your data is encrypted in your browser.
           </p>
-          <p className="text-xs text-gray-500 mt-2">
-            Built by San
+          <p className="text-xs text-gray-500">
+            Built by Sanjay [MGIT]
           </p>
         </div>
       </div>
