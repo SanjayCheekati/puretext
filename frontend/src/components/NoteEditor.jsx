@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy } from 'lucide-react';
+import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy, ArrowUpCircle } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -457,52 +457,51 @@ const NoteEditor = () => {
             <span className="hidden md:inline text-xs text-gray-500">| Built by Sanjay [MGIT]</span>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-3">
             {isDirty && (
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm disabled:bg-gray-400 whitespace-nowrap flex items-center gap-1"
+                className="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 disabled:bg-gray-400 transition-colors"
+                title={isSaving ? 'Saving...' : 'Save'}
               >
-                <Save size={16} />
-                <span>{isSaving ? 'Saving...' : 'Save'}</span>
+                <ArrowUpCircle size={20} />
               </button>
             )}
 
             <button
               onClick={toggleDarkMode}
-              className="px-2 sm:px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
+              className="p-2 rounded-full bg-gray-700 text-white hover:bg-gray-600 transition-colors"
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
-              <span>{isDarkMode ? 'Light' : 'Dark'}</span>
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
             <button
               onClick={handleCopyURL}
-              className="px-2 sm:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
+              className="p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+              title="Share URL"
             >
-              <Share2 size={16} />
-              <span>Share</span>
+              <Share2 size={20} />
             </button>
 
             {!isLocked && !password && (
               <button
                 onClick={handleLockNote}
-                className="px-2 sm:px-3 py-1 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
+                className="p-2 rounded-full bg-yellow-600 text-white hover:bg-yellow-700 transition-colors"
+                title="Lock Note"
               >
-                <Lock size={16} />
-                <span>Lock</span>
+                <Lock size={20} />
               </button>
             )}
 
             {password && (
               <button
                 onClick={handleChangePassword}
-                className="px-2 sm:px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs sm:text-sm whitespace-nowrap flex items-center gap-1"
+                className="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors"
+                title="Change Password"
               >
-                <Key size={16} />
-                <span>Change Password</span>
+                <Key size={20} />
               </button>
             )}
           </div>
