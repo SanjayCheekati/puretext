@@ -647,9 +647,6 @@ const NoteEditor = () => {
         >
           + Add Tab
         </button>
-        >
-          + Add Tab
-        </button>
         </div>
       </div>
 
