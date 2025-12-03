@@ -98,20 +98,10 @@ const Home = () => {
                     {decryptedData && !decryptedData.error && (
                       <div className="mt-4">
                         <h3 className="font-semibold text-gray-700 mb-3">Tabs ({decryptedData.tabs?.length || 0}):</h3>
-                        <div className="space-y-3">
+                        <div className="flex flex-wrap gap-2">
                           {decryptedData.tabs?.map((tab, tabIndex) => (
-                            <div key={tab.id} className="bg-white border border-gray-200 rounded p-4">
-                              <div className="flex justify-between items-start mb-2">
-                                <span className="font-semibold text-blue-600">{tab.name || `Tab ${tabIndex + 1}`}</span>
-                                <span className="text-xs text-gray-500">
-                                  Updated: {new Date(tab.updatedAt).toLocaleString()}
-                                </span>
-                              </div>
-                              <div className="bg-gray-50 p-3 rounded border border-gray-200">
-                                <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono max-h-40 overflow-y-auto">
-                                  {tab.content || '(Empty)'}
-                                </pre>
-                              </div>
+                            <div key={tab.id} className="bg-blue-100 border border-blue-300 rounded-lg px-4 py-2">
+                              <span className="font-medium text-blue-800">{tab.name || `Tab ${tabIndex + 1}`}</span>
                             </div>
                           ))}
                         </div>
