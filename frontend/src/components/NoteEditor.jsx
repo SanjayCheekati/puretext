@@ -462,10 +462,10 @@ const NoteEditor = () => {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="p-2 rounded-full bg-green-600 text-white hover:bg-green-700 disabled:bg-gray-400 transition-colors"
-                title={isSaving ? 'Saving...' : 'Save'}
+                className="px-3 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 disabled:bg-gray-400 transition-colors flex items-center gap-2"
               >
-                <ArrowUpCircle size={20} />
+                <Save size={18} />
+                <span className="text-sm font-medium">{isSaving ? 'Saving...' : 'Save'}</span>
               </button>
             )}
 
