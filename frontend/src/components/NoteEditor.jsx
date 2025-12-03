@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy, ArrowUpCircle } from 'lucide-react';
+import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy, ArrowUpCircle, Download } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -411,6 +411,22 @@ const NoteEditor = () => {
     }
   };
 
+  const handleDownload = () => {
+    const currentTab = noteData.tabs[noteData.activeTab];
+    if (currentTab) {
+      const content = (currentTab.title ? currentTab.title + '\n\n' : '') + currentTab.content;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${currentTab.title || 'Untitled'}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -593,6 +609,17 @@ const NoteEditor = () => {
                 disabled={isLocked}
               />
               <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDownload}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    isDarkMode 
+                      ? 'text-white hover:bg-zinc-800' 
+                      : 'text-gray-900 hover:bg-gray-200'
+                  }`}
+                  title="Download as .txt"
+                >
+                  <Download size={18} />
+                </button>
                 <button
                   onClick={handleCopyContent}
                   className={`p-1.5 rounded-lg transition-colors ${
