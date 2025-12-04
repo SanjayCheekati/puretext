@@ -10,6 +10,21 @@ const Home = () => {
   const [decryptedContents, setDecryptedContents] = useState({});
   const navigate = useNavigate();
 
+  // Preload NoteEditor component for faster navigation
+  useEffect(() => {
+    const preloadNoteEditor = async () => {
+      try {
+        await import('./NoteEditor');
+      } catch (error) {
+        // Silently fail - component will load on demand if preload fails
+      }
+    };
+    
+    // Start preloading after a short delay to not interfere with initial page load
+    const timer = setTimeout(preloadNoteEditor, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (noteName.trim()) {
