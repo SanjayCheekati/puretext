@@ -1,15 +1,19 @@
-# 🔐 Puretext.me - Secure Online Notepad
+# 🔐 PureText Online Plain Text Editor - Secure Web Notepad
 
-**Puretext.me** is a free, secure online notepad with military-grade AES-256 encryption. The best **ProtectedText** and **WriteXO** alternative for private, encrypted note-taking.
+**PureText** (puretext.me) is a browser-based online plain text editor with military-grade AES-256 encryption. A privacy-first web notepad for secure private notes — not to be confused with the Windows PureText desktop utility.
 
-🌐 **Live at:** [https://puretext.me](https://puretext.me)
+The best **ProtectedText** and **WriteXO** alternative for private, encrypted note-taking.
+
+🌐 **Live at:** [https://www.puretext.me](https://www.puretext.me)
 
 ---
 
-## 🌟 Why Puretext?
+## 🌟 Why PureText Online Editor?
 
 - **🔐 Military-Grade Encryption** - AES-256-GCM client-side encryption
 - **🔑 Password Protected** - Optional password protection for your notes
+- **📋 Paste as Plain Text** - Remove formatting from copied content
+- **🧹 Text Cleaner Tool** - Strip formatting and clean up text
 - **📑 Multiple Tabs** - Organize notes with unlimited tabs
 - **🌐 Custom URLs** - Access notes via memorable custom URLs (puretext.me/your-name)
 - **🌙 Dark Mode** - Beautiful dark theme for comfortable writing
@@ -18,6 +22,8 @@
 - **🔒 Zero-Knowledge** - Your password and data never leave your browser
 - **📱 Mobile Friendly** - Works seamlessly on all devices
 - **⚡ Lightning Fast** - Built with modern technologies
+
+> **Note:** PureText.me is a browser-based online plain text editor. It is not related to the Windows PureText desktop utility software.
 
 ---
 
@@ -63,9 +69,11 @@
 
 ## 🆚 Comparison with Alternatives
 
-| Feature | Puretext.me | ProtectedText | WriteXO | Standard Notepad |
+| Feature | PureText Online | ProtectedText | WriteXO | Standard Notepad |
 |---------|-------------|---------------|---------|------------------|
 | AES-256 Encryption | ✅ | ✅ | ✅ | ❌ |
+| Paste as Plain Text | ✅ | ❌ | ❌ | ❌ |
+| Text Cleaner Tool | ✅ | ❌ | ❌ | ❌ |
 | Multiple Tabs | ✅ | ❌ | ✅ | ❌ |
 | Dark Mode | ✅ | ❌ | ✅ | ❌ |
 | Custom URLs | ✅ | ✅ | ✅ | ❌ |
@@ -80,13 +88,15 @@
 
 ## 🚀 Quick Start
 
-1. Visit **[puretext.me](https://puretext.me)**
+1. Visit **[www.puretext.me](https://www.puretext.me)**
 2. Enter a custom URL name (e.g., "my-notes")
 3. Start writing - your notes auto-save
 4. Optionally set a password for extra security
 5. Access your notes anytime at `puretext.me/your-name`
 
 That's it! No registration, no email, no setup.
+
+**PureText WebApp** is perfect for quick note-taking, removing formatting from text, and storing secure private notes.
 
 ---
 

@@ -186,10 +186,13 @@ const Home = () => {
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-blue-100">
           <div className="text-center mb-8">
             <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-              Puretext
+              PureText
             </h1>
-            <p className="text-gray-600 text-lg">
-              Secure, encrypted notes. Zero-knowledge.
+            <p className="text-gray-600 text-lg mb-1">
+              Online Plain Text Editor & Privacy-First Notepad
+            </p>
+            <p className="text-xs text-gray-500">
+              Browser-based plain text editor — not the Windows PureText utility
             </p>
           </div>
 
@@ -214,23 +217,27 @@ const Home = () => {
           </form>
 
           <div className="border-t border-gray-200 pt-6">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3">✨ Features</h2>
+            <h2 className="text-sm font-semibold text-gray-700 mb-3">✨ PureText Online Features</h2>
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
-                <span>Client-side AES-256 encryption</span>
+                <span>Online plain text editor with encryption</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
-                <span>Password protection & custom URLs</span>
+                <span>Paste as plain text & remove formatting</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
-                <span>Multiple tabs & auto-save</span>
+                <span>Secure private notes with custom URLs</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
-                <span>No registration required</span>
+                <span>Text cleaner tool for formatted content</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-500 mt-0.5">✓</span>
+                <span>Browser-based notepad — no installation</span>
               </li>
             </ul>
           </div>
