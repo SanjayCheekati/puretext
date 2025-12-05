@@ -3,19 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Critical CSS -->
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto',sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}#root{min-height:100vh}
+    </style>
     
     <!-- Performance Optimization -->
     <link rel="preconnect" href="https://vitals.vercel-insights.com" />
     <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
     
     <!-- Primary Meta Tags -->
-    <title>PureText Online Plain Text Editor • Secure Web Notepad</title>
-    <meta name="title" content="PureText Online Plain Text Editor • Privacy-First Notepad" />
-    <meta name="description" content="PureText is a browser-based plain text editor and secure online notepad. Not related to Windows PureText software. Free encrypted note-taking with paste as plain text support." />
-    <meta name="keywords" content="puretext, puretext online, puretext web app, puretext notepad, online plain text editor, plain text editor online, paste as plain text, text cleaner tool, remove formatting online, secure private notes, encrypted online notepad, browser notepad, online notepad, web notepad, privacy-first text editor, protectedtext alternative, writexo alternative, puretext.me" />
+    <title>PureText Online Plain Text Editor • Fast Secure Notepad</title>
+    <meta name="title" content="PureText Online Plain Text Editor • Fast Secure Notepad" />
+    <meta name="description" content="PureText.me is the modern, browser-based PureText editor and a fast ProtectedText alternative. Online plain text editor with paste as plain text, text cleaner tool, and encrypted private notes." />
+    <meta name="keywords" content="puretext, puretext online, puretext editor, online plain text editor, paste as plain text, text cleaner tool, remove formatting online, protectedtext alternative, secure notepad, encrypted notepad, browser notepad, plain text editor online, puretext.me" />
     <meta name="author" content="Sanjay [MGIT]" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.puretext.me" />
@@ -23,16 +27,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.puretext.me" />
-    <meta property="og:title" content="PureText — Online Plain Text Editor & Privacy-First Notepad" />
-    <meta property="og:description" content="PureText is a browser-based plain text editor for secure note-taking. Not the Windows PureText utility. Free encrypted notepad with paste as plain text." />
+    <meta property="og:title" content="PureText Online Plain Text Editor • Fast Secure Notepad" />
+    <meta property="og:description" content="PureText.me is the modern, browser-based PureText editor and a fast ProtectedText alternative. Free encrypted notepad with paste as plain text." />
     <meta property="og:image" content="https://www.puretext.me/og-image.png" />
     <meta property="og:site_name" content="PureText Online" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://www.puretext.me" />
-    <meta property="twitter:title" content="PureText — Online Plain Text Editor & Secure Notepad" />
-    <meta property="twitter:description" content="PureText is a modern web-based plain text editor, not the legacy Windows tool. Free encrypted notepad for privacy-focused users." />
+    <meta property="twitter:title" content="PureText Online Plain Text Editor • Fast Secure Notepad" />
+    <meta property="twitter:description" content="PureText.me is the modern online plain text editor and ProtectedText alternative. Free encrypted notepad for privacy-focused users." />
     <meta property="twitter:image" content="https://www.puretext.me/twitter-image.png" />
     
     <!-- Additional SEO -->
@@ -47,10 +51,9 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "PureText",
-      "alternateName": ["PureText Online", "PureText Web Notepad", "PureText Editor", "PureText Online Plain Text Editor"],
       "url": "https://www.puretext.me",
-      "description": "PureText is a browser-based online plain text editor and privacy-first notepad. This is PureText.me, a modern web application — not related to the Windows PureText desktop utility. Features encrypted note-taking, paste as plain text, and secure private notes with zero-knowledge architecture.",
-      "applicationCategory": "Productivity",
+      "description": "PureText.me is the modern online plain text editor, ProtectedText alternative, and private notepad. Not related to the old Windows PureText tool.",
+      "applicationCategory": "TextEditor",
       "operatingSystem": "Web Browser",
       "browserRequirements": "Requires JavaScript. Supports Chrome, Firefox, Safari, Edge.",
       "offers": {
@@ -61,26 +64,7 @@
       "author": {
         "@type": "Person",
         "name": "Sanjay [MGIT]"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "5",
-        "ratingCount": "100"
-      },
-      "featureList": [
-        "Online Plain Text Editor",
-        "Paste as Plain Text",
-        "Remove Formatting Online",
-        "Text Cleaner Tool",
-        "AES-256 Encryption",
-        "Zero-Knowledge Architecture",
-        "Password Protection",
-        "Multiple Tabs",
-        "Custom URLs",
-        "No Registration Required",
-        "Secure Private Notes",
-        "Encrypted Online Notepad"
-      ]
+      }
     }
     </script>
     <script type="application/ld+json">
@@ -90,10 +74,18 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Is PureText the same as the Windows PureText utility?",
+          "name": "Is PureText.me the same as the Windows PureText tool?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. This is PureText.me, a modern online plain text editor and web-based notepad. It is not related to the legacy Windows PureText desktop software. PureText Online is a browser application for secure note-taking and encrypted text editing."
+            "text": "No. PureText.me is a modern web-based editor, not the legacy clipboard utility."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is PureText.me a ProtectedText alternative?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. PureText.me offers private text editing in the browser without tracking."
           }
         },
         {
@@ -101,15 +93,7 @@
           "name": "What is PureText Online used for?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "PureText is an online plain text editor designed for privacy-focused users. It allows you to paste as plain text, remove formatting online, create secure private notes with encryption, and organize content with multiple tabs. All notes are encrypted with AES-256 encryption."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does PureText Online differ from desktop text editors?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "PureText Online is a browser-based plain text editor that works on any device without installation. Unlike desktop tools, PureText WebApp offers cloud-based encrypted storage, custom URLs for note access, and zero-knowledge security. It combines the simplicity of plain text editing with modern encryption."
+            "text": "PureText is an online plain text editor for secure note-taking. It lets you paste as plain text, remove formatting, create encrypted notes, and organize content with multiple tabs."
           }
         },
         {
@@ -117,7 +101,7 @@
           "name": "Can I use PureText as a text cleaner tool?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. PureText Online functions as a text cleaner tool. When you paste formatted text, PureText automatically handles it as plain text, effectively removing formatting online. This makes it ideal for cleaning text copied from Word, websites, or other sources."
+            "text": "Yes. PureText functions as a text cleaner tool. When you paste formatted text, PureText handles it as plain text, removing formatting online automatically."
           }
         },
         {
@@ -125,7 +109,15 @@
           "name": "Is PureText free to use?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, PureText Online Plain Text Editor is completely free. No registration, no subscription, no hidden costs. Simply visit PureText.me and start using the encrypted notepad immediately."
+            "text": "Yes, PureText Online Plain Text Editor is completely free. No registration, no subscription, no hidden costs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How secure is PureText?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PureText uses AES-256-GCM encryption with zero-knowledge architecture. All encryption happens in your browser. Your password and data never leave your device."
           }
         }
       ]

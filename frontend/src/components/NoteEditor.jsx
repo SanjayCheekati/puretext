@@ -456,7 +456,7 @@ const NoteEditor = () => {
         {!showPasswordDialog && (
           <div className="h-screen flex items-center justify-center bg-gray-50">
             <div className="text-center">
-              <h1 className="text-3xl font-bold mb-4">Puretext</h1>
+              <h1 className="text-3xl font-bold mb-4">PureText</h1>
               <p className="text-gray-600">Loading note...</p>
             </div>
           </div>
@@ -498,7 +498,7 @@ const NoteEditor = () => {
                 ? 'text-blue-400' 
                 : 'text-blue-600'
             }`}>
-              Puretext
+              PureText
             </h1>
             <span className={`text-sm sm:text-base truncate max-w-[120px] sm:max-w-none ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
@@ -514,7 +514,7 @@ const NoteEditor = () => {
 
           <div className="flex items-center gap-2">
             <a
-              href="https://puretext.me"
+              href="https://www.puretext.me"
               target="_blank"
               rel="noopener noreferrer"
               className={`p-2 rounded-lg transition-colors ${
@@ -522,7 +522,7 @@ const NoteEditor = () => {
                   ? 'bg-zinc-900 hover:bg-zinc-800 text-blue-400 hover:text-blue-300' 
                   : 'bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700'
               }`}
-              title="Open Puretext Homepage"
+              title="Open PureText Homepage - Online Plain Text Editor"
             >
               <Home size={16} />
             </a>
