@@ -8,6 +8,14 @@ import { Toaster } from './components/ui/use-toast.jsx';
 const Home = lazy(() => import('./components/Home'));
 const NoteEditor = lazy(() => import('./components/NoteEditor'));
 
+// Lazy load SEO landing pages
+const ProtectedTextAlternative = lazy(() => import('./components/seo/ProtectedTextAlternative'));
+const BestProtectedTextAlternatives = lazy(() => import('./components/seo/BestProtectedTextAlternatives'));
+const PureTextVsProtectedText = lazy(() => import('./components/seo/PureTextVsProtectedText'));
+const PlainTextOnlineEditor = lazy(() => import('./components/seo/PlainTextOnlineEditor'));
+const RemoveFormattingOnline = lazy(() => import('./components/seo/RemoveFormattingOnline'));
+const PasteAsPlainTextTool = lazy(() => import('./components/seo/PasteAsPlainTextTool'));
+
 // Loading fallback
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -21,6 +29,14 @@ const App = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* SEO Landing Pages */}
+          <Route path="/protectedtext-alternative" element={<ProtectedTextAlternative />} />
+          <Route path="/best-protectedtext-alternatives" element={<BestProtectedTextAlternatives />} />
+          <Route path="/puretext-vs-protectedtext" element={<PureTextVsProtectedText />} />
+          <Route path="/plain-text-online-editor" element={<PlainTextOnlineEditor />} />
+          <Route path="/remove-formatting-online" element={<RemoveFormattingOnline />} />
+          <Route path="/paste-as-plain-text-tool" element={<PasteAsPlainTextTool />} />
+          {/* Note Editor - must be last to avoid conflicts */}
           <Route path="/:noteName" element={<NoteEditor />} />
         </Routes>
       </Suspense>
