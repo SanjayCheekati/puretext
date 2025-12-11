@@ -1,12 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Unlock, Key, Trash2, Sun, Moon, Copy, ArrowUpCircle, Download, Home } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
-import PasswordDialog from './PasswordDialog';
-import ConfirmDialog from './ConfirmDialog';
-import TextInputDialog from './TextInputDialog';
+import { Button } from './ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
+import { Separator } from './ui/separator';
+import { toast } from './ui/use-toast.jsx';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog';
 
 const NoteEditor = () => {
   const { noteName } = useParams();
@@ -30,11 +41,6 @@ const NoteEditor = () => {
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [draggedTabIndex, setDraggedTabIndex] = useState(null);
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('editorDarkMode');
-    return saved !== null ? JSON.parse(saved) : true; // Default to dark mode
-  });
-  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
@@ -383,12 +389,6 @@ const NoteEditor = () => {
     setShowPasswordDialog(true);
   };
 
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-    localStorage.setItem('editorDarkMode', JSON.stringify(newMode));
-  };
-
   const handleDeleteNote = async () => {
     if (!noteName) return;
 
@@ -412,17 +412,20 @@ const NoteEditor = () => {
   const handleCopyURL = () => {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
-    alert('URL copied to clipboard!');
+    toast({
+      title: "URL Copied",
+      description: "Note URL copied to clipboard",
+    });
   };
 
   const handleCopyContent = () => {
     const currentTab = noteData.tabs[noteData.activeTab];
     if (currentTab && currentTab.content) {
       navigator.clipboard.writeText(currentTab.content);
-      setShowCopiedMessage(true);
-      setTimeout(() => {
-        setShowCopiedMessage(false);
-      }, 5000);
+      toast({
+        title: "Content Copied",
+        description: "Tab content copied to clipboard",
+      });
     }
   };
 
@@ -444,32 +447,55 @@ const NoteEditor = () => {
 
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-sm text-gray-600">Loading...</p>
       </div>
     );
   }
 
   if (isLocked && !noteData) {
     return (
-      <>
-        {!showPasswordDialog && (
-          <div className="h-screen flex items-center justify-center bg-gray-50">
-            <div className="text-center">
-              <h1 className="text-3xl font-bold mb-4">PureText</h1>
-              <p className="text-gray-600">Loading note...</p>
-            </div>
+      <div className="min-h-screen bg-gray-50">
+        <nav className="border-b border-gray-200 bg-white">
+          <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+            <a href="https://www.puretext.me" className="text-xl font-semibold text-gray-900">
+              PureText
+            </a>
           </div>
-        )}
-        <PasswordDialog
-          isOpen={showPasswordDialog}
-          onSubmit={handlePasswordSubmit}
-          onCancel={() => navigate('/')}
-          title="Enter Password"
-          message="This note is password-protected. Enter the password to unlock it."
-          error={passwordError}
-        />
-      </>
+        </nav>
+        <div className="flex items-center justify-center py-16">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Password Protected</CardTitle>
+              <CardDescription>This note is password-protected. Enter the password to unlock it.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                handlePasswordSubmit(formData.get('password'));
+              }} className="space-y-4">
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                  required
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-sm text-red-600">{passwordError}</p>
+                )}
+                <div className="flex gap-2">
+                  <Button type="button" variant="outline" onClick={() => navigate('/')} className="flex-1">
+                    Cancel
+                  </Button>
+                  <Button type="submit" className="flex-1">Unlock</Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     );
   }
 
@@ -480,326 +506,254 @@ const NoteEditor = () => {
   const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
 
   return (
-    <div className={`min-h-screen flex flex-col ${
-      isDarkMode 
-        ? 'bg-black' 
-        : 'bg-gray-50'
-    }`}>
-      {/* Header */}
-      <div className={`border-b px-4 sm:px-6 py-3 sm:py-4 ${
-        isDarkMode 
-          ? 'bg-black border-zinc-800' 
-          : 'bg-white border-gray-200 shadow-sm'
-      }`}>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <h1 className={`text-2xl sm:text-3xl font-extrabold ${
-              isDarkMode 
-                ? 'text-blue-400' 
-                : 'text-blue-600'
-            }`}>
+    <div className="min-h-screen bg-gray-50">
+      {/* Minimal Navbar */}
+      <nav className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <a href="https://www.puretext.me" className="text-xl font-semibold text-gray-900 hover:text-gray-700">
               PureText
-            </h1>
-            <span className={`text-sm sm:text-base truncate max-w-[120px] sm:max-w-none ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              / {noteName}
-            </span>
-            <span className={`hidden sm:inline text-xs ${
-              isDarkMode ? 'text-gray-500' : 'text-gray-400'
-            }`}>
-              | Built by Sanjay [MGIT]
+            </a>
+            <Separator orientation="vertical" className="h-5" />
+            <span className="text-sm text-gray-600 truncate max-w-xs">
+              {noteName}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <a
-              href="https://www.puretext.me"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode 
-                  ? 'bg-zinc-900 hover:bg-zinc-800 text-blue-400 hover:text-blue-300' 
-                  : 'bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700'
-              }`}
-              title="Open PureText Homepage - Online Plain Text Editor"
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/')}
+              title="Home"
             >
-              <Home size={16} />
-            </a>
+              <Home className="h-4 w-4" />
+            </Button>
 
             {isDirty && (
-              <button
+              <Button
+                variant="default"
+                size="sm"
                 onClick={handleSave}
                 disabled={isSaving}
-                className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition-colors ${
-                  isSaving
-                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                    : 'bg-green-600 hover:bg-green-700 text-white'
-                }`}
               >
-                <Save size={16} />
-                <span>{isSaving ? 'Saving...' : 'Save'}</span>
-              </button>
+                <Save className="h-4 w-4 mr-1.5" />
+                {isSaving ? 'Saving...' : 'Save'}
+              </Button>
             )}
 
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode 
-                  ? 'bg-yellow-600 hover:bg-yellow-700 text-white' 
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-              }`}
-              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={handleCopyURL}
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode 
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                  : 'bg-blue-600 hover:bg-blue-700 text-white'
-              }`}
-              title="Share URL"
+              title="Copy URL"
             >
-              <Share2 size={16} />
-            </button>
+              <Share2 className="h-4 w-4" />
+            </Button>
 
             {!isLocked && !password && (
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleLockNote}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'bg-orange-600 hover:bg-orange-700 text-white' 
-                    : 'bg-orange-600 hover:bg-orange-700 text-white'
-                }`}
                 title="Lock Note"
               >
-                <Lock size={16} />
-              </button>
+                <Lock className="h-4 w-4" />
+              </Button>
             )}
 
             {password && (
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleChangePassword}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white' 
-                    : 'bg-purple-600 hover:bg-purple-700 text-white'
-                }`}
                 title="Change Password"
               >
-                <Key size={16} />
-              </button>
+                <Key className="h-4 w-4" />
+              </Button>
             )}
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Tabs */}
-      <div className={`border-b px-3 sm:px-6 py-3 ${
-        isDarkMode 
-          ? 'bg-black border-zinc-800' 
-          : 'bg-white border-gray-200'
-      }`}>
-        <div className="flex flex-wrap items-center gap-2 justify-center min-h-[40px]">
-        {noteData.tabs.map((tab, index) => (
-          <div
-            key={tab.id}
-            draggable
-            onDragStart={() => handleDragStart(index)}
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, index)}
-            onDragEnd={handleDragEnd}
-            className={`flex items-center gap-3 px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg cursor-move transition-colors text-xs sm:text-base ${
-              isDarkMode
-                ? index === noteData.activeTab
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
-                : index === noteData.activeTab
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
-          >
+      {/* Content Area */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Tabs */}
+        <div className="flex items-center gap-2 mb-6 flex-wrap">
+          {noteData.tabs.map((tab, index) => (
             <button
+              key={tab.id}
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, index)}
+              onDragEnd={handleDragEnd}
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
-              className="font-medium focus:outline-none"
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                index === noteData.activeTab
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+              } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
             >
               {tab.name}
+              {noteData.tabs.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteTab(index);
+                  }}
+                  className="hover:text-red-500"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              )}
             </button>
-            {noteData.tabs.length > 1 && (
-              <button
-                onClick={() => handleDeleteTab(index)}
-                className="text-xs focus:outline-none hover:text-red-400 transition-colors"
-                title="Delete"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          onClick={handleAddTab}
-          className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-lg text-xs sm:text-base font-medium focus:outline-none whitespace-nowrap transition-colors ${
-            isDarkMode
-              ? 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          + Add Tab
-        </button>
+          ))}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleAddTab}
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add Tab
+          </Button>
         </div>
-      </div>
 
-      {/* Editor */}
-      <div className="p-4 sm:p-6 flex justify-center">
-        <div className="w-full max-w-5xl flex gap-3 sm:gap-6">
-          {/* Line numbers */}
-          <div className={`hidden sm:flex flex-shrink-0 text-right font-mono text-sm sm:text-lg select-none flex-col pt-[73px] pr-3 leading-[24px] sm:leading-[28px] ${
-            isDarkMode ? 'text-zinc-700' : 'text-gray-400'
-          }`}>
-            {currentTab.content.split('\n').map((_, i) => (
-              <div key={i}>{i + 1}</div>
-            ))}
-          </div>
-
-          {/* Editor container */}
-          <div className={`flex-1 flex flex-col rounded-lg overflow-hidden shadow-lg ${
-            isDarkMode 
-              ? 'bg-zinc-950 border border-zinc-800' 
-              : 'bg-white border border-gray-200'
-          }`}>
-            {/* Title input with icons */}
-            <div className={`flex items-center gap-3 px-4 sm:px-6 py-2 sm:py-3 border-b ${
-              isDarkMode ? 'border-zinc-800' : 'border-gray-200'
-            }`}>
-              <input
-                type="text"
-                value={currentTab.title || ''}
-                onChange={(e) => handleTitleChange(e.target.value)}
-                placeholder="Title or program name..."
-                className={`flex-1 outline-none border-0 font-mono text-sm sm:text-xl font-semibold bg-transparent ${
-                  isDarkMode 
-                    ? 'text-zinc-100 placeholder-zinc-700' 
-                    : 'text-gray-900 placeholder-gray-400'
-                }`}
-                disabled={isLocked}
-              />
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleDownload}
-                  className={`p-2 rounded-lg transition-colors ${
-                    isDarkMode 
-                      ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                  title="Download as .txt"
-                >
-                  <Download size={18} />
-                </button>
-                <button
-                  onClick={handleCopyContent}
-                  className={`p-2 rounded-lg transition-colors ${
-                    showCopiedMessage
-                      ? 'text-green-500 hover:bg-green-500/10'
-                      : isDarkMode 
-                        ? 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900' 
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                  title="Copy tab content"
-                >
-                  <Copy size={18} />
-                </button>
-                {showCopiedMessage && (
-                  <span className="text-sm font-medium text-green-500">
-                    Copied
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Content textarea */}
-            <textarea
-              value={currentTab.content}
-              onChange={(e) => handleContentChange(e.target.value)}
-              className={`w-full px-4 sm:px-6 py-4 sm:py-6 outline-none border-0 resize-none font-mono text-sm sm:text-lg leading-[24px] sm:leading-[28px] scrollbar-hide min-h-[500px] ${
-                isDarkMode 
-                  ? 'bg-zinc-950 text-zinc-100 placeholder-zinc-700' 
-                  : 'bg-white text-gray-900 placeholder-gray-400'
-              }`}
-              placeholder="Start typing..."
+        {/* Editor Card */}
+        <Card>
+          {/* Title Bar */}
+          <div className="flex items-center gap-3 px-6 py-3 border-b border-gray-200">
+            <Input
+              type="text"
+              value={currentTab.title || ''}
+              onChange={(e) => handleTitleChange(e.target.value)}
+              placeholder="Untitled"
+              className="flex-1 border-0 text-base font-medium px-0 focus-visible:ring-0"
               disabled={isLocked}
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              rows={Math.max(20, currentTab.content.split('\n').length)}
             />
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleDownload}
+                title="Download"
+              >
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleCopyContent}
+                title="Copy Content"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-        </div>
+
+          {/* Editor */}
+          <Textarea
+            value={currentTab.content}
+            onChange={(e) => handleContentChange(e.target.value)}
+            placeholder="Start typing..."
+            disabled={isLocked}
+            className="min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0"
+            style={{ scrollbarWidth: 'thin' }}
+          />
+        </Card>
       </div>
 
-      {/* Dialogs */}
-      <PasswordDialog
-        isOpen={showPasswordDialog}
-        onSubmit={handlePasswordSubmit}
-        onCancel={() => setShowPasswordDialog(false)}
-        title={
-          passwordDialogMode === 'unlock'
-            ? 'Enter Password'
-            : passwordDialogMode === 'lock'
-            ? 'Lock Note'
-            : 'Change Password'
-        }
-        message={
-          passwordDialogMode === 'unlock'
-            ? 'Enter the password to unlock this note.'
-            : passwordDialogMode === 'lock'
-            ? 'Enter a password to lock this note.'
-            : 'Enter a new password for this note.'
-        }
-        error={passwordError}
-      />
+      {/* Password Dialog */}
+      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {passwordDialogMode === 'unlock' ? 'Enter Password' : passwordDialogMode === 'lock' ? 'Lock Note' : 'Change Password'}
+            </DialogTitle>
+            <DialogDescription>
+              {passwordDialogMode === 'unlock' ? 'Enter the password to unlock this note.' : passwordDialogMode === 'lock' ? 'Enter a password to lock this note.' : 'Enter a new password for this note.'}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            handlePasswordSubmit(formData.get('password'));
+          }}>
+            <div className="space-y-4 py-4">
+              <Input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required
+                autoFocus
+              />
+              {passwordError && (
+                <p className="text-sm text-red-600">{passwordError}</p>
+              )}
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setShowPasswordDialog(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">Submit</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        onConfirm={handleDeleteNote}
-        onCancel={() => setShowDeleteDialog(false)}
-        title="Delete Note"
-        message="Are you sure you want to permanently delete this note? This action cannot be undone."
-        confirmText="Delete"
-      />
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Note</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to permanently delete this note? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteNote}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      <TextInputDialog
-        isOpen={showTabNameDialog}
-        onSubmit={handleTabNameSubmit}
-        onCancel={() => setShowTabNameDialog(false)}
-        title={tabNameDialogMode === 'add' ? 'Add New Tab' : 'Rename Tab'}
-        message={tabNameDialogMode === 'add' ? 'Enter a name for the new tab:' : 'Enter a new name for the tab:'}
-        placeholder="Tab name"
-        defaultValue={tabNameDialogMode === 'rename' ? noteData.tabs[selectedTabIndex]?.name : ''}
-      />
-
-      {error && (
-        <div className={`fixed bottom-20 right-4 px-5 py-3 rounded-lg shadow-lg ${
-          isDarkMode 
-            ? 'bg-red-900 border border-red-700 text-red-200' 
-            : 'bg-red-50 border border-red-300 text-red-700'
-        }`}>
-          {error}
-        </div>
-      )}
-
-      {/* Scroll to Top Button */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className={`fixed bottom-6 right-6 p-3 sm:p-4 rounded-full shadow-xl transition-colors ${
-          isDarkMode
-            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-            : 'bg-blue-600 hover:bg-blue-700 text-white'
-        }`}
-        title="Scroll to Top"
-      >
-        <ArrowUpCircle size={22} />
-      </button>
+      {/* Tab Name Dialog */}
+      <Dialog open={showTabNameDialog} onOpenChange={setShowTabNameDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{tabNameDialogMode === 'add' ? 'Add New Tab' : 'Rename Tab'}</DialogTitle>
+            <DialogDescription>
+              {tabNameDialogMode === 'add' ? 'Enter a name for the new tab' : 'Enter a new name for the tab'}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            handleTabNameSubmit(formData.get('tabName'));
+          }}>
+            <div className="space-y-4 py-4">
+              <Input
+                type="text"
+                name="tabName"
+                placeholder="Tab name"
+                defaultValue={tabNameDialogMode === 'rename' ? noteData.tabs[selectedTabIndex]?.name : ''}
+                required
+                autoFocus
+              />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setShowTabNameDialog(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

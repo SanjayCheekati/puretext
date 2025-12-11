@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
+import { Button } from './ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Separator } from './ui/separator';
 
 const Home = () => {
   const [noteName, setNoteName] = useState('');
@@ -181,122 +185,129 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-16">
       <div className="max-w-2xl w-full mx-auto px-4">
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-blue-100">
-          <div className="text-center mb-8">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+        <Card className="shadow-sm">
+          <CardHeader className="space-y-1 text-center pb-6">
+            <CardTitle className="text-4xl font-semibold tracking-tight">
               PureText
-            </h1>
-            <p className="text-gray-600 text-lg mb-1">
+            </CardTitle>
+            <CardDescription className="text-base">
               Online Plain Text Editor
-            </p>
-            <p className="text-sm text-gray-700 font-medium mb-2">
+            </CardDescription>
+            <p className="text-sm text-gray-600 pt-2">
               PureText.me is the modern, browser-based PureText editor and a fast ProtectedText alternative.
             </p>
-            <p className="text-xs text-gray-500">
-              Not the Windows PureText utility — this is the web-based plain text editor
-            </p>
-          </div>
+          </CardHeader>
 
-          <form onSubmit={handleSubmit} className="mb-6">
-            <div className="space-y-3">
-              <input
+          <CardContent className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <Input
                 type="text"
                 value={noteName}
                 onChange={(e) => setNoteName(e.target.value)}
                 placeholder="Enter note name or ID"
-                className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 text-lg transition-colors bg-white/50"
+                className="h-11 text-base"
                 autoFocus
               />
-              <button
+              <Button
                 type="submit"
-                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 font-semibold text-lg transition-all shadow-lg hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400"
+                className="w-full h-11"
                 disabled={!noteName.trim() || loading}
               >
-                {loading ? 'Loading...' : 'Open Note →'}
-              </button>
-            </div>
-          </form>
+                {loading ? 'Loading...' : 'Open Note'}
+              </Button>
+            </form>
 
-          <div className="border-t border-gray-200 pt-6 mb-6">
-            <h2 className="text-base font-bold text-gray-800 mb-4">Online Plain Text Editor</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              PureText is a <a href="https://www.puretext.me" className="text-blue-600 hover:underline">browser-based plain text editor</a> for secure note-taking and encrypted text storage.
-            </p>
-            
-            <h2 className="text-base font-bold text-gray-800 mb-3 mt-5">ProtectedText Alternative</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Looking for a <strong>ProtectedText alternative</strong>? PureText offers the same privacy-first approach with modern features like multiple tabs and dark mode.
-            </p>
-            
-            <h2 className="text-base font-bold text-gray-800 mb-3">Text Cleaner Tool</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Use PureText as a <a href="#paste-plain-text" className="text-blue-600 hover:underline">text cleaner tool</a> to paste as plain text and remove formatting online from copied content.
-            </p>
-            
-            <h2 className="text-base font-bold text-gray-800 mb-3">Secure Private Notepad</h2>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-0.5">✓</span>
-                <span>AES-256 encryption for all notes</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-0.5">✓</span>
-                <span>Paste as plain text & remove formatting</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-0.5">✓</span>
-                <span>Zero-knowledge security model</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-0.5">✓</span>
-                <span>Multiple tabs for organization</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-0.5">✓</span>
-                <span>No registration required</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="border-t border-gray-200 pt-6">
-            <h2 className="text-base font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
-            <div className="space-y-4 text-sm">
+            <div className="space-y-6">
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Is PureText.me the same as the Windows PureText tool?</h3>
-                <p className="text-gray-600">No. PureText.me is a modern web-based editor, not the legacy clipboard utility.</p>
+                <h2 className="text-base font-semibold text-gray-900 mb-2">Online Plain Text Editor</h2>
+                <p className="text-sm text-gray-600">
+                  PureText is a <a href="https://www.puretext.me" className="text-gray-900 underline underline-offset-2 hover:text-gray-700">browser-based plain text editor</a> for secure note-taking and encrypted text storage.
+                </p>
               </div>
+              
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Is PureText.me a ProtectedText alternative?</h3>
-                <p className="text-gray-600">Yes. PureText.me offers private text editing in the browser without tracking.</p>
+                <h2 className="text-base font-semibold text-gray-900 mb-2">ProtectedText Alternative</h2>
+                <p className="text-sm text-gray-600">
+                  Looking for a <strong>ProtectedText alternative</strong>? PureText offers the same privacy-first approach with modern features like multiple tabs.
+                </p>
               </div>
+              
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Can I paste as plain text?</h3>
-                <p className="text-gray-600">Yes. PureText automatically handles all text as plain text, removing formatting online.</p>
+                <h2 className="text-base font-semibold text-gray-900 mb-2">Text Cleaner Tool</h2>
+                <p className="text-sm text-gray-600">
+                  Use PureText as a <a href="#paste-plain-text" className="text-gray-900 underline underline-offset-2 hover:text-gray-700">text cleaner tool</a> to paste as plain text and remove formatting online from copied content.
+                </p>
               </div>
+              
               <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Is PureText free?</h3>
-                <p className="text-gray-600">Yes. PureText is completely free with no registration or subscription required.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-700 mb-1">How secure is PureText?</h3>
-                <p className="text-gray-600">PureText uses AES-256-GCM encryption. All encryption happens in your browser with zero-knowledge architecture.</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-700 mb-1">Can I use PureText as a text cleaner tool?</h3>
-                <p className="text-gray-600">Yes. PureText functions as a text cleaner tool, removing formatting from copied text automatically.</p>
+                <h2 className="text-base font-semibold text-gray-900 mb-2">Secure Private Notepad</h2>
+                <ul className="space-y-1.5 text-sm text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <span className="text-gray-900 mt-0.5">•</span>
+                    <span>AES-256 encryption for all notes</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gray-900 mt-0.5">•</span>
+                    <span>Paste as plain text & remove formatting</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gray-900 mt-0.5">•</span>
+                    <span>Zero-knowledge security model</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gray-900 mt-0.5">•</span>
+                    <span>Multiple tabs for organization</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gray-900 mt-0.5">•</span>
+                    <span>No registration required</span>
+                  </li>
+                </ul>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="text-center mt-6">
-          <p className="text-sm text-gray-600 mb-2">
-            🔒 Your data is encrypted in your browser.
+            <Separator className="my-6" />
+
+            <div>
+              <h2 className="text-base font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-1">Is PureText.me the same as the Windows PureText tool?</h3>
+                  <p className="text-gray-600">No. PureText.me is a modern web-based editor, not the legacy clipboard utility.</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-1">Is PureText.me a ProtectedText alternative?</h3>
+                  <p className="text-gray-600">Yes. PureText.me offers private text editing in the browser without tracking.</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-1">Can I paste as plain text?</h3>
+                  <p className="text-gray-600">Yes. PureText automatically handles all text as plain text, removing formatting online.</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-1">Is PureText free?</h3>
+                  <p className="text-gray-600">Yes. PureText is completely free with no registration or subscription required.</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-1">How secure is PureText?</h3>
+                  <p className="text-gray-600">PureText uses AES-256-GCM encryption. All encryption happens in your browser with zero-knowledge architecture.</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-1">Can I use PureText as a text cleaner tool?</h3>
+                  <p className="text-gray-600">Yes. PureText functions as a text cleaner tool, removing formatting from copied text automatically.</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="text-center mt-6 space-y-1">
+          <p className="text-sm text-gray-600">
+            Your data is encrypted in your browser
           </p>
           <p className="text-xs text-gray-500">
-            Built by Sanjay [MGIT] | <a href="https://www.puretext.me" className="text-blue-600 hover:underline">PureText Online Editor</a>
+            Built by Sanjay [MGIT]
           </p>
         </div>
       </div>
