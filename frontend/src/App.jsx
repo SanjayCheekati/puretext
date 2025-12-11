@@ -9,12 +9,12 @@ const Home = lazy(() => import('./components/Home'));
 const NoteEditor = lazy(() => import('./components/NoteEditor'));
 
 // Lazy load SEO landing pages
-const ProtectedTextAlternative = lazy(() => import('./components/seo/ProtectedTextAlternative'));
-const BestProtectedTextAlternatives = lazy(() => import('./components/seo/BestProtectedTextAlternatives'));
-const PureTextVsProtectedText = lazy(() => import('./components/seo/PureTextVsProtectedText'));
-const PlainTextOnlineEditor = lazy(() => import('./components/seo/PlainTextOnlineEditor'));
-const RemoveFormattingOnline = lazy(() => import('./components/seo/RemoveFormattingOnline'));
-const PasteAsPlainTextTool = lazy(() => import('./components/seo/PasteAsPlainTextTool'));
+const ProtectedTextAlternative = lazy(() => import('./components/pages/ProtectedTextAlternative'));
+const BestProtectedTextAlternatives = lazy(() => import('./components/pages/BestProtectedTextAlternatives'));
+const PureTextVsProtectedText = lazy(() => import('./components/pages/PureTextVsProtectedText'));
+const PlainTextOnlineEditor = lazy(() => import('./components/pages/PlainTextOnlineEditor'));
+const RemoveFormattingOnline = lazy(() => import('./components/pages/RemoveFormattingOnline'));
+const PasteAsPlainTextTool = lazy(() => import('./components/pages/PasteAsPlainTextTool'));
 
 // Loading fallback
 const LoadingFallback = () => (
