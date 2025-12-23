@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useParams } from 'react-router-dom';
 import { Lock, ArrowLeft, Copy, Moon, Sun } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -8,6 +8,7 @@ import { toast } from './ui/use-toast.jsx';
 
 const ViewOnly = () => {
   const [searchParams] = useSearchParams();
+  const { shareName } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -117,8 +118,14 @@ const ViewOnly = () => {
           </div>
 
           {/* Content */}
-          <div className="p-6 prose prose-sm dark:prose-invert max-w-none">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <div className="p-6 prose prose-sm dark:prose-invert max-w-none [&_p]:whitespace-pre-wrap [&_li]:whitespace-pre-wrap">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                p: ({children}) => <p className="whitespace-pre-wrap mb-4">{children}</p>,
+                li: ({children}) => <li className="whitespace-pre-wrap">{children}</li>,
+              }}
+            >
               {content}
             </ReactMarkdown>
           </div>

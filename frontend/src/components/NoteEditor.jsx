@@ -84,6 +84,8 @@ const NoteEditor = () => {
   const [passwordError, setPasswordError] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showTabNameDialog, setShowTabNameDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [draggedTabIndex, setDraggedTabIndex] = useState(null);
@@ -588,22 +590,34 @@ const NoteEditor = () => {
   const handleShareReadOnly = () => {
     const currentTab = noteData.tabs[noteData.activeTab];
     if (currentTab && currentTab.content) {
-      // Encode content in base64 for URL
-      const encodedContent = btoa(encodeURIComponent(currentTab.content));
-      const encodedTitle = btoa(encodeURIComponent(currentTab.title || 'Shared Note'));
-      const shareUrl = `${window.location.origin}/view?t=${encodedTitle}&c=${encodedContent}`;
-      
-      // Copy to clipboard
-      navigator.clipboard.writeText(shareUrl);
-      toast({
-        title: "Read-Only Link Copied!",
-        description: "Anyone with this link can view (but not edit) your note.",
-      });
+      // Generate a suggested share name from note name
+      const suggestedName = `${noteName}-shared`;
+      setShareUrl(suggestedName);
+      setShowShareDialog(true);
     } else {
       toast({
         title: "Nothing to share",
         description: "Add some content first.",
         variant: "destructive"
+      });
+    }
+  };
+
+  const handleCopyShareLink = () => {
+    const currentTab = noteData.tabs[noteData.activeTab];
+    if (currentTab && currentTab.content && shareUrl.trim()) {
+      // Encode content in base64 for URL
+      const encodedContent = btoa(encodeURIComponent(currentTab.content));
+      const encodedTitle = btoa(encodeURIComponent(currentTab.title || 'Shared Note'));
+      const customUrl = shareUrl.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const fullShareUrl = `${window.location.origin}/view/${customUrl}?t=${encodedTitle}&c=${encodedContent}`;
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(fullShareUrl);
+      setShowShareDialog(false);
+      toast({
+        title: "Read-Only Link Copied!",
+        description: "Anyone with this link can view (but not edit) your note.",
       });
     }
   };
@@ -651,7 +665,7 @@ const NoteEditor = () => {
                 <p className="text-sm text-destructive">{passwordError}</p>
               )}
               <div className="flex gap-3">
-                <Button type="button" variant="outline" onClick={() => navigate('/')} className="flex-1 h-12">
+                <Button type="button" variant="ghost" onClick={() => navigate('/')} className="flex-1 h-12 border border-border">
                   Cancel
                 </Button>
                 <Button type="submit" className="flex-1 h-12">Unlock</Button>
@@ -822,7 +836,7 @@ const NoteEditor = () => {
               variant="outline"
               size="sm"
               onClick={handleAddTab}
-              className="flex-shrink-0 rounded-xl border-dashed hover:bg-primary/10 hover:text-primary hover:border-primary/50"
+              className="flex-shrink-0 rounded-xl border-dashed border-muted-foreground/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/50"
             >
               <Plus className="h-4 w-4 mr-1" />
               <span className="hidden sm:inline">Add Tab</span>
@@ -890,9 +904,15 @@ const NoteEditor = () => {
           {/* Editor / Preview */}
           <div className="relative">
             {isPreviewMode ? (
-              <div className="min-h-[500px] sm:min-h-[600px] p-6 prose prose-sm dark:prose-invert max-w-none overflow-auto">
+              <div className="min-h-[500px] sm:min-h-[600px] p-6 prose prose-sm dark:prose-invert max-w-none overflow-auto [&_p]:whitespace-pre-wrap [&_li]:whitespace-pre-wrap">
                 {currentTab.content ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      p: ({children}) => <p className="whitespace-pre-wrap mb-4">{children}</p>,
+                      li: ({children}) => <li className="whitespace-pre-wrap">{children}</li>,
+                    }}
+                  >
                     {currentTab.content}
                   </ReactMarkdown>
                 ) : (
@@ -953,7 +973,7 @@ const NoteEditor = () => {
               )}
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setShowPasswordDialog(false)}>
+              <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowPasswordDialog(false)}>
                 Cancel
               </Button>
               <Button type="submit">Submit</Button>
@@ -972,7 +992,7 @@ const NoteEditor = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            <Button variant="ghost" className="border border-border" onClick={() => setShowDeleteDialog(false)}>
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDeleteNote}>
@@ -1007,12 +1027,48 @@ const NoteEditor = () => {
               />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setShowTabNameDialog(false)}>
+              <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowTabNameDialog(false)}>
                 Cancel
               </Button>
               <Button type="submit">Save</Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Share Read-Only Dialog */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Read-Only Link</DialogTitle>
+            <DialogDescription>
+              Create a custom URL for your shared note. Anyone with this link can view (but not edit) your content.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground whitespace-nowrap">puretext.me/view/</span>
+              <Input
+                type="text"
+                value={shareUrl}
+                onChange={(e) => setShareUrl(e.target.value)}
+                placeholder="my-shared-note"
+                className="flex-1"
+                autoFocus
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Choose a memorable name. Only letters, numbers, and hyphens allowed.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowShareDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleCopyShareLink} disabled={!shareUrl.trim()}>
+              Copy Link
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

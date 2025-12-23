@@ -47,8 +47,9 @@ const App = () => {
           <Route path="/remove-formatting-online" element={<RemoveFormattingOnline />} />
           <Route path="/paste-as-plain-text-tool" element={<PasteAsPlainTextTool />} />
           <Route path="/puretext-vs-notion-google-keep" element={<PureTextVsNotionGoogleKeep />} />
-          {/* View Only page for shared links */}
+          {/* View Only pages for shared links */}
           <Route path="/view" element={<ViewOnly />} />
+          <Route path="/view/:shareName" element={<ViewOnly />} />
           {/* Note Editor - must be last to avoid conflicts */}
           <Route path="/:noteName" element={<NoteEditor />} />
         </Routes>
