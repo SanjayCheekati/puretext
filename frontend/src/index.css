@@ -78,4 +78,48 @@
   .dark .glass-card {
     @apply bg-card/90 border-border/30 shadow-black/20;
   }
+
+  /* Markdown prose styles */
+  .prose {
+    @apply text-foreground;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    @apply text-foreground font-semibold;
+  }
+  .prose p {
+    @apply text-foreground/90;
+  }
+  .prose a {
+    @apply text-primary underline;
+  }
+  .prose code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-primary/30 pl-4 italic text-muted-foreground;
+  }
+  .prose ul, .prose ol {
+    @apply pl-6;
+  }
+  .prose li {
+    @apply text-foreground/90;
+  }
+  .prose table {
+    @apply w-full border-collapse;
+  }
+  .prose th, .prose td {
+    @apply border border-border px-3 py-2;
+  }
+  .prose th {
+    @apply bg-muted font-semibold;
+  }
+  .prose hr {
+    @apply border-border my-8;
+  }
 }

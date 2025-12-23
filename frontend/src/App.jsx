@@ -7,6 +7,7 @@ import { Toaster } from './components/ui/use-toast.jsx';
 // Lazy load components
 const Home = lazy(() => import('./components/Home'));
 const NoteEditor = lazy(() => import('./components/NoteEditor'));
+const ViewOnly = lazy(() => import('./components/ViewOnly'));
 
 // Lazy load SEO landing pages
 const ProtectedTextAlternative = lazy(() => import('./components/pages/ProtectedTextAlternative'));
@@ -15,6 +16,7 @@ const PureTextVsProtectedText = lazy(() => import('./components/pages/PureTextVs
 const PlainTextOnlineEditor = lazy(() => import('./components/pages/PlainTextOnlineEditor'));
 const RemoveFormattingOnline = lazy(() => import('./components/pages/RemoveFormattingOnline'));
 const PasteAsPlainTextTool = lazy(() => import('./components/pages/PasteAsPlainTextTool'));
+const PureTextVsNotionGoogleKeep = lazy(() => import('./components/pages/PureTextVsNotionGoogleKeep'));
 
 // Loading fallback with spinner
 const LoadingFallback = () => (
@@ -44,6 +46,9 @@ const App = () => {
           <Route path="/plain-text-online-editor" element={<PlainTextOnlineEditor />} />
           <Route path="/remove-formatting-online" element={<RemoveFormattingOnline />} />
           <Route path="/paste-as-plain-text-tool" element={<PasteAsPlainTextTool />} />
+          <Route path="/puretext-vs-notion-google-keep" element={<PureTextVsNotionGoogleKeep />} />
+          {/* View Only page for shared links */}
+          <Route path="/view" element={<ViewOnly />} />
           {/* Note Editor - must be last to avoid conflicts */}
           <Route path="/:noteName" element={<NoteEditor />} />
         </Routes>

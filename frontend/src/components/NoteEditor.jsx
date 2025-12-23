@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, ExternalLink } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -72,6 +74,7 @@ const NoteEditor = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark';
   });
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -582,6 +585,29 @@ const NoteEditor = () => {
     }
   };
 
+  const handleShareReadOnly = () => {
+    const currentTab = noteData.tabs[noteData.activeTab];
+    if (currentTab && currentTab.content) {
+      // Encode content in base64 for URL
+      const encodedContent = btoa(encodeURIComponent(currentTab.content));
+      const encodedTitle = btoa(encodeURIComponent(currentTab.title || 'Shared Note'));
+      const shareUrl = `${window.location.origin}/view?t=${encodedTitle}&c=${encodedContent}`;
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(shareUrl);
+      toast({
+        title: "Read-Only Link Copied!",
+        description: "Anyone with this link can view (but not edit) your note.",
+      });
+    } else {
+      toast({
+        title: "Nothing to share",
+        description: "Add some content first.",
+        variant: "destructive"
+      });
+    }
+  };
+
   if (isLoading) {
     return <LoadingSkeleton />;
   }
@@ -728,6 +754,16 @@ const NoteEditor = () => {
                 <Key className="h-4 w-4" />
               </Button>
             )}
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShareReadOnly}
+              title="Share Read-Only Link"
+              className="rounded-xl"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </nav>
@@ -786,7 +822,7 @@ const NoteEditor = () => {
               variant="outline"
               size="sm"
               onClick={handleAddTab}
-              className="text-foreground flex-shrink-0 rounded-xl border-dashed"
+              className="flex-shrink-0 rounded-xl border-dashed hover:bg-primary/10 hover:text-primary hover:border-primary/50"
             >
               <Plus className="h-4 w-4 mr-1" />
               <span className="hidden sm:inline">Add Tab</span>
@@ -820,6 +856,16 @@ const NoteEditor = () => {
               disabled={isLocked}
             />
             <div className="flex items-center gap-1">
+              {/* Preview Toggle */}
+              <Button
+                variant={isPreviewMode ? "default" : "ghost"}
+                size="icon"
+                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                title={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
+                className="rounded-xl"
+              >
+                {isPreviewMode ? <Edit3 className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
               <Button
                 variant="ghost"
                 size="icon"
@@ -841,27 +887,38 @@ const NoteEditor = () => {
             </div>
           </div>
 
-          {/* Editor */}
+          {/* Editor / Preview */}
           <div className="relative">
-            <Textarea
-              value={currentTab.content}
-              onChange={(e) => handleContentChange(e.target.value)}
-              placeholder=""
-              disabled={isLocked}
-              className="min-h-[500px] sm:min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground p-6"
-              style={{ scrollbarWidth: 'thin' }}
-            />
-            {/* Empty State Overlay */}
-            {!currentTab.content && !isLocked && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="text-center px-4">
-                  <p className="text-muted-foreground text-base mb-4">Start typing your notes...</p>
-                  <div className="text-xs text-muted-foreground/60 space-y-2">
-                    <p><kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">Ctrl</kbd> + <kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">S</kbd> Save</p>
-                    <p><kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">Ctrl</kbd> + <kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">N</kbd> New Tab</p>
-                  </div>
-                </div>
+            {isPreviewMode ? (
+              <div className="min-h-[500px] sm:min-h-[600px] p-6 prose prose-sm dark:prose-invert max-w-none overflow-auto">
+                {currentTab.content ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {currentTab.content}
+                  </ReactMarkdown>
+                ) : (
+                  <p className="text-muted-foreground">Nothing to preview yet...</p>
+                )}
               </div>
+            ) : (
+              <>
+                <Textarea
+                  value={currentTab.content}
+                  onChange={(e) => handleContentChange(e.target.value)}
+                  placeholder=""
+                  disabled={isLocked}
+                  className="min-h-[500px] sm:min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground p-6"
+                  style={{ scrollbarWidth: 'thin' }}
+                />
+                {/* Empty State Overlay */}
+                {!currentTab.content && !isLocked && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="text-center px-4">
+                      <p className="text-muted-foreground text-base">Start typing your notes...</p>
+                      <p className="text-xs text-muted-foreground/50 mt-2">Supports Markdown formatting</p>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

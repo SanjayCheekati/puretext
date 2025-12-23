@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Lock, Zap, Shield, Layers, ArrowRight, ChevronDown } from 'lucide-react';
+import { Loader2, Lock, Zap, Shield, Layers, ArrowRight, ChevronDown, Star, MessageSquare, Bookmark, FileText, Eye, Key } from 'lucide-react';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
 import { Button } from './ui/button';
@@ -137,8 +137,10 @@ const Home = () => {
               <span className="text-xl font-semibold text-foreground">PureText</span>
             </div>
             <nav className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
+              <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
               <a href="#features" className="hover:text-foreground transition-colors">Features</a>
               <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+              <a href="/puretext-vs-notion-google-keep" className="hover:text-foreground transition-colors">Compare</a>
             </nav>
           </div>
         </header>
@@ -196,12 +198,78 @@ const Home = () => {
             </p>
 
             {/* Scroll indicator */}
-            <a href="#features" className="mt-16 block text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#how-it-works" className="mt-16 block text-muted-foreground hover:text-foreground transition-colors">
               <ChevronDown className="w-6 h-6 mx-auto animate-bounce" />
             </a>
           </div>
         </main>
       </div>
+
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-24 px-6 border-t border-border/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-foreground mb-4">How It Works</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Three simple steps to secure, private note-taking
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                step: "1",
+                icon: FileText,
+                title: "Pick a Name",
+                description: "Choose any unique name for your note. This becomes your private URL that only you know."
+              },
+              {
+                step: "2",
+                icon: Key,
+                title: "Set a Password",
+                description: "Optionally lock your note with a password. All encryption happens in your browser."
+              },
+              {
+                step: "3",
+                icon: Eye,
+                title: "Access Anywhere",
+                description: "Your encrypted note syncs across devices. Just visit your URL and enter your password."
+              }
+            ].map((item, index) => (
+              <div key={index} className="relative text-center">
+                {/* Connector line */}
+                {index < 2 && (
+                  <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-primary/50 to-transparent" />
+                )}
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6 relative">
+                    <item.icon className="w-7 h-7 text-primary" />
+                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                      {item.step}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold text-foreground mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bookmark Reminder */}
+      <section className="py-12 px-6 bg-primary/5 border-y border-border/50">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
+            <Bookmark className="w-4 h-4" />
+            <span className="text-sm font-medium">Pro Tip</span>
+          </div>
+          <h3 className="text-xl font-semibold text-foreground mb-2">Bookmark This Page!</h3>
+          <p className="text-muted-foreground">
+            Press <kbd className="px-2 py-0.5 bg-muted rounded text-xs font-mono">Ctrl+D</kbd> (or <kbd className="px-2 py-0.5 bg-muted rounded text-xs font-mono">⌘+D</kbd> on Mac) to bookmark PureText for instant access to your encrypted notes.
+          </p>
+        </div>
+      </section>
 
       {/* Features Section */}
       <section id="features" className="py-24 px-6 border-t border-border/50">
@@ -276,7 +344,7 @@ const Home = () => {
               },
               {
                 q: "Is this a ProtectedText alternative?",
-                a: "Yes! PureText offers the same privacy-first approach with modern features like multiple tabs and auto-save."
+                a: "Yes! PureText offers the same privacy-first approach with modern features like multiple tabs, markdown preview, and auto-save."
               },
               {
                 q: "How secure is PureText?",
@@ -287,8 +355,8 @@ const Home = () => {
                 a: "Yes, completely free. No registration, no subscription, no limits."
               },
               {
-                q: "Can I use it as a text cleaner?",
-                a: "Yes! PureText automatically handles all text as plain text, perfect for removing formatting from copied content."
+                q: "Can I share my notes with others?",
+                a: "Yes! Use the Share button to generate a read-only link. Anyone with the link can view (but not edit) your note."
               },
               {
                 q: "What happens if I forget my password?",
@@ -301,6 +369,41 @@ const Home = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Feedback Section */}
+      <section className="py-20 px-6 bg-gradient-to-b from-transparent to-primary/5">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
+            <MessageSquare className="w-8 h-8 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold text-foreground mb-4">Have a Feature Request?</h2>
+          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+            I'm actively developing PureText and would love to hear from you! 
+            Have a feature idea, found a bug, or want something improved for your workflow?
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a 
+              href="mailto:sanjaycheekati@gmail.com?subject=PureText%20Feedback"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Send Feedback
+            </a>
+            <a 
+              href="https://github.com/SanjayCheekati/puretext/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card border border-border text-foreground font-medium hover:bg-muted transition-colors"
+            >
+              <Star className="w-4 h-4" />
+              Star on GitHub
+            </a>
+          </div>
+          <p className="text-xs text-muted-foreground mt-6">
+            🚀 Developer is active and ready to build features you need!
+          </p>
         </div>
       </section>
 
