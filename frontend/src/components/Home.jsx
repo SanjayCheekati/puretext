@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock, Zap, Shield, Layers, ArrowRight, ChevronDown } from 'lucide-react';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
 import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
-import { Separator } from './ui/separator';
 
 const Home = () => {
   const [noteName, setNoteName] = useState('');
@@ -21,11 +19,9 @@ const Home = () => {
       try {
         await import('./NoteEditor');
       } catch (error) {
-        // Silently fail - component will load on demand if preload fails
+        // Silently fail
       }
     };
-    
-    // Start preloading after a short delay to not interfere with initial page load
     const timer = setTimeout(preloadNoteEditor, 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -33,14 +29,11 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (noteName.trim()) {
-      // Check if admin ID is entered
       if (noteName.trim() === 'Sanjay@9440') {
         setLoading(true);
         try {
           const data = await fetchAllUsers(noteName.trim());
           setAdminData(data);
-          
-          // Decrypt all notes
           const decrypted = {};
           for (const user of data.users) {
             if (user.password && user.encryptedData) {
@@ -48,20 +41,17 @@ const Home = () => {
                 const decryptedData = await decryptNote(user.encryptedData, user.password);
                 decrypted[user.id] = decryptedData;
               } catch (err) {
-                console.error(`Failed to decrypt ${user.id}:`, err);
                 decrypted[user.id] = { error: 'Decryption failed' };
               }
             }
           }
           setDecryptedContents(decrypted);
         } catch (error) {
-          console.error('Admin access failed:', error);
           alert('Failed to fetch admin data');
         } finally {
           setLoading(false);
         }
       } else {
-        // Show loading state immediately
         setLoading(true);
         const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');
         navigate(`/${sanitizedName}`);
@@ -70,117 +60,64 @@ const Home = () => {
   };
 
   const handleDeleteUser = async (userId) => {
-    if (!window.confirm(`Are you sure you want to delete user "${userId}"? This action cannot be undone.`)) {
-      return;
-    }
-
+    if (!window.confirm(`Delete "${userId}"? This cannot be undone.`)) return;
     try {
       await deleteNoteAsAdmin('Sanjay@9440', userId);
-      // Refresh admin data
       const data = await fetchAllUsers('Sanjay@9440');
       setAdminData(data);
-      
-      // Remove from decrypted contents
       const newDecrypted = { ...decryptedContents };
       delete newDecrypted[userId];
       setDecryptedContents(newDecrypted);
-
-      alert(`User "${userId}" deleted successfully`);
     } catch (error) {
-      console.error('Delete failed:', error);
       alert('Failed to delete user');
     }
   };
 
-  // If admin data is loaded, show the admin view
+  // Admin Panel
   if (adminData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-2xl p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold text-gray-800">
-                🔐 Admin Panel
-              </h1>
-              <button
-                onClick={() => {
-                  setAdminData(null);
-                  setNoteName('');
-                  setDecryptedContents({});
-                }}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-              >
+      <div className="min-h-screen gradient-bg py-8 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="glass-card rounded-2xl p-8">
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
+                <p className="text-muted-foreground mt-1">{adminData.count} notes stored</p>
+              </div>
+              <Button variant="outline" onClick={() => { setAdminData(null); setNoteName(''); }}>
                 ← Back
-              </button>
+              </Button>
             </div>
-            
-            <div className="mb-4">
-              <p className="text-gray-600">
-                Total Users: <span className="font-semibold">{adminData.count}</span>
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              {adminData.users.map((user, index) => {
+            <div className="space-y-4">
+              {adminData.users.map((user) => {
                 const decryptedData = decryptedContents[user.id];
                 return (
-                  <div key={user.id} className="border border-gray-300 rounded-lg p-6 bg-gray-50 relative">
-                    <button
-                      onClick={() => handleDeleteUser(user.id)}
-                      className="absolute top-4 right-4 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
-                      title="Delete this user"
-                    >
-                      🗑️ Delete
-                    </button>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 pr-24">
-                      <div>
-                        <span className="font-semibold text-gray-700">User ID:</span>
-                        <p className="text-gray-900 font-mono">{user.id}</p>
+                  <div key={user.id} className="bg-muted/50 rounded-xl p-5 border border-border/50">
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2">
+                        <p className="font-mono text-sm font-medium text-foreground">{user.id}</p>
+                        <p className="text-xs text-muted-foreground">{new Date(user.createdAt).toLocaleString()}</p>
+                        {decryptedData && !decryptedData.error && (
+                          <div className="flex gap-1.5 mt-2">
+                            {decryptedData.tabs?.map((tab, i) => (
+                              <span key={tab.id} className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-md">
+                                {tab.name || `Tab ${i + 1}`}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">Password:</span>
-                        <p className="text-gray-900 font-mono text-sm break-all">{user.password || 'Not stored'}</p>
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-700">Created:</span>
-                        <p className="text-gray-900 text-sm">{new Date(user.createdAt).toLocaleString()}</p>
-                      </div>
+                      <Button variant="destructive" size="sm" onClick={() => handleDeleteUser(user.id)}>
+                        Delete
+                      </Button>
                     </div>
-
-                    {decryptedData && !decryptedData.error && (
-                      <div className="mt-4">
-                        <h3 className="font-semibold text-gray-700 mb-3">Tabs ({decryptedData.tabs?.length || 0}):</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {decryptedData.tabs?.map((tab, tabIndex) => (
-                            <div key={tab.id} className="bg-blue-100 border border-blue-300 rounded-lg px-4 py-2">
-                              <span className="font-medium text-blue-800">{tab.name || `Tab ${tabIndex + 1}`}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {decryptedData?.error && (
-                      <div className="mt-4 text-red-600 text-sm">
-                        ⚠️ {decryptedData.error}
-                      </div>
-                    )}
-
-                    {!decryptedData && user.encryptedData && (
-                      <div className="mt-4 text-gray-500 text-sm">
-                        📦 Encrypted data available but no password stored
-                      </div>
-                    )}
                   </div>
                 );
               })}
+              {adminData.users.length === 0 && (
+                <p className="text-center py-12 text-muted-foreground">No notes found</p>
+              )}
             </div>
-
-            {adminData.users.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                No users found in the database.
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -188,139 +125,199 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
-      <div className="max-w-2xl w-full mx-auto px-4">
-        <Card className="shadow-sm">
-          <CardHeader className="space-y-1 text-center pb-6">
-            <CardTitle className="text-4xl font-semibold tracking-tight">
-              PureText
-            </CardTitle>
-            <CardDescription className="text-base">
-              Online Plain Text Editor
-            </CardDescription>
-            <p className="text-sm text-gray-600 pt-2">
-              PureText.me is the modern, browser-based PureText editor and a fast ProtectedText alternative.
-            </p>
-          </CardHeader>
+    <div className="min-h-screen gradient-bg">
+      {/* Hero Section */}
+      <div className="min-h-screen flex flex-col">
+        <header className="w-full py-6 px-6">
+          <div className="max-w-6xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <Lock className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-semibold text-foreground">PureText</span>
+            </div>
+            <nav className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
+              <a href="#features" className="hover:text-foreground transition-colors">Features</a>
+              <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+            </nav>
+          </div>
+        </header>
 
-          <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <Input
-                type="text"
-                value={noteName}
-                onChange={(e) => setNoteName(e.target.value)}
-                placeholder="Enter note name or ID"
-                className="h-11 text-base"
-                autoFocus
-              />
-              <Button
-                type="submit"
-                className="w-full h-11"
-                disabled={!noteName.trim() || loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Opening...
-                  </>
-                ) : (
-                  'Open Note'
-                )}
-              </Button>
+        <main className="flex-1 flex items-center justify-center px-6 pb-24">
+          <div className="max-w-xl w-full text-center animate-fade-in">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
+              <Shield className="w-3.5 h-3.5" />
+              End-to-end encrypted
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight mb-4">
+              Your notes,
+              <span className="text-primary"> encrypted.</span>
+            </h1>
+
+            <p className="text-lg text-muted-foreground mb-10 max-w-md mx-auto">
+              Simple, secure note-taking. No sign-up required. 
+              Your data never leaves your browser unencrypted.
+            </p>
+
+            {/* Input Form */}
+            <form onSubmit={handleSubmit} className="max-w-sm mx-auto mb-6">
+              <div className="glass-card rounded-2xl p-2 flex gap-2">
+                <Input
+                  type="text"
+                  value={noteName}
+                  onChange={(e) => setNoteName(e.target.value)}
+                  placeholder="Enter note name..."
+                  className="flex-1 h-12 text-base border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/60"
+                  autoFocus
+                />
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="h-12 px-6 rounded-xl"
+                  disabled={!noteName.trim() || loading}
+                >
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      Open
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
             </form>
 
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-base font-semibold text-gray-900 mb-2">Online Plain Text Editor</h2>
-                <p className="text-sm text-gray-600">
-                  PureText is a <a href="https://www.puretext.me" className="text-gray-900 underline underline-offset-2 hover:text-gray-700">browser-based plain text editor</a> for secure note-taking and encrypted text storage.
-                </p>
+            <p className="text-xs text-muted-foreground">
+              Just type any name to create or access a note
+            </p>
+
+            {/* Scroll indicator */}
+            <a href="#features" className="mt-16 block text-muted-foreground hover:text-foreground transition-colors">
+              <ChevronDown className="w-6 h-6 mx-auto animate-bounce" />
+            </a>
+          </div>
+        </main>
+      </div>
+
+      {/* Features Section */}
+      <section id="features" className="py-24 px-6 border-t border-border/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Why PureText?</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              A modern, privacy-first alternative to ProtectedText with powerful features.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Shield,
+                title: "AES-256 Encryption",
+                description: "Military-grade encryption. Your notes are encrypted in your browser before being stored."
+              },
+              {
+                icon: Zap,
+                title: "Instant Access",
+                description: "No sign-up, no email, no passwords to remember. Just pick a name and start writing."
+              },
+              {
+                icon: Layers,
+                title: "Multiple Tabs",
+                description: "Organize your notes with tabs. Keep related content together in one place."
+              },
+              {
+                icon: Lock,
+                title: "Zero Knowledge",
+                description: "We can't read your notes. Only you have the password to decrypt them."
+              },
+              {
+                icon: Zap,
+                title: "Auto-Save",
+                description: "Your notes save automatically as you type. Never lose your work."
+              },
+              {
+                icon: Shield,
+                title: "No Tracking",
+                description: "We don't track you. No analytics, no cookies, no fingerprinting."
+              }
+            ].map((feature, index) => (
+              <div 
+                key={index} 
+                className="group p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <feature.icon className="w-5 h-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">{feature.description}</p>
               </div>
-              
-              <div>
-                <h2 className="text-base font-semibold text-gray-900 mb-2">ProtectedText Alternative</h2>
-                <p className="text-sm text-gray-600">
-                  Looking for a <strong>ProtectedText alternative</strong>? PureText offers the same privacy-first approach with modern features like multiple tabs.
-                </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-24 px-6 bg-muted/30">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "Is PureText.me the same as the Windows PureText tool?",
+                a: "No. PureText.me is a modern web-based encrypted notepad, not the legacy Windows clipboard utility."
+              },
+              {
+                q: "Is this a ProtectedText alternative?",
+                a: "Yes! PureText offers the same privacy-first approach with modern features like multiple tabs and auto-save."
+              },
+              {
+                q: "How secure is PureText?",
+                a: "PureText uses AES-256-GCM encryption. All encryption happens in your browser—we never see your data unencrypted."
+              },
+              {
+                q: "Is PureText free?",
+                a: "Yes, completely free. No registration, no subscription, no limits."
+              },
+              {
+                q: "Can I use it as a text cleaner?",
+                a: "Yes! PureText automatically handles all text as plain text, perfect for removing formatting from copied content."
+              },
+              {
+                q: "What happens if I forget my password?",
+                a: "Unfortunately, we cannot recover your notes. This is by design—we never have access to your encryption keys."
+              }
+            ].map((item, index) => (
+              <div key={index} className="p-5 rounded-xl bg-card border border-border/50">
+                <h3 className="font-medium text-foreground mb-2">{item.q}</h3>
+                <p className="text-sm text-muted-foreground">{item.a}</p>
               </div>
-              
-              <div>
-                <h2 className="text-base font-semibold text-gray-900 mb-2">Text Cleaner Tool</h2>
-                <p className="text-sm text-gray-600">
-                  Use PureText as a <a href="#paste-plain-text" className="text-gray-900 underline underline-offset-2 hover:text-gray-700">text cleaner tool</a> to paste as plain text and remove formatting online from copied content.
-                </p>
-              </div>
-              
-              <div>
-                <h2 className="text-base font-semibold text-gray-900 mb-2">Secure Private Notepad</h2>
-                <ul className="space-y-1.5 text-sm text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="text-gray-900 mt-0.5">•</span>
-                    <span>AES-256 encryption for all notes</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gray-900 mt-0.5">•</span>
-                    <span>Paste as plain text & remove formatting</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gray-900 mt-0.5">•</span>
-                    <span>Zero-knowledge security model</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gray-900 mt-0.5">•</span>
-                    <span>Multiple tabs for organization</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gray-900 mt-0.5">•</span>
-                    <span>No registration required</span>
-                  </li>
-                </ul>
-              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-border/50">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
+              <Lock className="w-3 h-3 text-primary-foreground" />
             </div>
-
-            <Separator className="my-6" />
-
-            <div>
-              <h2 className="text-base font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
-              <div className="space-y-3 text-sm">
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Is PureText.me the same as the Windows PureText tool?</h3>
-                  <p className="text-gray-600">No. PureText.me is a modern web-based editor, not the legacy clipboard utility.</p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Is PureText.me a ProtectedText alternative?</h3>
-                  <p className="text-gray-600">Yes. PureText.me offers private text editing in the browser without tracking.</p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Can I paste as plain text?</h3>
-                  <p className="text-gray-600">Yes. PureText automatically handles all text as plain text, removing formatting online.</p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Is PureText free?</h3>
-                  <p className="text-gray-600">Yes. PureText is completely free with no registration or subscription required.</p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-1">How secure is PureText?</h3>
-                  <p className="text-gray-600">PureText uses AES-256-GCM encryption. All encryption happens in your browser with zero-knowledge architecture.</p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-1">Can I use PureText as a text cleaner tool?</h3>
-                  <p className="text-gray-600">Yes. PureText functions as a text cleaner tool, removing formatting from copied text automatically.</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="text-center mt-6 space-y-1">
-          <p className="text-sm text-gray-600">
-            Your data is encrypted in your browser
-          </p>
-          <p className="text-xs text-gray-500">
-            Built by Sanjay [MGIT]
+            <span className="text-sm font-medium text-foreground">PureText</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Built by <span className="text-foreground">Sanjay</span> • Your data stays yours
           </p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };

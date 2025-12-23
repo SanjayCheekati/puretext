@@ -21,29 +21,28 @@ import {
 
 // Loading Skeleton Component
 const LoadingSkeleton = () => (
-  <div className="min-h-screen bg-background animate-pulse">
-    <nav className="border-b border-border bg-card">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+  <div className="min-h-screen gradient-bg animate-pulse">
+    <nav className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
+      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-7 w-24 bg-muted rounded" />
-          <div className="h-5 w-px bg-border" />
-          <div className="h-5 w-32 bg-muted rounded" />
+          <div className="h-8 w-8 bg-muted rounded-lg" />
+          <div className="h-6 w-24 bg-muted rounded" />
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-9 w-9 bg-muted rounded" />
-          <div className="h-9 w-9 bg-muted rounded" />
-          <div className="h-9 w-9 bg-muted rounded" />
+        <div className="flex items-center gap-2">
+          <div className="h-9 w-9 bg-muted rounded-lg" />
+          <div className="h-9 w-9 bg-muted rounded-lg" />
+          <div className="h-9 w-9 bg-muted rounded-lg" />
         </div>
       </div>
     </nav>
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-6xl mx-auto px-6 py-8">
       <div className="flex items-center gap-2 mb-6">
-        <div className="h-8 w-20 bg-muted rounded-md" />
-        <div className="h-8 w-20 bg-muted rounded-md" />
-        <div className="h-8 w-24 bg-muted rounded-md" />
+        <div className="h-9 w-24 bg-muted rounded-xl" />
+        <div className="h-9 w-24 bg-muted rounded-xl" />
+        <div className="h-9 w-28 bg-muted rounded-xl" />
       </div>
-      <div className="bg-card border border-border rounded-lg">
-        <div className="px-6 py-3 border-b border-border">
+      <div className="glass-card rounded-2xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-border/50">
           <div className="h-6 w-48 bg-muted rounded" />
         </div>
         <div className="p-6 space-y-3">
@@ -589,45 +588,50 @@ const NoteEditor = () => {
 
   if (isLocked && !noteData) {
     return (
-      <div className="min-h-screen bg-background">
-        <nav className="border-b border-border bg-card">
-          <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-            <a href="https://www.puretext.me" className="text-xl font-semibold text-foreground">
-              PureText
+      <div className="min-h-screen gradient-bg">
+        <nav className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
+          <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="https://www.puretext.me" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <Lock className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-semibold text-foreground">PureText</span>
             </a>
           </div>
         </nav>
-        <div className="flex items-center justify-center py-16">
-          <Card className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle>Password Protected</CardTitle>
-              <CardDescription>This note is password-protected. Enter the password to unlock it.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                handlePasswordSubmit(formData.get('password'));
-              }} className="space-y-4">
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="Enter password"
-                  required
-                  autoFocus
-                />
-                {passwordError && (
-                  <p className="text-sm text-red-600">{passwordError}</p>
-                )}
-                <div className="flex gap-2">
-                  <Button type="button" variant="outline" onClick={() => navigate('/')} className="flex-1">
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="flex-1">Unlock</Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+        <div className="flex items-center justify-center py-20 px-4">
+          <div className="glass-card rounded-2xl p-8 w-full max-w-md">
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-6 h-6 text-primary" />
+              </div>
+              <h2 className="text-xl font-semibold text-foreground mb-2">Password Protected</h2>
+              <p className="text-sm text-muted-foreground">This note is password-protected. Enter the password to unlock it.</p>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target);
+              handlePasswordSubmit(formData.get('password'));
+            }} className="space-y-4">
+              <Input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required
+                autoFocus
+                className="h-12"
+              />
+              {passwordError && (
+                <p className="text-sm text-destructive">{passwordError}</p>
+              )}
+              <div className="flex gap-3">
+                <Button type="button" variant="outline" onClick={() => navigate('/')} className="flex-1 h-12">
+                  Cancel
+                </Button>
+                <Button type="submit" className="flex-1 h-12">Unlock</Button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     );
@@ -640,26 +644,30 @@ const NoteEditor = () => {
   const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen gradient-bg">
       {/* Minimal Navbar */}
-      <nav className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="https://www.puretext.me" className="text-xl font-semibold text-foreground hover:text-foreground/80">
-              PureText
+      <nav className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <a href="https://www.puretext.me" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <Lock className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-semibold text-foreground hidden sm:block">PureText</span>
             </a>
-            <Separator orientation="vertical" className="h-5" />
-            <span className="text-sm text-muted-foreground truncate max-w-xs">
+            <Separator orientation="vertical" className="h-6 bg-border/50" />
+            <span className="text-sm font-medium text-muted-foreground truncate max-w-[120px] sm:max-w-xs">
               {noteName}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate('/')}
               title="Home"
+              className="rounded-xl"
             >
               <Home className="h-4 w-4" />
             </Button>
@@ -669,6 +677,7 @@ const NoteEditor = () => {
               size="icon"
               onClick={() => setIsDarkMode(!isDarkMode)}
               title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              className="rounded-xl"
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -679,6 +688,7 @@ const NoteEditor = () => {
                 size="sm"
                 onClick={handleSave}
                 disabled={isSaving}
+                className="rounded-xl"
               >
                 <Save className="h-4 w-4 mr-1.5" />
                 {isSaving ? 'Saving...' : 'Save'}
@@ -690,6 +700,7 @@ const NoteEditor = () => {
               size="icon"
               onClick={handleCopyURL}
               title="Copy URL"
+              className="rounded-xl"
             >
               <Share2 className="h-4 w-4" />
             </Button>
@@ -700,6 +711,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleLockNote}
                 title="Lock Note"
+                className="rounded-xl"
               >
                 <Lock className="h-4 w-4" />
               </Button>
@@ -711,6 +723,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleChangePassword}
                 title="Change Password"
+                className="rounded-xl"
               >
                 <Key className="h-4 w-4" />
               </Button>
@@ -720,7 +733,7 @@ const NoteEditor = () => {
       </nav>
 
       {/* Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Tabs - Mobile optimized with scroll */}
         <div className="flex items-center gap-2 mb-6">
           {/* Left scroll button - mobile only */}
@@ -729,7 +742,7 @@ const NoteEditor = () => {
               variant="ghost"
               size="icon"
               onClick={() => scrollTabs('left')}
-              className="flex-shrink-0 sm:hidden h-8 w-8"
+              className="flex-shrink-0 sm:hidden h-9 w-9 rounded-xl"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -749,10 +762,10 @@ const NoteEditor = () => {
                 onDrop={(e) => handleDrop(e, index)}
                 onDragEnd={handleDragEnd}
                 onClick={() => setNoteData({ ...noteData, activeTab: index })}
-                className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap flex-shrink-0 ${
+                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all whitespace-nowrap flex-shrink-0 ${
                   index === noteData.activeTab
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-card text-foreground border border-border hover:bg-muted'
+                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                    : 'bg-card text-foreground border border-border/50 hover:border-primary/30 hover:bg-muted/50'
                 } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
               >
                 {tab.name}
@@ -762,7 +775,7 @@ const NoteEditor = () => {
                       e.stopPropagation();
                       handleDeleteTab(index);
                     }}
-                    className="hover:text-red-500"
+                    className={`hover:text-destructive transition-colors ${index === noteData.activeTab ? 'text-primary-foreground/70 hover:text-primary-foreground' : ''}`}
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -773,7 +786,7 @@ const NoteEditor = () => {
               variant="outline"
               size="sm"
               onClick={handleAddTab}
-              className="text-foreground flex-shrink-0"
+              className="text-foreground flex-shrink-0 rounded-xl border-dashed"
             >
               <Plus className="h-4 w-4 mr-1" />
               <span className="hidden sm:inline">Add Tab</span>
@@ -787,7 +800,7 @@ const NoteEditor = () => {
               variant="ghost"
               size="icon"
               onClick={() => scrollTabs('right')}
-              className="flex-shrink-0 sm:hidden h-8 w-8"
+              className="flex-shrink-0 sm:hidden h-9 w-9 rounded-xl"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -795,15 +808,15 @@ const NoteEditor = () => {
         </div>
 
         {/* Editor Card */}
-        <Card className="bg-card border-border">
+        <div className="glass-card rounded-2xl overflow-hidden">
           {/* Title Bar */}
-          <div className="flex items-center gap-3 px-6 py-3 border-b border-border">
+          <div className="flex items-center gap-3 px-6 py-4 border-b border-border/50">
             <Input
               type="text"
               value={currentTab.title || ''}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Untitled"
-              className="flex-1 border-0 text-base font-medium px-0 focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground"
+              className="flex-1 border-0 text-lg font-medium px-0 focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground/60"
               disabled={isLocked}
             />
             <div className="flex items-center gap-1">
@@ -812,6 +825,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleDownload}
                 title="Download"
+                className="rounded-xl"
               >
                 <Download className="h-4 w-4" />
               </Button>
@@ -820,6 +834,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleCopyContent}
                 title="Copy Content"
+                className="rounded-xl"
               >
                 <Copy className="h-4 w-4" />
               </Button>
@@ -833,23 +848,23 @@ const NoteEditor = () => {
               onChange={(e) => handleContentChange(e.target.value)}
               placeholder=""
               disabled={isLocked}
-              className="min-h-[500px] sm:min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-card text-foreground placeholder:text-muted-foreground"
+              className="min-h-[500px] sm:min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground p-6"
               style={{ scrollbarWidth: 'thin' }}
             />
             {/* Empty State Overlay */}
             {!currentTab.content && !isLocked && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="text-center px-4">
-                  <p className="text-muted-foreground text-base mb-2">Start typing your notes...</p>
-                  <div className="text-xs text-muted-foreground/70 space-y-1">
-                    <p><kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">S</kbd> Save</p>
-                    <p><kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">N</kbd> New Tab</p>
+                  <p className="text-muted-foreground text-base mb-4">Start typing your notes...</p>
+                  <div className="text-xs text-muted-foreground/60 space-y-2">
+                    <p><kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">Ctrl</kbd> + <kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">S</kbd> Save</p>
+                    <p><kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">Ctrl</kbd> + <kbd className="px-2 py-1 bg-muted/50 rounded-md text-[11px] font-mono">N</kbd> New Tab</p>
                   </div>
                 </div>
               </div>
             )}
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* Password Dialog */}
