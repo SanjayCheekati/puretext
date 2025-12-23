@@ -198,7 +198,7 @@ const Home = () => {
             </p>
 
             {/* Scroll indicator */}
-            <a href="#how-it-works" className="mt-16 block text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#how-it-works" className="mt-16 block text-muted-foreground hover:text-foreground transition-colors" aria-label="Scroll to How It Works section">
               <ChevronDown className="w-6 h-6 mx-auto animate-bounce" />
             </a>
           </div>

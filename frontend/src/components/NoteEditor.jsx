@@ -685,6 +685,7 @@ const NoteEditor = () => {
               size="icon"
               onClick={() => navigate('/')}
               title="Home"
+              aria-label="Home"
               className="rounded-xl"
             >
               <Home className="h-4 w-4" />
@@ -695,6 +696,7 @@ const NoteEditor = () => {
               size="icon"
               onClick={() => setIsDarkMode(!isDarkMode)}
               title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
               className="rounded-xl"
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -718,6 +720,7 @@ const NoteEditor = () => {
               size="icon"
               onClick={handleCopyURL}
               title="Copy URL"
+              aria-label="Copy URL"
               className="rounded-xl"
             >
               <Share2 className="h-4 w-4" />
@@ -729,6 +732,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleLockNote}
                 title="Lock Note"
+                aria-label="Lock Note"
                 className="rounded-xl"
               >
                 <Lock className="h-4 w-4" />
@@ -741,6 +745,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleChangePassword}
                 title="Change Password"
+                aria-label="Change Password"
                 className="rounded-xl"
               >
                 <Key className="h-4 w-4" />
@@ -752,6 +757,7 @@ const NoteEditor = () => {
               size="icon"
               onClick={handleShowQR}
               title="Show QR Code"
+              aria-label="Show QR Code"
               className="rounded-xl"
             >
               <QrCode className="h-4 w-4" />
@@ -770,6 +776,7 @@ const NoteEditor = () => {
               variant="ghost"
               size="icon"
               onClick={() => scrollTabs('left')}
+              aria-label="Scroll tabs left"
               className="flex-shrink-0 sm:hidden h-9 w-9 rounded-xl"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -803,6 +810,7 @@ const NoteEditor = () => {
                       e.stopPropagation();
                       handleDeleteTab(index);
                     }}
+                    aria-label={`Close ${tab.name}`}
                     className={`hover:text-destructive transition-colors ${index === noteData.activeTab ? 'text-primary-foreground/70 hover:text-primary-foreground' : ''}`}
                   >
                     <X className="h-3 w-3" />
@@ -828,6 +836,7 @@ const NoteEditor = () => {
               variant="ghost"
               size="icon"
               onClick={() => scrollTabs('right')}
+              aria-label="Scroll tabs right"
               className="flex-shrink-0 sm:hidden h-9 w-9 rounded-xl"
             >
               <ChevronRight className="h-4 w-4" />
@@ -854,6 +863,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={() => setIsPreviewMode(!isPreviewMode)}
                 title={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
+                aria-label={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
                 className="rounded-xl"
               >
                 {isPreviewMode ? <Edit3 className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -863,6 +873,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleDownload}
                 title="Download"
+                aria-label="Download"
                 className="rounded-xl"
               >
                 <Download className="h-4 w-4" />
@@ -872,6 +883,7 @@ const NoteEditor = () => {
                 size="icon"
                 onClick={handleCopyContent}
                 title="Copy Content"
+                aria-label="Copy Content"
                 className="rounded-xl"
               >
                 <Copy className="h-4 w-4" />

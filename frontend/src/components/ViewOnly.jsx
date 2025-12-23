@@ -84,6 +84,7 @@ const ViewOnly = () => {
               size="icon"
               onClick={() => navigate('/')}
               title="Create Your Own Note"
+              aria-label="Create Your Own Note"
               className="rounded-xl"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -93,6 +94,7 @@ const ViewOnly = () => {
               size="icon"
               onClick={() => setIsDarkMode(!isDarkMode)}
               title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
               className="rounded-xl"
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -102,6 +104,7 @@ const ViewOnly = () => {
               size="icon"
               onClick={handleCopy}
               title="Copy Content"
+              aria-label="Copy Content"
               className="rounded-xl"
             >
               <Copy className="h-4 w-4" />
