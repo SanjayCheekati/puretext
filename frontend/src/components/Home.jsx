@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Lock, Zap, Shield, Layers, ArrowRight, ChevronDown, Star, MessageSquare, Bookmark, FileText, Eye, Key, Timer, Clock, QrCode } from 'lucide-react';
+import { Loader2, Lock, Zap, Shield, Layers, ArrowRight, ChevronDown, Star, MessageSquare, Bookmark, FileText, Eye, Key, QrCode } from 'lucide-react';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
 import { Button } from './ui/button';
@@ -299,19 +299,9 @@ const Home = () => {
                 description: "Organize your notes with tabs. Keep related content together in one place."
               },
               {
-                icon: Timer,
-                title: "Self-Destructing Notes",
-                description: "Share notes that automatically expire after 1 hour, 24 hours, or 7 days. Perfect for sensitive info."
-              },
-              {
-                icon: Clock,
-                title: "Time Capsule",
-                description: "Create notes that unlock on a future date. Send a message to your future self or schedule reveals."
-              },
-              {
                 icon: QrCode,
                 title: "QR Code Sharing",
-                description: "Generate QR codes for instant sharing. Let others scan to view your read-only notes."
+                description: "Generate QR codes for your note URL. Let others scan to access your encrypted notes."
               },
               {
                 icon: Lock,

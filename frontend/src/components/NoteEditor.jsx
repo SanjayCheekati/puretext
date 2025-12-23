@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, ExternalLink, Clock, Timer, QrCode, Calendar } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { QRCodeSVG } from 'qrcode.react';
@@ -85,11 +85,7 @@ const NoteEditor = () => {
   const [passwordError, setPasswordError] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showTabNameDialog, setShowTabNameDialog] = useState(false);
-  const [showShareDialog, setShowShareDialog] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-  const [shareExpiry, setShareExpiry] = useState('never'); // never, 1h, 24h, 7d
-  const [shareUnlockDate, setShareUnlockDate] = useState(''); // Time capsule date
-  const [generatedShareLink, setGeneratedShareLink] = useState('');
+  const [showQRDialog, setShowQRDialog] = useState(false);
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [draggedTabIndex, setDraggedTabIndex] = useState(null);
@@ -591,80 +587,17 @@ const NoteEditor = () => {
     }
   };
 
-  const handleShareReadOnly = () => {
-    const currentTab = noteData.tabs[noteData.activeTab];
-    if (currentTab && currentTab.content) {
-      // Generate a suggested share name from note name
-      const suggestedName = `${noteName}-shared`;
-      setShareUrl(suggestedName);
-      setShareExpiry('never');
-      setShareUnlockDate('');
-      setGeneratedShareLink('');
-      setShowShareDialog(true);
-    } else {
-      toast({
-        title: "Nothing to share",
-        description: "Add some content first.",
-        variant: "destructive"
-      });
-    }
+  const handleShowQR = () => {
+    setShowQRDialog(true);
   };
 
-  const generateShareLink = () => {
-    const currentTab = noteData.tabs[noteData.activeTab];
-    if (currentTab && currentTab.content && shareUrl.trim()) {
-      // Encode content in base64 for URL
-      const encodedContent = btoa(encodeURIComponent(currentTab.content));
-      const encodedTitle = btoa(encodeURIComponent(currentTab.title || 'Shared Note'));
-      const customUrl = shareUrl.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-      
-      // Calculate expiry timestamp
-      let expiryParam = '';
-      if (shareExpiry !== 'never') {
-        const now = Date.now();
-        let expiryTime;
-        switch (shareExpiry) {
-          case '1h': expiryTime = now + 60 * 60 * 1000; break;
-          case '24h': expiryTime = now + 24 * 60 * 60 * 1000; break;
-          case '7d': expiryTime = now + 7 * 24 * 60 * 60 * 1000; break;
-          default: expiryTime = 0;
-        }
-        if (expiryTime) expiryParam = `&exp=${expiryTime}`;
-      }
-      
-      // Add time capsule unlock date
-      let unlockParam = '';
-      if (shareUnlockDate) {
-        const unlockTime = new Date(shareUnlockDate).getTime();
-        if (unlockTime > Date.now()) {
-          unlockParam = `&unlock=${unlockTime}`;
-        }
-      }
-      
-      const fullShareUrl = `${window.location.origin}/view/${customUrl}?t=${encodedTitle}&c=${encodedContent}${expiryParam}${unlockParam}`;
-      setGeneratedShareLink(fullShareUrl);
-    }
-  };
-
-  const handleCopyShareLink = () => {
-    if (generatedShareLink) {
-      navigator.clipboard.writeText(generatedShareLink);
-      setShowShareDialog(false);
-      
-      let message = "Anyone with this link can view your note.";
-      if (shareExpiry !== 'never') {
-        const expiryLabels = { '1h': '1 hour', '24h': '24 hours', '7d': '7 days' };
-        message = `Link expires in ${expiryLabels[shareExpiry]}.`;
-      }
-      if (shareUnlockDate) {
-        message = `Note unlocks on ${new Date(shareUnlockDate).toLocaleDateString()}.`;
-      }
-      
-      toast({
-        title: shareUnlockDate ? "⏰ Time Capsule Created!" : shareExpiry !== 'never' ? "💀 Self-Destructing Link Copied!" : "🔗 Link Copied!",
-        description: message,
-      });
-    }
+  const handleCopyNoteUrl = () => {
+    const noteUrl = `${window.location.origin}/${noteName}`;
+    navigator.clipboard.writeText(noteUrl);
+    toast({
+      title: "Link Copied!",
+      description: "Share this link with anyone who knows the password.",
+    });
   };
 
   if (isLoading) {
@@ -817,11 +750,11 @@ const NoteEditor = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleShareReadOnly}
-              title="Share Read-Only Link"
+              onClick={handleShowQR}
+              title="Show QR Code"
               className="rounded-xl"
             >
-              <ExternalLink className="h-4 w-4" />
+              <QrCode className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -1081,122 +1014,40 @@ const NoteEditor = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Share Read-Only Dialog */}
-      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-        <DialogContent className="max-w-lg">
+      {/* QR Code Dialog */}
+      <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
+        <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <ExternalLink className="w-5 h-5" />
-              Share Read-Only Link
+              <QrCode className="w-5 h-5" />
+              QR Code for Note
             </DialogTitle>
             <DialogDescription>
-              Create a shareable link with optional self-destruct or time capsule features.
+              Scan to open this note on another device
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-5 py-4">
-            {/* Custom URL */}
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">Custom URL</label>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground whitespace-nowrap">puretext.me/view/</span>
-                <Input
-                  type="text"
-                  value={shareUrl}
-                  onChange={(e) => { setShareUrl(e.target.value); setGeneratedShareLink(''); }}
-                  placeholder="my-shared-note"
-                  className="flex-1"
+          <div className="py-4">
+            <div className="flex justify-center mb-4">
+              <div className="p-4 bg-white rounded-xl">
+                <QRCodeSVG 
+                  value={`${window.location.origin}/${noteName}`} 
+                  size={180}
+                  level="M"
                 />
               </div>
             </div>
-
-            {/* Self-Destruct Timer */}
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
-                <Timer className="w-4 h-4 text-destructive" />
-                Self-Destruct Timer
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {[
-                  { value: 'never', label: 'Never' },
-                  { value: '1h', label: '1 Hour' },
-                  { value: '24h', label: '24 Hours' },
-                  { value: '7d', label: '7 Days' },
-                ].map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => { setShareExpiry(option.value); setGeneratedShareLink(''); }}
-                    className={`px-3 py-2 text-sm rounded-lg border transition-all ${
-                      shareExpiry === option.value
-                        ? 'bg-destructive/10 border-destructive text-destructive'
-                        : 'bg-card border-border text-muted-foreground hover:border-destructive/50'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-              {shareExpiry !== 'never' && (
-                <p className="text-xs text-destructive mt-2">💀 Link will expire and content will be inaccessible</p>
-              )}
+            <div className="text-center">
+              <p className="text-xs text-muted-foreground mb-3">Note URL</p>
+              <code className="text-sm bg-muted px-3 py-2 rounded-lg border border-border block">
+                puretext.me/{noteName}
+              </code>
             </div>
-
-            {/* Time Capsule */}
-            <div>
-              <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" />
-                Time Capsule (Optional)
-              </label>
-              <Input
-                type="datetime-local"
-                value={shareUnlockDate}
-                onChange={(e) => { setShareUnlockDate(e.target.value); setGeneratedShareLink(''); }}
-                min={new Date().toISOString().slice(0, 16)}
-                className="w-full"
-              />
-              {shareUnlockDate && (
-                <p className="text-xs text-primary mt-2">⏰ Content hidden until {new Date(shareUnlockDate).toLocaleString()}</p>
-              )}
-            </div>
-
-            {/* Generate Button */}
-            {!generatedShareLink && (
-              <Button 
-                onClick={generateShareLink} 
-                disabled={!shareUrl.trim()}
-                className="w-full"
-                variant="outline"
-              >
-                Generate Link
-              </Button>
-            )}
-
-            {/* Generated Link with QR Code */}
-            {generatedShareLink && (
-              <div className="space-y-4 p-4 rounded-xl bg-muted/50 border border-border">
-                <div className="flex justify-center">
-                  <div className="p-3 bg-white rounded-xl">
-                    <QRCodeSVG 
-                      value={generatedShareLink} 
-                      size={140}
-                      level="M"
-                    />
-                  </div>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-muted-foreground mb-2">Scan QR code or copy link below</p>
-                  <code className="text-xs bg-card px-2 py-1 rounded border border-border break-all block">
-                    {generatedShareLink.length > 60 ? generatedShareLink.slice(0, 60) + '...' : generatedShareLink}
-                  </code>
-                </div>
-              </div>
-            )}
           </div>
           <DialogFooter>
-            <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowShareDialog(false)}>
-              Cancel
+            <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowQRDialog(false)}>
+              Close
             </Button>
-            <Button onClick={handleCopyShareLink} disabled={!generatedShareLink}>
+            <Button onClick={handleCopyNoteUrl}>
               <Copy className="w-4 h-4 mr-2" />
               Copy Link
             </Button>
