@@ -1030,6 +1030,7 @@ const NoteEditor = () => {
             <div className="flex justify-center mb-4">
               <div className="p-4 bg-white rounded-xl">
                 <QRCodeSVG 
+                  id="qr-code-svg"
                   value={`${window.location.origin}/${noteName}`} 
                   size={180}
                   level="M"
@@ -1047,9 +1048,29 @@ const NoteEditor = () => {
             <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowQRDialog(false)}>
               Close
             </Button>
-            <Button onClick={handleCopyNoteUrl}>
-              <Copy className="w-4 h-4 mr-2" />
-              Copy Link
+            <Button onClick={() => {
+              const svg = document.querySelector('#qr-code-svg');
+              if (svg) {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                img.onload = () => {
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  ctx.fillStyle = 'white';
+                  ctx.fillRect(0, 0, canvas.width, canvas.height);
+                  ctx.drawImage(img, 0, 0);
+                  const link = document.createElement('a');
+                  link.download = `${noteName}-qrcode.png`;
+                  link.href = canvas.toDataURL('image/png');
+                  link.click();
+                };
+                img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+              }
+            }}>
+              <Download className="w-4 h-4 mr-2" />
+              Download QR
             </Button>
           </DialogFooter>
         </DialogContent>
