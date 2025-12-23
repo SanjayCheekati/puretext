@@ -216,7 +216,7 @@ puretext, puretext.me, protectedtext, protectedtext alternative, writexo, writex
 
 ## 👨‍💻 Built By
 
-**Sanjay [MGIT]**  
+**Sanjay Cheekati**  
 GitHub: [@SanjayCheekati](https://github.com/SanjayCheekati)
 
 ---
