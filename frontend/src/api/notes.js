@@ -44,16 +44,15 @@ export const fetchNote = async (name, forceRefresh = false) => {
   return data;
 };
 
-export const saveNote = async (name, data, deleteTokenHash, deleteToken, encryptionPassword) => {
+export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUserPassword) => {
   const body = { data };
   if (deleteTokenHash) {
     body.deleteTokenHash = deleteTokenHash;
   }
-  if (deleteToken) {
-    body.deleteToken = deleteToken;
-  }
-  if (encryptionPassword) {
-    body.encryptionPassword = encryptionPassword;
+  // Note: We no longer send deleteToken or passwords to the server
+  // Only send whether user has set a password (boolean)
+  if (typeof hasUserPassword === 'boolean') {
+    body.hasUserPassword = hasUserPassword;
   }
 
   const response = await fetch(`${API_URL}/note/${name}`, {

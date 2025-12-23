@@ -332,7 +332,7 @@ const NoteEditor = () => {
         existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, pwd);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true);
       setIsDirty(false);
       toast({ title: "Auto-saved", description: "Changes saved automatically" });
     } catch (err) {
@@ -370,7 +370,7 @@ const NoteEditor = () => {
         existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, defaultPassword);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, false);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to auto-save note');

@@ -13,12 +13,20 @@ export const hashDeleteToken = (token) => {
 };
 
 /**
- * Validate a delete token against a hash
+ * Validate a delete token against a hash using timing-safe comparison
  * @param {string} token - The token to validate
  * @param {string} hash - The hash to validate against
  * @returns {boolean} - Whether the token is valid
  */
 export const validateDeleteToken = (token, hash) => {
-  const tokenHash = hashDeleteToken(token);
-  return tokenHash === hash;
+  try {
+    const tokenHash = hashDeleteToken(token);
+    // Use timing-safe comparison to prevent timing attacks
+    return crypto.timingSafeEqual(
+      Buffer.from(tokenHash, 'hex'),
+      Buffer.from(hash, 'hex')
+    );
+  } catch {
+    return false;
+  }
 };

@@ -4,16 +4,23 @@ import { hashDeleteToken, validateDeleteToken } from '../utils/crypto.js';
 
 const router = express.Router();
 
+// Input validation helper
+const sanitizeNoteName = (name) => {
+  if (!name || typeof name !== 'string') return null;
+  // Only allow alphanumeric and hyphens, max 100 chars
+  const sanitized = name.toLowerCase().replace(/[^a-z0-9-]/g, '').substring(0, 100);
+  return sanitized.length > 0 ? sanitized : null;
+};
+
 /**
  * GET /api/note/:name
  * Check if a note exists and return its encrypted data
  */
 router.get('/note/:name', async (req, res) => {
   try {
-    const { name } = req.params;
+    const name = sanitizeNoteName(req.params.name);
     
-    // Validate note name
-    if (!name || name.length > 100) {
+    if (!name) {
       return res.status(400).json({ error: 'Invalid note name' });
     }
 
@@ -42,11 +49,10 @@ router.get('/note/:name', async (req, res) => {
  */
 router.post('/note/:name', async (req, res) => {
   try {
-    const { name } = req.params;
-    const { data, deleteTokenHash } = req.body;
+    const name = sanitizeNoteName(req.params.name);
+    const { data, deleteTokenHash, hasUserPassword } = req.body;
 
-    // Validate note name
-    if (!name || name.length > 100) {
+    if (!name) {
       return res.status(400).json({ error: 'Invalid note name' });
     }
 
@@ -55,16 +61,19 @@ router.post('/note/:name', async (req, res) => {
       return res.status(400).json({ error: 'Invalid encrypted data' });
     }
 
+    // Validate ciphertext size (5MB max)
+    if (data.ciphertext.length > 5 * 1024 * 1024) {
+      return res.status(400).json({ error: 'Note too large (max 5MB)' });
+    }
+
     // Check if note exists
     const existingNote = await Note.findById(name);
 
     if (existingNote) {
       // Update existing note
       existingNote.data = data;
-      existingNote.updatedAt = new Date();
-      if (req.body.encryptionPassword) {
-        existingNote.encryptionPassword = req.body.encryptionPassword;
-        existingNote.hasUserPassword = req.body.encryptionPassword !== 'no-password-set';
+      if (typeof hasUserPassword === 'boolean') {
+        existingNote.hasUserPassword = hasUserPassword;
       }
       await existingNote.save();
 
@@ -83,9 +92,7 @@ router.post('/note/:name', async (req, res) => {
         _id: name,
         data,
         deleteTokenHash,
-        deleteToken: req.body.deleteToken,
-        encryptionPassword: req.body.encryptionPassword,
-        hasUserPassword: req.body.encryptionPassword && req.body.encryptionPassword !== 'no-password-set'
+        hasUserPassword: hasUserPassword || false
       });
 
       await newNote.save();
@@ -109,10 +116,9 @@ router.post('/note/:name', async (req, res) => {
  */
 router.delete('/note/:name', async (req, res) => {
   try {
-    const { name } = req.params;
+    const name = sanitizeNoteName(req.params.name);
     const { deleteToken } = req.body;
 
-    // Validate inputs
     if (!name || !deleteToken) {
       return res.status(400).json({ error: 'Note name and delete token required' });
     }
@@ -123,7 +129,7 @@ router.delete('/note/:name', async (req, res) => {
       return res.status(404).json({ error: 'Note not found' });
     }
 
-    // Validate delete token
+    // Validate delete token with timing-safe comparison
     const isValid = validateDeleteToken(deleteToken, note.deleteTokenHash);
 
     if (!isValid) {
@@ -145,26 +151,31 @@ router.delete('/note/:name', async (req, res) => {
 
 /**
  * GET /api/admin/:adminId
- * Get all users (IDs and delete tokens) if admin ID is correct
+ * Get all notes metadata (no sensitive data) if admin ID is correct
  */
 router.get('/admin/:adminId', async (req, res) => {
   try {
     const { adminId } = req.params;
+    const adminSecret = process.env.ADMIN_SECRET;
+    
+    // Check if admin secret is configured
+    if (!adminSecret) {
+      return res.status(500).json({ error: 'Admin not configured' });
+    }
     
     // Check if the admin ID is correct
-    if (adminId !== 'Sanjay@9440') {
+    if (adminId !== adminSecret) {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Fetch all notes from the database with encrypted data
-    const notes = await Note.find({});
+    // Fetch all notes from the database (only metadata, no passwords)
+    const notes = await Note.find({}).select('_id hasUserPassword createdAt updatedAt data');
     
-    // Format the response
+    // Format the response - NO passwords or tokens exposed
     const users = notes.map(note => ({
       id: note._id,
-      password: note.encryptionPassword || note.deleteToken || 'Not stored',
-      deleteTokenHash: note.deleteTokenHash,
-      encryptedData: note.data,
+      hasUserPassword: note.hasUserPassword,
+      encryptedData: note.data, // Still encrypted, admin can try to decrypt if they know password
       createdAt: note.createdAt,
       updatedAt: note.updatedAt
     }));
@@ -187,14 +198,22 @@ router.get('/admin/:adminId', async (req, res) => {
 router.delete('/admin/:adminId/delete/:noteId', async (req, res) => {
   try {
     const { adminId, noteId } = req.params;
+    const adminSecret = process.env.ADMIN_SECRET;
     
-    // Check if the admin ID is correct
-    if (adminId !== 'Sanjay@9440') {
+    if (!adminSecret) {
+      return res.status(500).json({ error: 'Admin not configured' });
+    }
+    
+    if (adminId !== adminSecret) {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Find and delete the note
-    const deletedNote = await Note.findByIdAndDelete(noteId);
+    const name = sanitizeNoteName(noteId);
+    if (!name) {
+      return res.status(400).json({ error: 'Invalid note ID' });
+    }
+
+    const deletedNote = await Note.findByIdAndDelete(name);
 
     if (!deletedNote) {
       return res.status(404).json({ error: 'Note not found' });
@@ -202,7 +221,7 @@ router.delete('/admin/:adminId/delete/:noteId', async (req, res) => {
 
     return res.json({
       success: true,
-      message: `Note ${noteId} deleted successfully`
+      message: `Note ${name} deleted successfully`
     });
   } catch (error) {
     console.error('Error deleting note as admin:', error);

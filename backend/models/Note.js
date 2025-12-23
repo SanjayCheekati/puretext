@@ -3,7 +3,15 @@ import mongoose from 'mongoose';
 const noteSchema = new mongoose.Schema({
   _id: {
     type: String,
-    required: true
+    required: true,
+    maxlength: 100,
+    validate: {
+      validator: function(v) {
+        // Only allow alphanumeric and hyphens
+        return /^[a-z0-9-]+$/i.test(v);
+      },
+      message: 'Note name can only contain letters, numbers, and hyphens'
+    }
   },
   data: {
     version: {
@@ -12,45 +20,36 @@ const noteSchema = new mongoose.Schema({
     },
     salt: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 100
     },
     iv: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 100
     },
     ciphertext: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 5 * 1024 * 1024 // 5MB max
     }
   },
   deleteTokenHash: {
     type: String,
     required: true
   },
-  deleteToken: {
-    type: String,
-    required: false
-  },
-  encryptionPassword: {
-    type: String,
-    required: false
-  },
   hasUserPassword: {
     type: Boolean,
     default: false
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
   }
 }, {
   _id: false,
   timestamps: true
 });
+
+// Add indexes for better query performance
+noteSchema.index({ createdAt: 1 });
+noteSchema.index({ updatedAt: 1 });
 
 const Note = mongoose.model('Note', noteSchema);
 
