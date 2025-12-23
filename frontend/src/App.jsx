@@ -27,6 +27,11 @@ const FreeOnlineNotepad = lazy(() => import('./components/pages/FreeOnlineNotepa
 const NotepadWithTabs = lazy(() => import('./components/pages/NotepadWithTabs'));
 const SecretDiaryOnline = lazy(() => import('./components/pages/SecretDiaryOnline'));
 const AutosaveNotepad = lazy(() => import('./components/pages/AutosaveNotepad'));
+const AnonymousNotepad = lazy(() => import('./components/pages/AnonymousNotepad'));
+const SecureNotepadForWork = lazy(() => import('./components/pages/SecureNotepadForWork'));
+const NotepadForStudents = lazy(() => import('./components/pages/NotepadForStudents'));
+const CodeSnippetManager = lazy(() => import('./components/pages/CodeSnippetManager'));
+const CloudNotepadSync = lazy(() => import('./components/pages/CloudNotepadSync'));
 
 // Loading fallback with spinner
 const LoadingFallback = () => (
@@ -67,6 +72,11 @@ const App = () => {
           <Route path="/notepad-with-tabs" element={<NotepadWithTabs />} />
           <Route path="/secret-diary-online" element={<SecretDiaryOnline />} />
           <Route path="/autosave-notepad" element={<AutosaveNotepad />} />
+          <Route path="/anonymous-notepad" element={<AnonymousNotepad />} />
+          <Route path="/secure-notepad-for-work" element={<SecureNotepadForWork />} />
+          <Route path="/notepad-for-students" element={<NotepadForStudents />} />
+          <Route path="/code-snippet-manager" element={<CodeSnippetManager />} />
+          <Route path="/cloud-notepad-sync" element={<CloudNotepadSync />} />
           {/* View Only pages for shared links */}
           <Route path="/view" element={<ViewOnly />} />
           <Route path="/view/:shareName" element={<ViewOnly />} />

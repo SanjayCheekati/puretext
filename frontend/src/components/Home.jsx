@@ -424,6 +424,7 @@ const Home = () => {
                 <li><a href="/secure-notes-app" className="hover:text-foreground transition-colors">Secure Notes App</a></li>
                 <li><a href="/private-notepad" className="hover:text-foreground transition-colors">Private Notepad</a></li>
                 <li><a href="/password-protected-notes" className="hover:text-foreground transition-colors">Password Protected Notes</a></li>
+                <li><a href="/anonymous-notepad" className="hover:text-foreground transition-colors">Anonymous Notepad</a></li>
               </ul>
             </div>
             <div>
@@ -433,6 +434,7 @@ const Home = () => {
                 <li><a href="/online-notepad-no-signup" className="hover:text-foreground transition-colors">No Signup Notepad</a></li>
                 <li><a href="/notepad-with-tabs" className="hover:text-foreground transition-colors">Notepad with Tabs</a></li>
                 <li><a href="/autosave-notepad" className="hover:text-foreground transition-colors">Autosave Notepad</a></li>
+                <li><a href="/cloud-notepad-sync" className="hover:text-foreground transition-colors">Cloud Sync Notepad</a></li>
               </ul>
             </div>
             <div>
@@ -440,8 +442,9 @@ const Home = () => {
               <ul className="space-y-2 text-muted-foreground">
                 <li><a href="/secret-diary-online" className="hover:text-foreground transition-colors">Secret Diary Online</a></li>
                 <li><a href="/self-destructing-notes" className="hover:text-foreground transition-colors">Self-Destructing Notes</a></li>
-                <li><a href="/plain-text-online-editor" className="hover:text-foreground transition-colors">Plain Text Editor</a></li>
-                <li><a href="/remove-formatting-online" className="hover:text-foreground transition-colors">Remove Formatting</a></li>
+                <li><a href="/notepad-for-students" className="hover:text-foreground transition-colors">Notepad for Students</a></li>
+                <li><a href="/secure-notepad-for-work" className="hover:text-foreground transition-colors">Secure Work Notepad</a></li>
+                <li><a href="/code-snippet-manager" className="hover:text-foreground transition-colors">Code Snippet Manager</a></li>
               </ul>
             </div>
             <div>

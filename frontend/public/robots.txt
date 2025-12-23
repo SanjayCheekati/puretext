@@ -20,6 +20,11 @@ Allow: /paste-as-plain-text-tool
 Allow: /notepad-with-tabs
 Allow: /secret-diary-online
 Allow: /autosave-notepad
+Allow: /anonymous-notepad
+Allow: /secure-notepad-for-work
+Allow: /notepad-for-students
+Allow: /code-snippet-manager
+Allow: /cloud-notepad-sync
 
 # Block API and internal paths
 Disallow: /api/
