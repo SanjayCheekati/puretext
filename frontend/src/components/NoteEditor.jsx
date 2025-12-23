@@ -615,8 +615,8 @@ const NoteEditor = () => {
               onClick={() => setNoteData({ ...noteData, activeTab: index })}
               className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                 index === noteData.activeTab
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card text-foreground border border-border hover:bg-muted'
               } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
             >
               {tab.name}
@@ -637,6 +637,7 @@ const NoteEditor = () => {
             variant="outline"
             size="sm"
             onClick={handleAddTab}
+            className="text-foreground"
           >
             <Plus className="h-4 w-4 mr-1" />
             Add Tab
@@ -644,15 +645,15 @@ const NoteEditor = () => {
         </div>
 
         {/* Editor Card */}
-        <Card>
+        <Card className="bg-card border-border">
           {/* Title Bar */}
-          <div className="flex items-center gap-3 px-6 py-3 border-b border-gray-200">
+          <div className="flex items-center gap-3 px-6 py-3 border-b border-border">
             <Input
               type="text"
               value={currentTab.title || ''}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Untitled"
-              className="flex-1 border-0 text-base font-medium px-0 focus-visible:ring-0"
+              className="flex-1 border-0 text-base font-medium px-0 focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground"
               disabled={isLocked}
             />
             <div className="flex items-center gap-1">
@@ -681,7 +682,7 @@ const NoteEditor = () => {
             onChange={(e) => handleContentChange(e.target.value)}
             placeholder="Start typing..."
             disabled={isLocked}
-            className="min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0"
+            className="min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-card text-foreground placeholder:text-muted-foreground"
             style={{ scrollbarWidth: 'thin' }}
           />
         </Card>
