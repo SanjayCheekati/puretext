@@ -2,12 +2,46 @@ const API_URL = import.meta.env.PROD
   ? 'https://puretext-backend.vercel.app/api'
   : 'http://localhost:5000/api';
 
-export const fetchNote = async (name) => {
+// Simple in-memory cache for note metadata
+const noteCache = new Map();
+const CACHE_TTL = 30000; // 30 seconds
+
+const getCachedNote = (name) => {
+  const cached = noteCache.get(name);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+  noteCache.delete(name);
+  return null;
+};
+
+const setCachedNote = (name, data) => {
+  noteCache.set(name, { data, timestamp: Date.now() });
+};
+
+export const invalidateNoteCache = (name) => {
+  noteCache.delete(name);
+};
+
+export const fetchNote = async (name, forceRefresh = false) => {
+  // Check cache first (unless force refresh)
+  if (!forceRefresh) {
+    const cached = getCachedNote(name);
+    if (cached) {
+      return cached;
+    }
+  }
+
   const response = await fetch(`${API_URL}/note/${name}`);
   if (!response.ok) {
     throw new Error('Failed to fetch note');
   }
-  return response.json();
+  const data = await response.json();
+  
+  // Cache the response
+  setCachedNote(name, data);
+  
+  return data;
 };
 
 export const saveNote = async (name, data, deleteTokenHash, deleteToken, encryptionPassword) => {

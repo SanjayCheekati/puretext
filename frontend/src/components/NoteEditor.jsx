@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun } from 'lucide-react';
-import { fetchNote, saveNote, deleteNote } from '../api/notes';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight } from 'lucide-react';
+import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
 import { Button } from './ui/button';
@@ -19,9 +19,48 @@ import {
   DialogTitle,
 } from './ui/dialog';
 
+// Loading Skeleton Component
+const LoadingSkeleton = () => (
+  <div className="min-h-screen bg-background animate-pulse">
+    <nav className="border-b border-border bg-card">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="h-7 w-24 bg-muted rounded" />
+          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-32 bg-muted rounded" />
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-9 w-9 bg-muted rounded" />
+          <div className="h-9 w-9 bg-muted rounded" />
+          <div className="h-9 w-9 bg-muted rounded" />
+        </div>
+      </div>
+    </nav>
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="flex items-center gap-2 mb-6">
+        <div className="h-8 w-20 bg-muted rounded-md" />
+        <div className="h-8 w-20 bg-muted rounded-md" />
+        <div className="h-8 w-24 bg-muted rounded-md" />
+      </div>
+      <div className="bg-card border border-border rounded-lg">
+        <div className="px-6 py-3 border-b border-border">
+          <div className="h-6 w-48 bg-muted rounded" />
+        </div>
+        <div className="p-6 space-y-3">
+          <div className="h-4 w-full bg-muted rounded" />
+          <div className="h-4 w-3/4 bg-muted rounded" />
+          <div className="h-4 w-5/6 bg-muted rounded" />
+          <div className="h-4 w-2/3 bg-muted rounded" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const NoteEditor = () => {
   const { noteName } = useParams();
   const navigate = useNavigate();
+  const tabsContainerRef = useRef(null);
 
   // State
   const [noteData, setNoteData] = useState(null);
@@ -32,9 +71,10 @@ const NoteEditor = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Load theme from localStorage or default to light mode
     return localStorage.getItem('theme') === 'dark';
   });
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   // Dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
@@ -49,6 +89,23 @@ const NoteEditor = () => {
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
 
+  // Check tabs scroll state for mobile
+  const checkTabsScroll = useCallback(() => {
+    const container = tabsContainerRef.current;
+    if (container) {
+      setCanScrollLeft(container.scrollLeft > 0);
+      setCanScrollRight(container.scrollLeft < container.scrollWidth - container.clientWidth - 1);
+    }
+  }, []);
+
+  const scrollTabs = (direction) => {
+    const container = tabsContainerRef.current;
+    if (container) {
+      const scrollAmount = 150;
+      container.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   // Apply theme to document
   useEffect(() => {
     if (isDarkMode) {
@@ -59,6 +116,64 @@ const NoteEditor = () => {
       localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ctrl/Cmd + S - Save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (noteData && isDirty && !isLocked) {
+          if (password) {
+            saveNoteWithPassword(password);
+          } else {
+            handleSaveWithoutPassword();
+          }
+          toast({ title: "Saved", description: "Note saved successfully" });
+        }
+      }
+      // Ctrl/Cmd + N - New Tab
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        if (noteData && !isLocked) {
+          handleAddTab();
+        }
+      }
+      // Ctrl/Cmd + W - Close Tab
+      if ((e.ctrlKey || e.metaKey) && e.key === 'w') {
+        e.preventDefault();
+        if (noteData && noteData.tabs.length > 1 && !isLocked) {
+          handleDeleteTab(noteData.activeTab);
+        }
+      }
+      // Ctrl/Cmd + Tab - Next Tab
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Tab' && !e.shiftKey) {
+        e.preventDefault();
+        if (noteData) {
+          const nextTab = (noteData.activeTab + 1) % noteData.tabs.length;
+          setNoteData({ ...noteData, activeTab: nextTab });
+        }
+      }
+      // Ctrl/Cmd + Shift + Tab - Previous Tab
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Tab') {
+        e.preventDefault();
+        if (noteData) {
+          const prevTab = noteData.activeTab === 0 ? noteData.tabs.length - 1 : noteData.activeTab - 1;
+          setNoteData({ ...noteData, activeTab: prevTab });
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [noteData, isDirty, isLocked, password]);
+
+  // Check scroll on mount and resize
+  useEffect(() => {
+    checkTabsScroll();
+    window.addEventListener('resize', checkTabsScroll);
+    return () => window.removeEventListener('resize', checkTabsScroll);
+  }, [checkTabsScroll, noteData?.tabs]);
 
   // Load note on mount
   useEffect(() => {
@@ -215,8 +330,10 @@ const NoteEditor = () => {
 
       await saveNote(noteName, encrypted, deleteTokenHash, existingToken, pwd);
       setIsDirty(false);
+      toast({ title: "Auto-saved", description: "Changes saved automatically" });
     } catch (err) {
       setError('Failed to save note');
+      toast({ title: "Error", description: "Failed to save note", variant: "destructive" });
     } finally {
       setIsSaving(false);
     }
@@ -225,6 +342,7 @@ const NoteEditor = () => {
   const handleSave = async () => {
     if (!password || !noteData || !noteName || !isDirty) return;
     await saveNoteWithPassword(password);
+    toast({ title: "Saved", description: "Note saved successfully" });
   };
 
   const handleSaveWithoutPassword = async () => {
@@ -410,15 +528,19 @@ const NoteEditor = () => {
     const token = getDeleteToken(noteName);
     if (!token) {
       setError('No delete token found. Cannot delete this note.');
+      toast({ title: "Error", description: "No delete token found", variant: "destructive" });
       return;
     }
 
     try {
       await deleteNote(noteName, token);
       removeDeleteToken(noteName);
+      invalidateNoteCache(noteName);
+      toast({ title: "Deleted", description: "Note deleted successfully" });
       navigate('/');
     } catch (err) {
       setError(err.message || 'Failed to delete note');
+      toast({ title: "Error", description: "Failed to delete note", variant: "destructive" });
     } finally {
       setShowDeleteDialog(false);
     }
@@ -457,23 +579,20 @@ const NoteEditor = () => {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
+      toast({ title: "Downloaded", description: `${currentTab.name || 'Untitled'}.txt saved` });
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-sm text-gray-600">Loading...</p>
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (isLocked && !noteData) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <nav className="border-b border-gray-200 bg-white">
+      <div className="min-h-screen bg-background">
+        <nav className="border-b border-border bg-card">
           <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-            <a href="https://www.puretext.me" className="text-xl font-semibold text-gray-900">
+            <a href="https://www.puretext.me" className="text-xl font-semibold text-foreground">
               PureText
             </a>
           </div>
@@ -601,47 +720,78 @@ const NoteEditor = () => {
       </nav>
 
       {/* Content Area */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Tabs */}
-        <div className="flex items-center gap-2 mb-6 flex-wrap">
-          {noteData.tabs.map((tab, index) => (
-            <button
-              key={tab.id}
-              draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, index)}
-              onDragEnd={handleDragEnd}
-              onClick={() => setNoteData({ ...noteData, activeTab: index })}
-              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                index === noteData.activeTab
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-card text-foreground border border-border hover:bg-muted'
-              } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Tabs - Mobile optimized with scroll */}
+        <div className="flex items-center gap-2 mb-6">
+          {/* Left scroll button - mobile only */}
+          {canScrollLeft && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => scrollTabs('left')}
+              className="flex-shrink-0 sm:hidden h-8 w-8"
             >
-              {tab.name}
-              {noteData.tabs.length > 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteTab(index);
-                  }}
-                  className="hover:text-red-500"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              )}
-            </button>
-          ))}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleAddTab}
-            className="text-foreground"
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          )}
+          
+          <div 
+            ref={tabsContainerRef}
+            onScroll={checkTabsScroll}
+            className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-1 sm:flex-wrap"
           >
-            <Plus className="h-4 w-4 mr-1" />
-            Add Tab
-          </Button>
+            {noteData.tabs.map((tab, index) => (
+              <button
+                key={tab.id}
+                draggable
+                onDragStart={() => handleDragStart(index)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}
+                onDragEnd={handleDragEnd}
+                onClick={() => setNoteData({ ...noteData, activeTab: index })}
+                className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap flex-shrink-0 ${
+                  index === noteData.activeTab
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card text-foreground border border-border hover:bg-muted'
+                } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
+              >
+                {tab.name}
+                {noteData.tabs.length > 1 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteTab(index);
+                    }}
+                    className="hover:text-red-500"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
+              </button>
+            ))}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleAddTab}
+              className="text-foreground flex-shrink-0"
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">Add Tab</span>
+              <span className="sm:hidden">New</span>
+            </Button>
+          </div>
+
+          {/* Right scroll button - mobile only */}
+          {canScrollRight && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => scrollTabs('right')}
+              className="flex-shrink-0 sm:hidden h-8 w-8"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          )}
         </div>
 
         {/* Editor Card */}
@@ -677,14 +827,28 @@ const NoteEditor = () => {
           </div>
 
           {/* Editor */}
-          <Textarea
-            value={currentTab.content}
-            onChange={(e) => handleContentChange(e.target.value)}
-            placeholder="Start typing..."
-            disabled={isLocked}
-            className="min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-card text-foreground placeholder:text-muted-foreground"
-            style={{ scrollbarWidth: 'thin' }}
-          />
+          <div className="relative">
+            <Textarea
+              value={currentTab.content}
+              onChange={(e) => handleContentChange(e.target.value)}
+              placeholder=""
+              disabled={isLocked}
+              className="min-h-[500px] sm:min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-card text-foreground placeholder:text-muted-foreground"
+              style={{ scrollbarWidth: 'thin' }}
+            />
+            {/* Empty State Overlay */}
+            {!currentTab.content && !isLocked && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="text-center px-4">
+                  <p className="text-muted-foreground text-base mb-2">Start typing your notes...</p>
+                  <div className="text-xs text-muted-foreground/70 space-y-1">
+                    <p><kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">S</kbd> Save</p>
+                    <p><kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px]">N</kbd> New Tab</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </Card>
       </div>
 
