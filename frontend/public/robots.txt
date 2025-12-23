@@ -1,4 +1,32 @@
+# PureText - Encrypted Notepad
+# https://www.puretext.me
+
 User-agent: *
 Allow: /
+Allow: /encrypted-notepad
+Allow: /secure-notes-app
+Allow: /private-notepad
+Allow: /free-online-notepad
+Allow: /online-notepad-no-signup
+Allow: /password-protected-notes
+Allow: /self-destructing-notes
+Allow: /protectedtext-alternative
+Allow: /best-protectedtext-alternatives
+Allow: /puretext-vs-protectedtext
+Allow: /puretext-vs-notion-google-keep
+Allow: /plain-text-online-editor
+Allow: /remove-formatting-online
+Allow: /paste-as-plain-text-tool
+Allow: /notepad-with-tabs
+Allow: /secret-diary-online
+Allow: /autosave-notepad
 
-Sitemap: https://puretext.me/sitemap.xml
+# Block API and internal paths
+Disallow: /api/
+Disallow: /view/
+
+# Sitemaps
+Sitemap: https://www.puretext.me/sitemap.xml
+
+# Crawl-delay for politeness (optional)
+Crawl-delay: 1

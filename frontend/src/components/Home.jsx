@@ -412,18 +412,61 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer with SEO Links */}
       <footer className="py-12 px-6 border-t border-border/50">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-              <Lock className="w-3 h-3 text-primary-foreground" />
+        <div className="max-w-6xl mx-auto">
+          {/* SEO Internal Links */}
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12 text-sm">
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Products</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/encrypted-notepad" className="hover:text-foreground transition-colors">Encrypted Notepad</a></li>
+                <li><a href="/secure-notes-app" className="hover:text-foreground transition-colors">Secure Notes App</a></li>
+                <li><a href="/private-notepad" className="hover:text-foreground transition-colors">Private Notepad</a></li>
+                <li><a href="/password-protected-notes" className="hover:text-foreground transition-colors">Password Protected Notes</a></li>
+              </ul>
             </div>
-            <span className="text-sm font-medium text-foreground">PureText</span>
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Features</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/free-online-notepad" className="hover:text-foreground transition-colors">Free Online Notepad</a></li>
+                <li><a href="/online-notepad-no-signup" className="hover:text-foreground transition-colors">No Signup Notepad</a></li>
+                <li><a href="/notepad-with-tabs" className="hover:text-foreground transition-colors">Notepad with Tabs</a></li>
+                <li><a href="/autosave-notepad" className="hover:text-foreground transition-colors">Autosave Notepad</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Use Cases</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/secret-diary-online" className="hover:text-foreground transition-colors">Secret Diary Online</a></li>
+                <li><a href="/self-destructing-notes" className="hover:text-foreground transition-colors">Self-Destructing Notes</a></li>
+                <li><a href="/plain-text-online-editor" className="hover:text-foreground transition-colors">Plain Text Editor</a></li>
+                <li><a href="/remove-formatting-online" className="hover:text-foreground transition-colors">Remove Formatting</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Compare</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/protectedtext-alternative" className="hover:text-foreground transition-colors">ProtectedText Alternative</a></li>
+                <li><a href="/best-protectedtext-alternatives" className="hover:text-foreground transition-colors">Best Alternatives 2025</a></li>
+                <li><a href="/puretext-vs-protectedtext" className="hover:text-foreground transition-colors">vs ProtectedText</a></li>
+                <li><a href="/puretext-vs-notion-google-keep" className="hover:text-foreground transition-colors">vs Notion & Google Keep</a></li>
+              </ul>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Built by <span className="text-foreground">Sanjay</span> • Your data stays yours
-          </p>
+          
+          {/* Bottom Footer */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 border-t border-border/50">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
+                <Lock className="w-3 h-3 text-primary-foreground" />
+              </div>
+              <span className="text-sm font-medium text-foreground">PureText</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2025 PureText • Free encrypted notepad • Your data stays yours
+            </p>
+          </div>
         </div>
       </footer>
     </div>
