@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, ExternalLink } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, ExternalLink, Clock, Timer, QrCode, Calendar } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { QRCodeSVG } from 'qrcode.react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -86,6 +87,9 @@ const NoteEditor = () => {
   const [showTabNameDialog, setShowTabNameDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
+  const [shareExpiry, setShareExpiry] = useState('never'); // never, 1h, 24h, 7d
+  const [shareUnlockDate, setShareUnlockDate] = useState(''); // Time capsule date
+  const [generatedShareLink, setGeneratedShareLink] = useState('');
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [draggedTabIndex, setDraggedTabIndex] = useState(null);
@@ -593,6 +597,9 @@ const NoteEditor = () => {
       // Generate a suggested share name from note name
       const suggestedName = `${noteName}-shared`;
       setShareUrl(suggestedName);
+      setShareExpiry('never');
+      setShareUnlockDate('');
+      setGeneratedShareLink('');
       setShowShareDialog(true);
     } else {
       toast({
@@ -603,21 +610,59 @@ const NoteEditor = () => {
     }
   };
 
-  const handleCopyShareLink = () => {
+  const generateShareLink = () => {
     const currentTab = noteData.tabs[noteData.activeTab];
     if (currentTab && currentTab.content && shareUrl.trim()) {
       // Encode content in base64 for URL
       const encodedContent = btoa(encodeURIComponent(currentTab.content));
       const encodedTitle = btoa(encodeURIComponent(currentTab.title || 'Shared Note'));
       const customUrl = shareUrl.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-      const fullShareUrl = `${window.location.origin}/view/${customUrl}?t=${encodedTitle}&c=${encodedContent}`;
       
-      // Copy to clipboard
-      navigator.clipboard.writeText(fullShareUrl);
+      // Calculate expiry timestamp
+      let expiryParam = '';
+      if (shareExpiry !== 'never') {
+        const now = Date.now();
+        let expiryTime;
+        switch (shareExpiry) {
+          case '1h': expiryTime = now + 60 * 60 * 1000; break;
+          case '24h': expiryTime = now + 24 * 60 * 60 * 1000; break;
+          case '7d': expiryTime = now + 7 * 24 * 60 * 60 * 1000; break;
+          default: expiryTime = 0;
+        }
+        if (expiryTime) expiryParam = `&exp=${expiryTime}`;
+      }
+      
+      // Add time capsule unlock date
+      let unlockParam = '';
+      if (shareUnlockDate) {
+        const unlockTime = new Date(shareUnlockDate).getTime();
+        if (unlockTime > Date.now()) {
+          unlockParam = `&unlock=${unlockTime}`;
+        }
+      }
+      
+      const fullShareUrl = `${window.location.origin}/view/${customUrl}?t=${encodedTitle}&c=${encodedContent}${expiryParam}${unlockParam}`;
+      setGeneratedShareLink(fullShareUrl);
+    }
+  };
+
+  const handleCopyShareLink = () => {
+    if (generatedShareLink) {
+      navigator.clipboard.writeText(generatedShareLink);
       setShowShareDialog(false);
+      
+      let message = "Anyone with this link can view your note.";
+      if (shareExpiry !== 'never') {
+        const expiryLabels = { '1h': '1 hour', '24h': '24 hours', '7d': '7 days' };
+        message = `Link expires in ${expiryLabels[shareExpiry]}.`;
+      }
+      if (shareUnlockDate) {
+        message = `Note unlocks on ${new Date(shareUnlockDate).toLocaleDateString()}.`;
+      }
+      
       toast({
-        title: "Read-Only Link Copied!",
-        description: "Anyone with this link can view (but not edit) your note.",
+        title: shareUnlockDate ? "⏰ Time Capsule Created!" : shareExpiry !== 'never' ? "💀 Self-Destructing Link Copied!" : "🔗 Link Copied!",
+        description: message,
       });
     }
   };
@@ -1038,34 +1083,121 @@ const NoteEditor = () => {
 
       {/* Share Read-Only Dialog */}
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Share Read-Only Link</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <ExternalLink className="w-5 h-5" />
+              Share Read-Only Link
+            </DialogTitle>
             <DialogDescription>
-              Create a custom URL for your shared note. Anyone with this link can view (but not edit) your content.
+              Create a shareable link with optional self-destruct or time capsule features.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground whitespace-nowrap">puretext.me/view/</span>
-              <Input
-                type="text"
-                value={shareUrl}
-                onChange={(e) => setShareUrl(e.target.value)}
-                placeholder="my-shared-note"
-                className="flex-1"
-                autoFocus
-              />
+          <div className="space-y-5 py-4">
+            {/* Custom URL */}
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Custom URL</label>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground whitespace-nowrap">puretext.me/view/</span>
+                <Input
+                  type="text"
+                  value={shareUrl}
+                  onChange={(e) => { setShareUrl(e.target.value); setGeneratedShareLink(''); }}
+                  placeholder="my-shared-note"
+                  className="flex-1"
+                />
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Choose a memorable name. Only letters, numbers, and hyphens allowed.
-            </p>
+
+            {/* Self-Destruct Timer */}
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                <Timer className="w-4 h-4 text-destructive" />
+                Self-Destruct Timer
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { value: 'never', label: 'Never' },
+                  { value: '1h', label: '1 Hour' },
+                  { value: '24h', label: '24 Hours' },
+                  { value: '7d', label: '7 Days' },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => { setShareExpiry(option.value); setGeneratedShareLink(''); }}
+                    className={`px-3 py-2 text-sm rounded-lg border transition-all ${
+                      shareExpiry === option.value
+                        ? 'bg-destructive/10 border-destructive text-destructive'
+                        : 'bg-card border-border text-muted-foreground hover:border-destructive/50'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+              {shareExpiry !== 'never' && (
+                <p className="text-xs text-destructive mt-2">💀 Link will expire and content will be inaccessible</p>
+              )}
+            </div>
+
+            {/* Time Capsule */}
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                Time Capsule (Optional)
+              </label>
+              <Input
+                type="datetime-local"
+                value={shareUnlockDate}
+                onChange={(e) => { setShareUnlockDate(e.target.value); setGeneratedShareLink(''); }}
+                min={new Date().toISOString().slice(0, 16)}
+                className="w-full"
+              />
+              {shareUnlockDate && (
+                <p className="text-xs text-primary mt-2">⏰ Content hidden until {new Date(shareUnlockDate).toLocaleString()}</p>
+              )}
+            </div>
+
+            {/* Generate Button */}
+            {!generatedShareLink && (
+              <Button 
+                onClick={generateShareLink} 
+                disabled={!shareUrl.trim()}
+                className="w-full"
+                variant="outline"
+              >
+                Generate Link
+              </Button>
+            )}
+
+            {/* Generated Link with QR Code */}
+            {generatedShareLink && (
+              <div className="space-y-4 p-4 rounded-xl bg-muted/50 border border-border">
+                <div className="flex justify-center">
+                  <div className="p-3 bg-white rounded-xl">
+                    <QRCodeSVG 
+                      value={generatedShareLink} 
+                      size={140}
+                      level="M"
+                    />
+                  </div>
+                </div>
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground mb-2">Scan QR code or copy link below</p>
+                  <code className="text-xs bg-card px-2 py-1 rounded border border-border break-all block">
+                    {generatedShareLink.length > 60 ? generatedShareLink.slice(0, 60) + '...' : generatedShareLink}
+                  </code>
+                </div>
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowShareDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={handleCopyShareLink} disabled={!shareUrl.trim()}>
+            <Button onClick={handleCopyShareLink} disabled={!generatedShareLink}>
+              <Copy className="w-4 h-4 mr-2" />
               Copy Link
             </Button>
           </DialogFooter>
