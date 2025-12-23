@@ -29,7 +29,7 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (noteName.trim()) {
-      if (noteName.trim() === 'Sanjay@9440') {
+      if (noteName.trim() === import.meta.env.VITE_ADMIN_SECRET) {
         setLoading(true);
         try {
           const data = await fetchAllUsers(noteName.trim());
@@ -62,8 +62,8 @@ const Home = () => {
   const handleDeleteUser = async (userId) => {
     if (!window.confirm(`Delete "${userId}"? This cannot be undone.`)) return;
     try {
-      await deleteNoteAsAdmin('Sanjay@9440', userId);
-      const data = await fetchAllUsers('Sanjay@9440');
+      await deleteNoteAsAdmin(import.meta.env.VITE_ADMIN_SECRET, userId);
+      const data = await fetchAllUsers(import.meta.env.VITE_ADMIN_SECRET);
       setAdminData(data);
       const newDecrypted = { ...decryptedContents };
       delete newDecrypted[userId];
