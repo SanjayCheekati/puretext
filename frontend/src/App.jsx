@@ -16,10 +16,18 @@ const PlainTextOnlineEditor = lazy(() => import('./components/pages/PlainTextOnl
 const RemoveFormattingOnline = lazy(() => import('./components/pages/RemoveFormattingOnline'));
 const PasteAsPlainTextTool = lazy(() => import('./components/pages/PasteAsPlainTextTool'));
 
-// Loading fallback
+// Loading fallback with spinner
 const LoadingFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <p className="text-sm text-gray-600">Loading...</p>
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="text-center space-y-4">
+      <div className="flex justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-800 mb-1">🔒 PureText</h1>
+        <p className="text-sm text-gray-600">Loading...</p>
+      </div>
+    </div>
   </div>
 );
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
 import { Button } from './ui/button';
@@ -60,6 +61,8 @@ const Home = () => {
           setLoading(false);
         }
       } else {
+        // Show loading state immediately
+        setLoading(true);
         const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');
         navigate(`/${sanitizedName}`);
       }
@@ -215,7 +218,14 @@ const Home = () => {
                 className="w-full h-11"
                 disabled={!noteName.trim() || loading}
               >
-                {loading ? 'Loading...' : 'Open Note'}
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Opening...
+                  </>
+                ) : (
+                  'Open Note'
+                )}
               </Button>
             </form>
 
