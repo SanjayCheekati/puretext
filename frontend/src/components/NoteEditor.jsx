@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -31,6 +31,10 @@ const NoteEditor = () => {
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Load theme from localStorage or default to light mode
+    return localStorage.getItem('theme') === 'dark';
+  });
 
   // Dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
@@ -44,6 +48,17 @@ const NoteEditor = () => {
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
+
+  // Apply theme to document
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
 
   // Load note on mount
   useEffect(() => {
@@ -506,16 +521,16 @@ const NoteEditor = () => {
   const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Minimal Navbar */}
-      <nav className="border-b border-gray-200 bg-white">
+      <nav className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <a href="https://www.puretext.me" className="text-xl font-semibold text-gray-900 hover:text-gray-700">
+            <a href="https://www.puretext.me" className="text-xl font-semibold text-foreground hover:text-foreground/80">
               PureText
             </a>
             <Separator orientation="vertical" className="h-5" />
-            <span className="text-sm text-gray-600 truncate max-w-xs">
+            <span className="text-sm text-muted-foreground truncate max-w-xs">
               {noteName}
             </span>
           </div>
@@ -528,6 +543,15 @@ const NoteEditor = () => {
               title="Home"
             >
               <Home className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
             {isDirty && (
