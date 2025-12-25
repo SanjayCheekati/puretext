@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 99%;
+    --background: 240 10% 96%;
     --foreground: 240 10% 10%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 10%;
-    --muted: 240 5% 96%;
+    --muted: 240 5% 94%;
     --muted-foreground: 240 5% 45%;
-    --border: 240 6% 90%;
+    --border: 240 6% 88%;
     --input: 240 6% 90%;
     --ring: 262 83% 58%;
     --primary: 262 83% 58%;
@@ -21,6 +21,7 @@
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
+    --glow: 262 83% 58%;
   }
 
   .dark {
@@ -41,6 +42,7 @@
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
+    --glow: 262 83% 65%;
   }
 }
 
@@ -64,19 +66,130 @@
   }
   
   .gradient-bg {
-    background: linear-gradient(135deg, hsl(262 83% 58% / 0.05) 0%, hsl(240 10% 99%) 50%, hsl(262 83% 58% / 0.03) 100%);
+    background: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(262 83% 58% / 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(262 60% 70% / 0.1), transparent),
+      radial-gradient(ellipse 50% 30% at 0% 100%, hsl(220 70% 60% / 0.08), transparent),
+      linear-gradient(180deg, hsl(240 10% 96%) 0%, hsl(240 8% 94%) 100%);
+    position: relative;
+  }
+  
+  .gradient-bg::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
   }
   
   .dark .gradient-bg {
-    background: linear-gradient(135deg, hsl(262 83% 65% / 0.1) 0%, hsl(240 10% 6%) 50%, hsl(262 83% 65% / 0.05) 100%);
+    background: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(262 83% 65% / 0.2), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(262 60% 50% / 0.12), transparent),
+      radial-gradient(ellipse 50% 30% at 0% 100%, hsl(220 70% 40% / 0.1), transparent),
+      linear-gradient(180deg, hsl(240 10% 6%) 0%, hsl(240 12% 8%) 100%);
+  }
+  
+  .dark .gradient-bg::before {
+    opacity: 0.02;
   }
 
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50 shadow-xl shadow-black/5;
+    @apply bg-card/95 backdrop-blur-xl border border-border/60;
+    box-shadow: 
+      0 0 0 1px hsl(var(--border) / 0.1),
+      0 1px 2px hsl(240 10% 10% / 0.02),
+      0 4px 8px hsl(240 10% 10% / 0.04),
+      0 12px 24px hsl(240 10% 10% / 0.06),
+      0 24px 48px hsl(240 10% 10% / 0.08);
   }
   
   .dark .glass-card {
-    @apply bg-card/90 border-border/30 shadow-black/20;
+    @apply bg-card/90 border-border/30;
+    box-shadow: 
+      0 0 0 1px hsl(262 83% 65% / 0.05),
+      0 1px 2px hsl(0 0% 0% / 0.1),
+      0 4px 8px hsl(0 0% 0% / 0.15),
+      0 12px 24px hsl(0 0% 0% / 0.2),
+      0 24px 48px hsl(0 0% 0% / 0.25),
+      inset 0 1px 0 hsl(0 0% 100% / 0.03);
+  }
+  
+  .editor-card {
+    @apply bg-card backdrop-blur-xl border border-border/60;
+    box-shadow: 
+      0 0 0 1px hsl(var(--border) / 0.15),
+      0 2px 4px hsl(262 83% 58% / 0.02),
+      0 8px 16px hsl(240 10% 10% / 0.06),
+      0 16px 32px hsl(240 10% 10% / 0.08),
+      0 32px 64px hsl(240 10% 10% / 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .editor-card:focus-within {
+    box-shadow: 
+      0 0 0 1px hsl(262 83% 58% / 0.3),
+      0 0 0 4px hsl(262 83% 58% / 0.1),
+      0 2px 4px hsl(262 83% 58% / 0.03),
+      0 8px 16px hsl(240 10% 10% / 0.08),
+      0 16px 32px hsl(240 10% 10% / 0.1),
+      0 32px 64px hsl(240 10% 10% / 0.12);
+  }
+  
+  .dark .editor-card {
+    @apply bg-card/95 border-border/40;
+    box-shadow: 
+      0 0 0 1px hsl(262 83% 65% / 0.08),
+      0 2px 4px hsl(0 0% 0% / 0.15),
+      0 8px 16px hsl(0 0% 0% / 0.2),
+      0 16px 32px hsl(0 0% 0% / 0.25),
+      0 32px 64px hsl(0 0% 0% / 0.3),
+      inset 0 1px 0 hsl(0 0% 100% / 0.04);
+  }
+  
+  .dark .editor-card:focus-within {
+    box-shadow: 
+      0 0 0 1px hsl(262 83% 65% / 0.4),
+      0 0 0 4px hsl(262 83% 65% / 0.15),
+      0 0 30px hsl(262 83% 65% / 0.1),
+      0 8px 16px hsl(0 0% 0% / 0.25),
+      0 16px 32px hsl(0 0% 0% / 0.3),
+      0 32px 64px hsl(0 0% 0% / 0.35),
+      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  }
+  
+  .tab-button {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  .tab-button:hover {
+    transform: translateY(-1px);
+  }
+  
+  .tab-button-active {
+    box-shadow: 
+      0 4px 12px hsl(262 83% 58% / 0.3),
+      0 2px 4px hsl(262 83% 58% / 0.2);
+  }
+  
+  .dark .tab-button-active {
+    box-shadow: 
+      0 4px 16px hsl(262 83% 65% / 0.4),
+      0 2px 4px hsl(262 83% 65% / 0.25);
+  }
+  
+  .nav-glass {
+    @apply bg-card/80 backdrop-blur-xl border-b border-border/50;
+    box-shadow: 0 1px 3px hsl(240 10% 10% / 0.03);
+  }
+  
+  .dark .nav-glass {
+    @apply bg-card/70 border-border/30;
+    box-shadow: 
+      0 1px 3px hsl(0 0% 0% / 0.2),
+      inset 0 -1px 0 hsl(0 0% 100% / 0.03);
   }
 
   /* Markdown prose styles */
@@ -121,5 +234,54 @@
   }
   .prose hr {
     @apply border-border my-8;
+  }
+
+  /* Animations */
+  @keyframes fade-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(10px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Enhanced button styles */
+  .btn-glow {
+    @apply relative overflow-hidden;
+  }
+  
+  .btn-glow::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(circle at center, hsl(262 83% 58% / 0.3), transparent 70%);
+  }
+  
+  .btn-glow:hover::before {
+    @apply opacity-100;
+  }
+  
+  /* Focus ring enhancement */
+  .focus-ring {
+    @apply outline-none ring-offset-2 ring-offset-background;
+  }
+  
+  .focus-ring:focus-visible {
+    @apply ring-2 ring-primary/50;
   }
 }

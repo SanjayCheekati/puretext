@@ -166,7 +166,7 @@ const Home = () => {
 
             {/* Input Form */}
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto mb-6">
-              <div className="glass-card rounded-2xl p-2 flex gap-2">
+              <div className="editor-card rounded-2xl p-2 flex gap-2 relative z-10">
                 <Input
                   type="text"
                   value={noteName}

@@ -25,7 +25,7 @@ import {
 // Loading Skeleton Component
 const LoadingSkeleton = () => (
   <div className="min-h-screen gradient-bg animate-pulse">
-    <nav className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
+    <nav className="nav-glass">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 bg-muted rounded-lg" />
@@ -44,7 +44,7 @@ const LoadingSkeleton = () => (
         <div className="h-9 w-24 bg-muted rounded-xl" />
         <div className="h-9 w-28 bg-muted rounded-xl" />
       </div>
-      <div className="glass-card rounded-2xl overflow-hidden">
+      <div className="editor-card rounded-2xl overflow-hidden relative z-10">
         <div className="px-6 py-4 border-b border-border/50">
           <div className="h-6 w-48 bg-muted rounded" />
         </div>
@@ -607,7 +607,7 @@ const NoteEditor = () => {
   if (isLocked && !noteData) {
     return (
       <div className="min-h-screen gradient-bg">
-        <nav className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
+        <nav className="nav-glass">
           <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="https://www.puretext.me" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
@@ -618,7 +618,7 @@ const NoteEditor = () => {
           </div>
         </nav>
         <div className="flex items-center justify-center py-20 px-4">
-          <div className="glass-card rounded-2xl p-8 w-full max-w-md">
+          <div className="editor-card rounded-2xl p-8 w-full max-w-md relative z-10">
             <div className="text-center mb-6">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <Lock className="w-6 h-6 text-primary" />
@@ -664,7 +664,7 @@ const NoteEditor = () => {
   return (
     <div className="min-h-screen gradient-bg">
       {/* Minimal Navbar */}
-      <nav className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="nav-glass sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <a href="https://www.puretext.me" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
@@ -797,9 +797,9 @@ const NoteEditor = () => {
                 onDrop={(e) => handleDrop(e, index)}
                 onDragEnd={handleDragEnd}
                 onClick={() => setNoteData({ ...noteData, activeTab: index })}
-                className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-all whitespace-nowrap flex-shrink-0 ${
+                className={`tab-button flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap flex-shrink-0 ${
                   index === noteData.activeTab
-                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                    ? 'tab-button-active bg-primary text-primary-foreground'
                     : 'bg-card text-foreground border border-border/50 hover:border-primary/30 hover:bg-muted/50'
                 } ${draggedTabIndex === index ? 'opacity-50' : ''}`}
               >
@@ -845,7 +845,7 @@ const NoteEditor = () => {
         </div>
 
         {/* Editor Card */}
-        <div className="glass-card rounded-2xl overflow-hidden">
+        <div className="editor-card rounded-2xl overflow-hidden relative z-10">
           {/* Title Bar */}
           <div className="flex items-center gap-3 px-6 py-4 border-b border-border/50">
             <Input
