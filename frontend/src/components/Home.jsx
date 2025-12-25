@@ -467,7 +467,7 @@ const Home = () => {
               <span className="text-sm font-medium text-foreground">PureText</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2025 PureText • Free encrypted notepad • Your data stays yours
+              © 2025 PureText • Built by <a href="https://github.com/SanjayCheekati" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Cheekati Sanjay Goud</a> • Free encrypted notepad
             </p>
           </div>
         </div>
