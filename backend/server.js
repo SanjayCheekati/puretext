@@ -6,6 +6,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import noteRoutes from './routes/notes.js';
+import feedbackRoutes from './routes/feedback.js';
 
 dotenv.config();
 
@@ -92,6 +93,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api', noteRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,7 +1,27 @@
-import React from 'react';
-import { Lock, Zap, Shield, Layers, Star, MessageSquare, Bookmark, FileText, Eye, Key, QrCode } from 'lucide-react';
+import React, { useState } from 'react';
+import { Lock, Zap, Shield, Layers, Star, MessageSquare, Bookmark, FileText, Eye, Key, QrCode, Send, CheckCircle } from 'lucide-react';
+import { submitFeedback } from '../api/feedback';
 
 const HomeSections = () => {
+  const [feedbackForm, setFeedbackForm] = useState({ name: '', email: '', type: 'feature', message: '' });
+  const [feedbackStatus, setFeedbackStatus] = useState('idle'); // idle | sending | sent | error
+  const [feedbackError, setFeedbackError] = useState('');
+
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+    if (!feedbackForm.message.trim()) return;
+    setFeedbackStatus('sending');
+    setFeedbackError('');
+    try {
+      await submitFeedback(feedbackForm);
+      setFeedbackStatus('sent');
+      setFeedbackForm({ name: '', email: '', type: 'feature', message: '' });
+    } catch (err) {
+      setFeedbackError(err.message || 'Failed to submit');
+      setFeedbackStatus('error');
+    }
+  };
+
   return (
     <>
       {/* How It Works Section */}
@@ -130,37 +150,109 @@ const HomeSections = () => {
       </section>
 
       {/* Feedback Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-transparent to-primary/5" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
-            <MessageSquare className="w-8 h-8 text-primary" />
+      <section className="py-20 px-6 bg-gradient-to-b from-transparent to-primary/5" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}>
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
+              <MessageSquare className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground mb-3">Send Us Your Feedback</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Have a feature idea, found a bug, or want something improved? Let us know!
+            </p>
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-4">Have a Feature Request?</h2>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            I'm actively developing PureText and would love to hear from you! 
-            Have a feature idea, found a bug, or want something improved for your workflow?
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
-              href="mailto:sanjaycheekati@gmail.com?subject=PureText%20Feedback"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
-            >
-              <MessageSquare className="w-4 h-4" />
-              Send Feedback
-            </a>
-            <a 
-              href="https://github.com/SanjayCheekati/puretext/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card border border-border text-foreground font-medium hover:bg-muted transition-colors"
-            >
-              <Star className="w-4 h-4" />
-              Star on GitHub
-            </a>
-          </div>
-          <p className="text-xs text-muted-foreground mt-6">
-            Developer is active and ready to build features you need!
-          </p>
+
+          {feedbackStatus === 'sent' ? (
+            <div className="text-center py-12 px-6 rounded-2xl bg-card border border-border/50">
+              <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-foreground mb-2">Thank you!</h3>
+              <p className="text-muted-foreground mb-6">Your feedback has been submitted successfully.</p>
+              <button
+                onClick={() => setFeedbackStatus('idle')}
+                className="text-sm text-primary hover:underline"
+              >
+                Send another
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleFeedbackSubmit} className="space-y-4 p-6 sm:p-8 rounded-2xl bg-card border border-border/50">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="fb-name" className="block text-sm font-medium text-foreground mb-1.5">Name <span className="text-muted-foreground font-normal">(optional)</span></label>
+                  <input
+                    id="fb-name"
+                    type="text"
+                    value={feedbackForm.name}
+                    onChange={(e) => setFeedbackForm(f => ({ ...f, name: e.target.value }))}
+                    placeholder="Your name"
+                    maxLength={100}
+                    className="w-full h-10 px-3 rounded-xl border border-border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="fb-email" className="block text-sm font-medium text-foreground mb-1.5">Email <span className="text-muted-foreground font-normal">(optional)</span></label>
+                  <input
+                    id="fb-email"
+                    type="email"
+                    value={feedbackForm.email}
+                    onChange={(e) => setFeedbackForm(f => ({ ...f, email: e.target.value }))}
+                    placeholder="you@example.com"
+                    maxLength={200}
+                    className="w-full h-10 px-3 rounded-xl border border-border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="fb-type" className="block text-sm font-medium text-foreground mb-1.5">Type</label>
+                <select
+                  id="fb-type"
+                  value={feedbackForm.type}
+                  onChange={(e) => setFeedbackForm(f => ({ ...f, type: e.target.value }))}
+                  className="w-full h-10 px-3 rounded-xl border border-border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                >
+                  <option value="feature">Feature Request</option>
+                  <option value="bug">Bug Report</option>
+                  <option value="improvement">Improvement</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="fb-message" className="block text-sm font-medium text-foreground mb-1.5">Message <span className="text-red-400">*</span></label>
+                <textarea
+                  id="fb-message"
+                  value={feedbackForm.message}
+                  onChange={(e) => setFeedbackForm(f => ({ ...f, message: e.target.value }))}
+                  placeholder="Describe your idea, bug, or suggestion..."
+                  required
+                  maxLength={2000}
+                  rows={4}
+                  className="w-full px-3 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/50 transition-shadow resize-none"
+                />
+                <div className="text-xs text-muted-foreground text-right mt-1">{feedbackForm.message.length}/2000</div>
+              </div>
+
+              {feedbackError && (
+                <p className="text-sm text-red-500">{feedbackError}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={feedbackStatus === 'sending' || !feedbackForm.message.trim()}
+                className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {feedbackStatus === 'sending' ? (
+                  <>Submitting...</>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Submit Feedback
+                  </>
+                )}
+              </button>
+            </form>
+          )}
         </div>
       </section>
 
