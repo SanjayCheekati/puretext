@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Zap, Shield, Layers, Star, MessageSquare, Bookmark, FileText, Eye, Key, QrCode, Send, CheckCircle } from 'lucide-react';
+import { Lock, Zap, Shield, Layers, MessageSquare, Bookmark, FileText, Eye, Key, QrCode, Send, CheckCircle } from 'lucide-react';
 import { submitFeedback } from '../api/feedback';
 
 const HomeSections = () => {
@@ -299,7 +299,7 @@ const HomeSections = () => {
               <h3 className="font-semibold text-foreground mb-4">Tools & Compare</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li><a href="/protectedtext-alternative" className="hover:text-foreground transition-colors">ProtectedText Alternative</a></li>
-                <li><a href="/best-protectedtext-alternatives" className="hover:text-foreground transition-colors">Best Alternatives 2025</a></li>
+                <li><a href="/best-protectedtext-alternatives" className="hover:text-foreground transition-colors">Best Alternatives 2026</a></li>
                 <li><a href="/puretext-vs-protectedtext" className="hover:text-foreground transition-colors">vs ProtectedText</a></li>
                 <li><a href="/puretext-vs-notion-google-keep" className="hover:text-foreground transition-colors">vs Notion & Google Keep</a></li>
                 <li><a href="/online-text-editor" className="hover:text-foreground transition-colors">Online Text Editor</a></li>
@@ -317,7 +317,7 @@ const HomeSections = () => {
               <span className="text-sm font-medium text-foreground">PureText</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2025 PureText • Built by <a href="https://www.sanjaycheekati.dev/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Cheekati Sanjay Goud</a> • Free encrypted notepad
+              © 2026 PureText • Built by <a href="https://www.sanjaycheekati.dev/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Cheekati Sanjay Goud</a> • Free encrypted notepad
             </p>
           </div>
         </div>

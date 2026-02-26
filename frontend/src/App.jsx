@@ -48,15 +48,18 @@ const MarkdownEditorOnline = lazy(() => import('./components/pages/MarkdownEdito
 const PrivateJournalOnline = lazy(() => import('./components/pages/PrivateJournalOnline'));
 
 // Loading fallback - minimal, matches critical CSS bg
-const LoadingFallback = () => (
-  <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0b' }}>
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ width: 40, height: 40, margin: '0 auto 16px', border: '4px solid #7c3aed', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-      <p style={{ color: '#888', fontSize: 14 }}>Loading...</p>
+const LoadingFallback = () => {
+  const isDark = typeof window !== 'undefined' && localStorage.getItem('theme') !== 'light';
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDark ? '#0a0a0b' : '#f8f9fa' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ width: 40, height: 40, margin: '0 auto 16px', border: '4px solid #7c3aed', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <p style={{ color: isDark ? '#888' : '#666', fontSize: 14 }}>Loading...</p>
+      </div>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
     </div>
-    <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-  </div>
-);
+  );
+};
 
 const App = () => {
   return (
@@ -103,6 +106,14 @@ const App = () => {
           <Route path="/view/:shareName" element={<ViewOnly />} />
           {/* Note Editor - must be last to avoid conflicts */}
           <Route path="/:noteName" element={<NoteEditor />} />
+          {/* 404 fallback */}
+          <Route path="*" element={
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+              <h1 style={{ fontSize: '2rem', fontWeight: 700 }}>404</h1>
+              <p style={{ color: '#888' }}>Page not found</p>
+              <a href="/" style={{ color: '#7c3aed', textDecoration: 'underline' }}>Go Home</a>
+            </div>
+          } />
         </Routes>
       </Suspense>
       <Suspense fallback={null}>

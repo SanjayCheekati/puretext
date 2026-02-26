@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, QrCode, Timer, Clock, Eye, Edit3 } from 'lucide-react';
+import { Save, Share2, Lock, Key, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, QrCode, Timer, Clock, Eye, Edit3 } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -136,11 +136,14 @@ const NoteEditor = () => {
         e.preventDefault();
         if (noteData && isDirty && !isLocked) {
           if (password) {
-            saveNoteWithPassword(password);
+            saveNoteWithPassword(password).then(() => {
+              toast({ title: "Saved", description: "Note saved successfully" });
+            });
           } else {
-            handleSaveWithoutPassword();
+            handleSaveWithoutPassword().then(() => {
+              toast({ title: "Saved", description: "Note saved successfully" });
+            });
           }
-          toast({ title: "Saved", description: "Note saved successfully" });
         }
       }
       // Ctrl/Cmd + N - New Tab
@@ -344,8 +347,8 @@ const NoteEditor = () => {
       }
 
       await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true, expiresAt || undefined);
+      invalidateNoteCache(noteName);
       setIsDirty(false);
-      toast({ title: "Auto-saved", description: "Changes saved automatically" });
     } catch (err) {
       setError('Failed to save note');
       toast({ title: "Error", description: "Failed to save note", variant: "destructive" });
@@ -355,8 +358,12 @@ const NoteEditor = () => {
   };
 
   const handleSave = async () => {
-    if (!password || !noteData || !noteName || !isDirty) return;
-    await saveNoteWithPassword(password);
+    if (!noteData || !noteName || !isDirty) return;
+    if (password) {
+      await saveNoteWithPassword(password);
+    } else {
+      await handleSaveWithoutPassword();
+    }
     toast({ title: "Saved", description: "Note saved successfully" });
   };
 
@@ -382,6 +389,7 @@ const NoteEditor = () => {
       }
 
       await saveNote(noteName, encrypted, deleteTokenHash, existingToken, false, expiresAt || undefined);
+      invalidateNoteCache(noteName);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to auto-save note');

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Lock, ArrowLeft, Copy, Moon, Sun, AlertTriangle } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { Button } from './ui/button';
 import { toast } from './ui/use-toast.jsx';
 import { htmlToPlainText } from './RichTextEditor';
 
 const ViewOnly = () => {
   const [searchParams] = useSearchParams();
-  const { shareName } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -45,8 +45,15 @@ const ViewOnly = () => {
     toast({ title: "Copied!", description: "Content copied to clipboard" });
   };
 
-  // Check if content is HTML
+  // Check if content is HTML and sanitize it
   const isHTML = content && content.trim().startsWith('<');
+  const sanitizedHTML = useMemo(() => {
+    if (!isHTML) return '';
+    return DOMPurify.sanitize(content, {
+      ALLOWED_TAGS: ['p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'a', 'hr', 'span', 'div', 'label', 'input'],
+      ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'data-type', 'data-checked', 'type', 'checked', 'disabled'],
+    });
+  }, [content, isHTML]);
 
   // Invalid/no content state
   if (!content) {
@@ -128,7 +135,7 @@ const ViewOnly = () => {
           <div className="p-6 prose prose-sm dark:prose-invert max-w-none">
             {isHTML ? (
               <div 
-                dangerouslySetInnerHTML={{ __html: content }}
+                dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
                 className={
                   '[&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-3 [&_h1]:mt-4 ' +
                   '[&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-2 [&_h2]:mt-3 ' +

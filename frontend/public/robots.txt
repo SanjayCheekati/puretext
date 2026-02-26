@@ -3,41 +3,14 @@
 
 User-agent: *
 Allow: /
-Allow: /encrypted-notepad
-Allow: /secure-notes-app
-Allow: /private-notepad
-Allow: /free-online-notepad
-Allow: /online-notepad-no-signup
-Allow: /password-protected-notes
-Allow: /self-destructing-notes
-Allow: /protectedtext-alternative
-Allow: /best-protectedtext-alternatives
-Allow: /puretext-vs-protectedtext
-Allow: /puretext-vs-notion-google-keep
-Allow: /plain-text-online-editor
-Allow: /remove-formatting-online
-Allow: /paste-as-plain-text-tool
-Allow: /notepad-with-tabs
-Allow: /secret-diary-online
-Allow: /autosave-notepad
-Allow: /anonymous-notepad
-Allow: /secure-notepad-for-work
-Allow: /notepad-for-students
-Allow: /code-snippet-manager
-Allow: /cloud-notepad-sync
-Allow: /online-text-editor
-Allow: /write-notes-online
-Allow: /temporary-notepad
-Allow: /quick-notes-online
-Allow: /scratch-pad-online
-Allow: /digital-notepad
-Allow: /markdown-editor-online
-Allow: /private-journal-online
 
 # Block internal paths
 Disallow: /api/
 Disallow: /view/
 Disallow: /admin-panel
+
+# Crawl-delay (be polite to search engines)
+Crawl-delay: 1
 
 # Sitemaps
 Sitemap: https://www.puretext.me/sitemap.xml
