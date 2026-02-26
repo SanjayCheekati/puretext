@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode, Timer, Clock } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, QrCode, Timer, Clock } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast.jsx';
-import MarkdownToolbar from './MarkdownToolbar';
+import RichTextEditor, { htmlToPlainText } from './RichTextEditor';
 import {
   Dialog,
   DialogContent,
@@ -21,18 +20,7 @@ import {
 } from './ui/dialog';
 
 // Lazy load heavy dependencies - only loaded when user needs them
-const ReactMarkdown = lazy(() => import('react-markdown'));
 const LazyQRCodeSVG = lazy(() => import('qrcode.react').then(m => ({ default: m.QRCodeSVG })));
-
-// Lazy load remarkGfm only when markdown preview is used
-let remarkGfmPlugin = null;
-const getRemarkGfm = async () => {
-  if (!remarkGfmPlugin) {
-    const mod = await import('remark-gfm');
-    remarkGfmPlugin = mod.default;
-  }
-  return remarkGfmPlugin;
-};
 
 // Loading Skeleton Component
 const LoadingSkeleton = () => (
@@ -75,7 +63,6 @@ const NoteEditor = () => {
   const { noteName } = useParams();
   const navigate = useNavigate();
   const tabsContainerRef = useRef(null);
-  const textareaRef = useRef(null);
 
   // State
   const [noteData, setNoteData] = useState(null);
@@ -88,8 +75,6 @@ const NoteEditor = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('theme') === 'dark';
   });
-  const [isPreviewMode, setIsPreviewMode] = useState(false);
-  const [remarkPlugins, setRemarkPlugins] = useState([]);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -112,7 +97,6 @@ const NoteEditor = () => {
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
-  const pendingSelectionRef = useRef(null);
 
   // Check tabs scroll state for mobile
   const checkTabsScroll = useCallback(() => {
@@ -467,43 +451,6 @@ const NoteEditor = () => {
     setIsDirty(true);
   }, [noteData]);
 
-  // Toolbar-triggered content change with cursor positioning
-  const handleToolbarAction = useCallback((newText, cursorStart, cursorEnd) => {
-    if (!noteData) return;
-
-    // Store desired cursor position to apply after render
-    pendingSelectionRef.current = { start: cursorStart, end: cursorEnd };
-
-    const updatedTabs = [...noteData.tabs];
-    updatedTabs[noteData.activeTab] = {
-      ...updatedTabs[noteData.activeTab],
-      content: newText,
-      updatedAt: Date.now()
-    };
-
-    // Don't use startTransition here — we need synchronous render for cursor positioning
-    setNoteData({
-      ...noteData,
-      tabs: updatedTabs
-    });
-    setIsDirty(true);
-  }, [noteData]);
-
-  // Apply pending cursor position after React re-renders the textarea
-  useEffect(() => {
-    if (pendingSelectionRef.current && textareaRef.current) {
-      const { start, end } = pendingSelectionRef.current;
-      pendingSelectionRef.current = null;
-      // Use rAF to ensure DOM has been painted
-      requestAnimationFrame(() => {
-        if (textareaRef.current) {
-          textareaRef.current.focus();
-          textareaRef.current.setSelectionRange(start, end);
-        }
-      });
-    }
-  });
-
   const handleTitleChange = useCallback((title) => {
     if (!noteData) return;
 
@@ -671,7 +618,8 @@ const NoteEditor = () => {
   const handleCopyContent = () => {
     const currentTab = noteData.tabs[noteData.activeTab];
     if (currentTab && currentTab.content) {
-      navigator.clipboard.writeText(currentTab.content);
+      const plainText = htmlToPlainText(currentTab.content);
+      navigator.clipboard.writeText(plainText);
       toast({
         title: "Content Copied",
         description: "Tab content copied to clipboard",
@@ -682,7 +630,8 @@ const NoteEditor = () => {
   const handleDownload = () => {
     const currentTab = noteData.tabs[noteData.activeTab];
     if (currentTab) {
-      const content = (currentTab.title ? currentTab.title + '\n\n' : '') + currentTab.content;
+      const plainText = htmlToPlainText(currentTab.content || '');
+      const content = (currentTab.title ? currentTab.title + '\n\n' : '') + plainText;
       const blob = new Blob([content], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -978,24 +927,6 @@ const NoteEditor = () => {
               disabled={isLocked}
             />
             <div className="flex items-center gap-1">
-              {/* Preview Toggle */}
-              <Button
-                variant={isPreviewMode ? "default" : "ghost"}
-                size="icon"
-                onClick={() => {
-                  const newMode = !isPreviewMode;
-                  if (newMode && remarkPlugins.length === 0) {
-                    // Pre-load remark-gfm when entering preview mode
-                    getRemarkGfm().then(plugin => setRemarkPlugins([plugin]));
-                  }
-                  startTransition(() => setIsPreviewMode(newMode));
-                }}
-                title={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
-                aria-label={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
-                className="rounded-xl"
-              >
-                {isPreviewMode ? <Edit3 className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"
@@ -1019,57 +950,12 @@ const NoteEditor = () => {
             </div>
           </div>
 
-          {/* Editor / Preview */}
-          <div className="relative">
-            {isPreviewMode ? (
-              <div className="min-h-[500px] sm:min-h-[600px] p-6 prose prose-sm dark:prose-invert max-w-none overflow-auto [&_p]:whitespace-pre-wrap [&_li]:whitespace-pre-wrap">
-                {currentTab.content ? (
-                  <Suspense fallback={<div className="text-muted-foreground">Loading preview...</div>}>
-                    <ReactMarkdown 
-                      remarkPlugins={remarkPlugins}
-                      components={{
-                        p: ({children}) => <p className="whitespace-pre-wrap mb-4">{children}</p>,
-                        li: ({children}) => <li className="whitespace-pre-wrap">{children}</li>,
-                      }}
-                    >
-                      {currentTab.content}
-                    </ReactMarkdown>
-                  </Suspense>
-                ) : (
-                  <p className="text-muted-foreground">Nothing to preview yet...</p>
-                )}
-              </div>
-            ) : (
-              <>
-                {/* Markdown Formatting Toolbar */}
-                {!isLocked && (
-                  <MarkdownToolbar 
-                    textareaRef={textareaRef} 
-                    onToolbarAction={handleToolbarAction} 
-                    disabled={isLocked} 
-                  />
-                )}
-                <Textarea
-                  ref={textareaRef}
-                  value={currentTab.content}
-                  onChange={(e) => handleContentChange(e.target.value)}
-                  placeholder=""
-                  disabled={isLocked}
-                  className="min-h-[500px] sm:min-h-[600px] border-0 rounded-none font-mono text-sm resize-none focus-visible:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground p-6"
-                  style={{ scrollbarWidth: 'thin' }}
-                />
-                {/* Empty State Overlay */}
-                {!currentTab.content && !isLocked && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="text-center px-4">
-                      <p className="text-muted-foreground text-base">Start typing your notes...</p>
-                      <p className="text-xs text-muted-foreground/50 mt-2">Supports Markdown formatting</p>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+          {/* Rich Text Editor */}
+          <RichTextEditor
+            content={currentTab.content}
+            onContentChange={handleContentChange}
+            disabled={isLocked}
+          />
         </div>
       </div>
 
