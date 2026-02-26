@@ -258,8 +258,10 @@ const RemoveFormattingOnline = () => {
               Remove formatting → <a href="https://puretext.me" className="text-blue-600 hover:underline">https://puretext.me</a>
             </p>
           </section>
+        </article>
+      </main>
 
-          <RelatedPages currentPath="/remove-formatting-online" />
+      <RelatedPages currentPath="/remove-formatting-online" />
     </>
   );
 };

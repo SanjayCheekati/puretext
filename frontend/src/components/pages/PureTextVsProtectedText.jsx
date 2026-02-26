@@ -247,8 +247,10 @@ const PureTextVsProtectedText = () => {
               Start using PureText → <a href="https://puretext.me" className="text-blue-600 hover:underline">https://puretext.me</a>
             </p>
           </section>
+        </article>
+      </main>
 
-          <RelatedPages currentPath="/puretext-vs-protectedtext" />
+      <RelatedPages currentPath="/puretext-vs-protectedtext" />
     </>
   );
 };

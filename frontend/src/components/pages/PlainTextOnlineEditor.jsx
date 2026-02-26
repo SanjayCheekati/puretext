@@ -220,8 +220,10 @@ const PlainTextOnlineEditor = () => {
               Use PureText → <a href="https://puretext.me" className="text-blue-600 hover:underline">https://puretext.me</a>
             </p>
           </section>
+        </article>
+      </main>
 
-          <RelatedPages currentPath="/plain-text-online-editor" />
+      <RelatedPages currentPath="/plain-text-online-editor" />
     </>
   );
 };

@@ -211,8 +211,10 @@ const ProtectedTextAlternative = () => {
               Use PureText → <a href="https://puretext.me" className="text-blue-600 hover:underline">https://puretext.me</a>
             </p>
           </section>
+        </article>
+      </main>
 
-          <RelatedPages currentPath="/protectedtext-alternative" />
+      <RelatedPages currentPath="/protectedtext-alternative" />
     </>
   );
 };

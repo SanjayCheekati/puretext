@@ -260,8 +260,10 @@ const PasteAsPlainTextTool = () => {
               Try PureText now → <a href="https://puretext.me" className="text-blue-600 hover:underline">https://puretext.me</a>
             </p>
           </section>
+        </article>
+      </main>
 
-          <RelatedPages currentPath="/paste-as-plain-text-tool" />
+      <RelatedPages currentPath="/paste-as-plain-text-tool" />
     </>
   );
 };
