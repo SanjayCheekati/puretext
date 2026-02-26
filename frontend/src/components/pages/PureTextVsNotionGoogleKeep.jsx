@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Check, X, Lock, Zap, Shield, Layers, ArrowRight } from 'lucide-react';
+import RelatedPages from '../RelatedPages';
 
 const PureTextVsNotionGoogleKeep = () => {
   const features = [
@@ -24,11 +25,15 @@ const PureTextVsNotionGoogleKeep = () => {
       <Helmet>
         <title>PureText vs Notion vs Google Keep - Best Private Notes App Comparison 2025</title>
         <meta name="description" content="Compare PureText, Notion, and Google Keep. Find the best note-taking app for privacy, security, and simplicity. Detailed feature comparison for encrypted notes." />
-        <link rel="canonical" href="https://puretext.me/puretext-vs-notion-google-keep" />
+        <link rel="canonical" href="https://www.puretext.me/puretext-vs-notion-google-keep" />
         <meta property="og:title" content="PureText vs Notion vs Google Keep - Best Private Notes App Comparison 2025" />
         <meta property="og:description" content="Compare PureText, Notion, and Google Keep. Find the best note-taking app for privacy, security, and simplicity." />
-        <meta property="og:url" content="https://puretext.me/puretext-vs-notion-google-keep" />
+        <meta property="og:url" content="https://www.puretext.me/puretext-vs-notion-google-keep" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="PureText vs Notion vs Google Keep | PureText" />
+        <meta name="twitter:description" content="Compare privacy, security, and simplicity across PureText, Notion, and Google Keep." />
         <meta name="keywords" content="puretext vs notion, puretext vs google keep, encrypted notes app, private notes, secure notepad, notion alternative, google keep alternative" />
       </Helmet>
 
@@ -262,36 +267,9 @@ const PureTextVsNotionGoogleKeep = () => {
           </section>
 
           {/* Related Pages */}
-          <section className="mt-16 pt-16 border-t border-border/50">
-            <h2 className="text-lg font-semibold text-foreground mb-6">Related Comparisons</h2>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/puretext-vs-protectedtext" className="text-sm text-primary hover:underline">
-                PureText vs ProtectedText →
-              </Link>
-              <Link to="/protectedtext-alternative" className="text-sm text-primary hover:underline">
-                Best ProtectedText Alternative →
-              </Link>
-              <Link to="/plain-text-online-editor" className="text-sm text-primary hover:underline">
-                Plain Text Online Editor →
-              </Link>
-            </div>
-          </section>
         </article>
 
-        {/* Footer */}
-        <footer className="py-12 px-6 border-t border-border/50">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
-                <Lock className="w-3 h-3 text-primary-foreground" />
-              </div>
-              <span className="text-sm font-medium text-foreground">PureText</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Built by <span className="text-foreground">Sanjay</span> • Your data stays yours
-            </p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/puretext-vs-notion-google-keep" />
       </main>
     </>
   );

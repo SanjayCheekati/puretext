@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import RelatedPages from '../RelatedPages';
 
 const PlainTextOnlineEditor = () => {
   return (
@@ -8,11 +9,15 @@ const PlainTextOnlineEditor = () => {
       <Helmet>
         <title>Plain Text Online Editor - Free, Fast, Encrypted | PureText</title>
         <meta name="description" content="Free plain text online editor with military-grade encryption. No signup, no distractions, just pure text editing. Access your notes from anywhere with automatic cloud sync." />
-        <link rel="canonical" href="https://puretext.me/plain-text-online-editor" />
+        <link rel="canonical" href="https://www.puretext.me/plain-text-online-editor" />
         <meta property="og:title" content="Plain Text Online Editor - Free, Fast, Encrypted | PureText" />
         <meta property="og:description" content="Free plain text online editor with military-grade encryption. No signup, no distractions, just pure text editing in the cloud." />
-        <meta property="og:url" content="https://puretext.me/plain-text-online-editor" />
+        <meta property="og:url" content="https://www.puretext.me/plain-text-online-editor" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Plain Text Online Editor | PureText" />
+        <meta name="twitter:description" content="Free plain text online editor with encryption. No signup, no distractions." />
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -216,11 +221,7 @@ const PlainTextOnlineEditor = () => {
             </p>
           </section>
 
-          <footer className="mt-8 pt-8 border-t border-gray-200">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">← Back to Home</Link>
-          </footer>
-        </article>
-      </main>
+          <RelatedPages currentPath="/plain-text-online-editor" />
     </>
   );
 };

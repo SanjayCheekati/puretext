@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import RelatedPages from '../RelatedPages';
 
 const PureTextVsProtectedText = () => {
   return (
@@ -8,11 +9,15 @@ const PureTextVsProtectedText = () => {
       <Helmet>
         <title>PureText vs ProtectedText - Which Encrypted Notes App is Better?</title>
         <meta name="description" content="Detailed comparison between PureText and ProtectedText. Compare speed, design, features, security, and user experience to decide which encrypted note-taking service is right for you." />
-        <link rel="canonical" href="https://puretext.me/puretext-vs-protectedtext" />
+        <link rel="canonical" href="https://www.puretext.me/puretext-vs-protectedtext" />
         <meta property="og:title" content="PureText vs ProtectedText - Which Encrypted Notes App is Better?" />
         <meta property="og:description" content="Detailed comparison between PureText and ProtectedText. Compare speed, design, features, security, and user experience." />
-        <meta property="og:url" content="https://puretext.me/puretext-vs-protectedtext" />
+        <meta property="og:url" content="https://www.puretext.me/puretext-vs-protectedtext" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="PureText vs ProtectedText | PureText" />
+        <meta name="twitter:description" content="Compare PureText and ProtectedText — speed, design, features, and security." />
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -243,11 +248,7 @@ const PureTextVsProtectedText = () => {
             </p>
           </section>
 
-          <footer className="mt-8 pt-8 border-t border-gray-200">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">← Back to Home</Link>
-          </footer>
-        </article>
-      </main>
+          <RelatedPages currentPath="/puretext-vs-protectedtext" />
     </>
   );
 };

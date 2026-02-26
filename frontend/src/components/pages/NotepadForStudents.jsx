@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, GraduationCap, BookOpen, Brain, PenTool, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const NotepadForStudents = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const NotepadForStudents = () => {
         <meta name="description" content="Free online notepad for students. Take lecture notes, organize study materials, and keep your notes synced across all devices. No signup, no ads, completely free for education." />
         <meta name="keywords" content="notepad for students, free student notepad, study notes online, lecture notes app, college notepad free, university notes, student note taking, online study notes, free notes app students" />
         <link rel="canonical" href="https://www.puretext.me/notepad-for-students" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.puretext.me/notepad-for-students" />
+        <meta property="og:title" content="Free Notepad for Students | Study Notes Online" />
+        <meta property="og:description" content="Free online notepad for students. Take lecture notes, organize study materials, and sync across all devices." />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Notepad for Students | PureText" />
+        <meta name="twitter:description" content="Free notepad for students. Take lecture notes and organize study materials online." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -121,11 +130,7 @@ const NotepadForStudents = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Free notepad for students everywhere.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/notepad-for-students" />
       </div>
     </>
   );

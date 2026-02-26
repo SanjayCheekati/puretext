@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Shield, Key, Zap, Eye, FileText, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const EncryptedNotepad = () => {
   const navigate = useNavigate();
@@ -17,6 +18,11 @@ const EncryptedNotepad = () => {
         <meta property="og:title" content="Free Encrypted Notepad Online | AES-256 Secure Notes" />
         <meta property="og:description" content="Create password-protected notes with military-grade AES-256 encryption. Free, no signup, zero-knowledge security." />
         <meta property="og:url" content="https://www.puretext.me/encrypted-notepad" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Free Encrypted Notepad Online | PureText" />
+        <meta name="twitter:description" content="Free encrypted notepad with AES-256 encryption. Zero-knowledge security, no signup required." />
         <script type="application/ld+json">{`
           {
             "@context": "https://schema.org",
@@ -122,16 +128,7 @@ const EncryptedNotepad = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText. Free encrypted notepad with zero-knowledge security.</p>
-            <div className="flex justify-center gap-4 mt-4">
-              <a href="/protectedtext-alternative" className="hover:text-foreground">ProtectedText Alternative</a>
-              <a href="/plain-text-online-editor" className="hover:text-foreground">Plain Text Editor</a>
-              <a href="/secure-notes-app" className="hover:text-foreground">Secure Notes App</a>
-            </div>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/encrypted-notepad" />
       </div>
     </>
   );

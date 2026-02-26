@@ -1,4 +1,4 @@
-# PureText - Encrypted Notepad
+# PureText - Free Encrypted Notepad
 # https://www.puretext.me
 
 User-agent: *
@@ -25,13 +25,19 @@ Allow: /secure-notepad-for-work
 Allow: /notepad-for-students
 Allow: /code-snippet-manager
 Allow: /cloud-notepad-sync
+Allow: /online-text-editor
+Allow: /write-notes-online
+Allow: /temporary-notepad
+Allow: /quick-notes-online
+Allow: /scratch-pad-online
+Allow: /digital-notepad
+Allow: /markdown-editor-online
+Allow: /private-journal-online
 
-# Block API and internal paths
+# Block internal paths
 Disallow: /api/
 Disallow: /view/
+Disallow: /admin-panel
 
 # Sitemaps
 Sitemap: https://www.puretext.me/sitemap.xml
-
-# Crawl-delay for politeness (optional)
-Crawl-delay: 1

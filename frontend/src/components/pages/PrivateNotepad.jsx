@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Shield, Users, Zap, Eye, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const PrivateNotepad = () => {
   const navigate = useNavigate();
@@ -17,6 +18,11 @@ const PrivateNotepad = () => {
         <meta property="og:title" content="Private Notepad Online | Anonymous Notes No Login" />
         <meta property="og:description" content="Take anonymous notes without login. No tracking, no cookies. The most private notepad online." />
         <meta property="og:url" content="https://www.puretext.me/private-notepad" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Private Notepad Online | PureText" />
+        <meta name="twitter:description" content="Take anonymous notes without login. No tracking, no cookies. The most private notepad online." />
       </Helmet>
 
       <div className="min-h-screen gradient-bg">
@@ -118,11 +124,7 @@ const PrivateNotepad = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Private notepad with zero tracking.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/private-notepad" />
       </div>
     </>
   );

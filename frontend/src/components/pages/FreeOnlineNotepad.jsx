@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Laptop, Smartphone, Tablet, Cloud, ArrowRight, CheckCircle2, Globe, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const FreeOnlineNotepad = () => {
   const navigate = useNavigate();
@@ -50,6 +51,11 @@ const FreeOnlineNotepad = () => {
         <meta property="og:title" content="Free Online Notepad | Access From Any Device" />
         <meta property="og:description" content="Cloud notepad that works everywhere. No downloads, no signup, no cost." />
         <meta property="og:url" content="https://www.puretext.me/free-online-notepad" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Free Online Notepad | PureText" />
+        <meta name="twitter:description" content="Cloud notepad that works everywhere. No downloads, no signup, no cost." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
@@ -172,11 +178,7 @@ const FreeOnlineNotepad = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - The internet's best free online notepad.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/free-online-notepad" />
       </div>
     </>
   );

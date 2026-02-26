@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Trash2, Clock, Flame, Skull, ArrowRight, CheckCircle2, Timer } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const SelfDestructingNotes = () => {
   const navigate = useNavigate();
@@ -28,6 +29,11 @@ const SelfDestructingNotes = () => {
         <meta property="og:title" content="Self-Destructing Notes | Auto-Delete After Reading" />
         <meta property="og:description" content="Notes that vanish automatically. Share sensitive info without leaving traces." />
         <meta property="og:url" content="https://www.puretext.me/self-destructing-notes" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Self-Destructing Notes | PureText" />
+        <meta name="twitter:description" content="Notes that vanish automatically. Share sensitive info without leaving traces. Free, encrypted." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -156,11 +162,7 @@ const SelfDestructingNotes = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Self-destructing notes that leave no trace.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/self-destructing-notes" />
       </div>
     </>
   );

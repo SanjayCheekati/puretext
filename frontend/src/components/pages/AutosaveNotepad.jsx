@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Save, Cloud, Wifi, WifiOff, ArrowRight, CheckCircle2, Zap, RefreshCw } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const AutosaveNotepad = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const AutosaveNotepad = () => {
         <meta name="description" content="Online notepad with automatic saving - never lose your work again. Your notes save instantly as you type. Cloud sync, offline support, and zero data loss. Free." />
         <meta name="keywords" content="autosave notepad, auto save notes, notepad with auto save, never lose notes, cloud save notepad, automatic saving notepad, notes auto backup, instant save notepad" />
         <link rel="canonical" href="https://www.puretext.me/autosave-notepad" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.puretext.me/autosave-notepad" />
+        <meta property="og:title" content="Autosave Notepad Online | Never Lose Your Work" />
+        <meta property="og:description" content="Online notepad with automatic saving. Your notes save instantly as you type. Cloud sync, offline support, and zero data loss." />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Autosave Notepad Online | PureText" />
+        <meta name="twitter:description" content="Online notepad with automatic saving. Never lose your work again." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -144,11 +153,7 @@ const AutosaveNotepad = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Autosave notepad that never loses your work.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/autosave-notepad" />
       </div>
     </>
   );

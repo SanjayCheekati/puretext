@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Shield, Key, Fingerprint, ArrowRight, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const PasswordProtectedNotes = () => {
   const navigate = useNavigate();
@@ -28,6 +29,11 @@ const PasswordProtectedNotes = () => {
         <meta property="og:title" content="Password Protected Notes | Military-Grade Encryption" />
         <meta property="og:description" content="Lock your notes with AES-256 encryption. Even we can't read them." />
         <meta property="og:url" content="https://www.puretext.me/password-protected-notes" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Password Protected Notes | PureText" />
+        <meta name="twitter:description" content="Lock your notes with AES-256 encryption. Even we can't read them." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -171,11 +177,7 @@ const PasswordProtectedNotes = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Military-grade password protected notes.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/password-protected-notes" />
       </div>
     </>
   );

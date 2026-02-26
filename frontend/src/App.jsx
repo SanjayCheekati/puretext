@@ -37,6 +37,15 @@ const NotepadForStudents = lazy(() => import('./components/pages/NotepadForStude
 const CodeSnippetManager = lazy(() => import('./components/pages/CodeSnippetManager'));
 const CloudNotepadSync = lazy(() => import('./components/pages/CloudNotepadSync'));
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
+// New high-traffic SEO pages (Feb 2026)
+const OnlineTextEditor = lazy(() => import('./components/pages/OnlineTextEditor'));
+const WriteNotesOnline = lazy(() => import('./components/pages/WriteNotesOnline'));
+const TemporaryNotepad = lazy(() => import('./components/pages/TemporaryNotepad'));
+const QuickNotesOnline = lazy(() => import('./components/pages/QuickNotesOnline'));
+const ScratchPadOnline = lazy(() => import('./components/pages/ScratchPadOnline'));
+const DigitalNotepad = lazy(() => import('./components/pages/DigitalNotepad'));
+const MarkdownEditorOnline = lazy(() => import('./components/pages/MarkdownEditorOnline'));
+const PrivateJournalOnline = lazy(() => import('./components/pages/PrivateJournalOnline'));
 
 // Loading fallback - minimal, matches critical CSS bg
 const LoadingFallback = () => (
@@ -78,6 +87,15 @@ const App = () => {
           <Route path="/notepad-for-students" element={<NotepadForStudents />} />
           <Route path="/code-snippet-manager" element={<CodeSnippetManager />} />
           <Route path="/cloud-notepad-sync" element={<CloudNotepadSync />} />
+          {/* New SEO pages (Feb 2026) */}
+          <Route path="/online-text-editor" element={<OnlineTextEditor />} />
+          <Route path="/write-notes-online" element={<WriteNotesOnline />} />
+          <Route path="/temporary-notepad" element={<TemporaryNotepad />} />
+          <Route path="/quick-notes-online" element={<QuickNotesOnline />} />
+          <Route path="/scratch-pad-online" element={<ScratchPadOnline />} />
+          <Route path="/digital-notepad" element={<DigitalNotepad />} />
+          <Route path="/markdown-editor-online" element={<MarkdownEditorOnline />} />
+          <Route path="/private-journal-online" element={<PrivateJournalOnline />} />
           {/* Admin Panel */}
           <Route path="/admin-panel" element={<AdminPanel />} />
           {/* View Only pages for shared links */}

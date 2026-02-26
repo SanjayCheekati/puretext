@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Briefcase, Building, Shield, Users, FileText, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const SecureNotepadForWork = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const SecureNotepadForWork = () => {
         <meta name="description" content="Secure notepad for work and business. Keep confidential meeting notes, project plans, and sensitive information encrypted. GDPR compliant, no data retention, enterprise-grade security." />
         <meta name="keywords" content="secure notepad for work, business notepad encrypted, confidential notes app, work notes secure, enterprise notepad, GDPR compliant notes, business meeting notes, secure work notes" />
         <link rel="canonical" href="https://www.puretext.me/secure-notepad-for-work" />
+        <meta property="og:title" content="Secure Notepad for Work | Business Notes Encrypted | PureText" />
+        <meta property="og:description" content="Secure notepad for work and business. Keep confidential meeting notes, project plans, and sensitive information encrypted." />
+        <meta property="og:url" content="https://www.puretext.me/secure-notepad-for-work" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Secure Notepad for Work | PureText" />
+        <meta name="twitter:description" content="Keep confidential work notes encrypted. GDPR compliant, enterprise-grade security, no data retention." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -103,11 +112,7 @@ const SecureNotepadForWork = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Secure notepad for business professionals.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/secure-notepad-for-work" />
       </div>
     </>
   );

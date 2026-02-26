@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Shield, Smartphone, Globe, Zap, CheckCircle2, Star } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const SecureNotesApp = () => {
   const navigate = useNavigate();
@@ -17,6 +18,11 @@ const SecureNotesApp = () => {
         <meta property="og:title" content="Secure Notes App Online | Private Note Taking | PureText" />
         <meta property="og:description" content="Best secure notes app with end-to-end encryption. Take private notes on any device. Free, no download." />
         <meta property="og:url" content="https://www.puretext.me/secure-notes-app" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Secure Notes App Online | PureText" />
+        <meta name="twitter:description" content="Best secure notes app with end-to-end encryption. Take private notes on any device. Free, no download." />
         <script type="application/ld+json">{`
           {
             "@context": "https://schema.org",
@@ -137,11 +143,7 @@ const SecureNotesApp = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Best secure notes app with zero-knowledge encryption.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/secure-notes-app" />
       </div>
     </>
   );

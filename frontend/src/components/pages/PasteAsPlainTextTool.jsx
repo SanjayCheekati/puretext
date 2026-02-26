@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import RelatedPages from '../RelatedPages';
 
 const PasteAsPlainTextTool = () => {
   return (
@@ -8,11 +9,15 @@ const PasteAsPlainTextTool = () => {
       <Helmet>
         <title>Paste as Plain Text Tool - Remove Formatting When Pasting | PureText</title>
         <meta name="description" content="Free paste as plain text tool. Strip formatting automatically when pasting. No signup, instant access. Convert formatted text to clean plain text online." />
-        <link rel="canonical" href="https://puretext.me/paste-as-plain-text-tool" />
+        <link rel="canonical" href="https://www.puretext.me/paste-as-plain-text-tool" />
         <meta property="og:title" content="Paste as Plain Text Tool - Remove Formatting When Pasting | PureText" />
         <meta property="og:description" content="Free paste as plain text tool. Strip formatting automatically when pasting. Convert formatted text to clean plain text online." />
-        <meta property="og:url" content="https://puretext.me/paste-as-plain-text-tool" />
+        <meta property="og:url" content="https://www.puretext.me/paste-as-plain-text-tool" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Paste as Plain Text Tool | PureText" />
+        <meta name="twitter:description" content="Strip formatting automatically when pasting. Convert formatted text to clean plain text online." />
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -256,11 +261,7 @@ const PasteAsPlainTextTool = () => {
             </p>
           </section>
 
-          <footer className="mt-8 pt-8 border-t border-gray-200">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">← Back to Home</Link>
-          </footer>
-        </article>
-      </main>
+          <RelatedPages currentPath="/paste-as-plain-text-tool" />
     </>
   );
 };

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Code, Terminal, Braces, FileCode, ArrowRight, CheckCircle2, Copy } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const CodeSnippetManager = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const CodeSnippetManager = () => {
         <meta name="description" content="Free online code snippet manager. Store, organize, and access your code snippets from anywhere. Perfect for developers - organize by language with tabs, encrypted storage, no signup." />
         <meta name="keywords" content="code snippet manager, store code snippets online, code notes, developer notepad, programming snippets, code storage online, snippet organizer, code library online, developer notes" />
         <link rel="canonical" href="https://www.puretext.me/code-snippet-manager" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.puretext.me/code-snippet-manager" />
+        <meta property="og:title" content="Code Snippet Manager Online | Store Code Snippets Free" />
+        <meta property="og:description" content="Free online code snippet manager. Store, organize, and access your code snippets from anywhere. Encrypted storage, no signup." />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Code Snippet Manager | PureText" />
+        <meta name="twitter:description" content="Free online code snippet manager. Store and organize code snippets from anywhere." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -122,11 +131,7 @@ const CodeSnippetManager = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Code snippet manager for developers.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/code-snippet-manager" />
       </div>
     </>
   );

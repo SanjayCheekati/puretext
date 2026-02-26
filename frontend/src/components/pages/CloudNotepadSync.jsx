@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Smartphone, Laptop, Tablet, Cloud, Wifi, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const CloudNotepadSync = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const CloudNotepadSync = () => {
         <meta name="description" content="Cloud notepad with automatic sync across all your devices. Write on your phone, continue on laptop. Free cloud notes with encryption - no signup required." />
         <meta name="keywords" content="cloud notepad, sync notes across devices, cloud notes free, notepad with sync, cross device notes, cloud text editor, synced notepad, access notes anywhere, multi device notepad" />
         <link rel="canonical" href="https://www.puretext.me/cloud-notepad-sync" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.puretext.me/cloud-notepad-sync" />
+        <meta property="og:title" content="Cloud Notepad with Sync | Access Notes Any Device" />
+        <meta property="og:description" content="Cloud notepad with automatic sync across all your devices. Free cloud notes with encryption - no signup required." />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Cloud Notepad with Sync | PureText" />
+        <meta name="twitter:description" content="Cloud notepad with automatic sync across all your devices. Free and encrypted." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -125,11 +134,7 @@ const CloudNotepadSync = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Cloud notepad with automatic sync.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/cloud-notepad-sync" />
       </div>
     </>
   );

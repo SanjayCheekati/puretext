@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import RelatedPages from '../RelatedPages';
 
 const BestProtectedTextAlternatives = () => {
   return (
@@ -8,11 +9,15 @@ const BestProtectedTextAlternatives = () => {
       <Helmet>
         <title>Best ProtectedText Alternatives 2025 - Private Encrypted Notes Comparison</title>
         <meta name="description" content="Comprehensive comparison of the best ProtectedText alternatives. Compare features, security, speed, and privacy of top encrypted note-taking apps including PureText, Standard Notes, and more." />
-        <link rel="canonical" href="https://puretext.me/best-protectedtext-alternatives" />
+        <link rel="canonical" href="https://www.puretext.me/best-protectedtext-alternatives" />
         <meta property="og:title" content="Best ProtectedText Alternatives 2025 - Private Encrypted Notes Comparison" />
         <meta property="og:description" content="Comprehensive comparison of the best ProtectedText alternatives. Compare features, security, speed, and privacy of top encrypted note-taking apps." />
-        <meta property="og:url" content="https://puretext.me/best-protectedtext-alternatives" />
+        <meta property="og:url" content="https://www.puretext.me/best-protectedtext-alternatives" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Best ProtectedText Alternatives 2025 | PureText" />
+        <meta name="twitter:description" content="Compare the best ProtectedText alternatives for encrypted note-taking in 2025." />
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -238,11 +243,7 @@ const BestProtectedTextAlternatives = () => {
             </p>
           </section>
 
-          <footer className="mt-8 pt-8 border-t border-gray-200">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">← Back to Home</Link>
-          </footer>
-        </article>
-      </main>
+          <RelatedPages currentPath="/best-protectedtext-alternatives" />
     </>
   );
 };

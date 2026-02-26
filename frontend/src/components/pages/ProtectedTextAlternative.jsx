@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import RelatedPages from '../RelatedPages';
 
 const ProtectedTextAlternative = () => {
   return (
@@ -8,11 +9,15 @@ const ProtectedTextAlternative = () => {
       <Helmet>
         <title>ProtectedText Alternative - Fast, Private, No-Signup Notes | PureText</title>
         <meta name="description" content="Looking for a ProtectedText alternative? PureText offers the same privacy-first encrypted notes with a faster, cleaner interface. No signup required, instant access, military-grade encryption." />
-        <link rel="canonical" href="https://puretext.me/protectedtext-alternative" />
+        <link rel="canonical" href="https://www.puretext.me/protectedtext-alternative" />
         <meta property="og:title" content="ProtectedText Alternative - Fast, Private, No-Signup Notes | PureText" />
         <meta property="og:description" content="Looking for a ProtectedText alternative? PureText offers the same privacy-first encrypted notes with a faster, cleaner interface. No signup required." />
-        <meta property="og:url" content="https://puretext.me/protectedtext-alternative" />
+        <meta property="og:url" content="https://www.puretext.me/protectedtext-alternative" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ProtectedText Alternative | PureText" />
+        <meta name="twitter:description" content="Better than ProtectedText. Faster, cleaner, same privacy. No signup required." />
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -207,11 +212,7 @@ const ProtectedTextAlternative = () => {
             </p>
           </section>
 
-          <footer className="mt-8 pt-8 border-t border-gray-200">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">← Back to Home</Link>
-          </footer>
-        </article>
-      </main>
+          <RelatedPages currentPath="/protectedtext-alternative" />
     </>
   );
 };

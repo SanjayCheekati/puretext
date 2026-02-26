@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, UserX, Eye, EyeOff, Shield, ArrowRight, CheckCircle2, Globe } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const AnonymousNotepad = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const AnonymousNotepad = () => {
         <meta name="description" content="Anonymous notepad with zero tracking. No IP logging, no cookies, no fingerprinting. Write notes completely anonymously online. Perfect for whistleblowers, journalists, and privacy advocates." />
         <meta name="keywords" content="anonymous notepad, no tracking notepad, anonymous notes online, untraceable notes, no logs notepad, privacy notepad, anonymous text editor, incognito notepad, tor friendly notepad" />
         <link rel="canonical" href="https://www.puretext.me/anonymous-notepad" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.puretext.me/anonymous-notepad" />
+        <meta property="og:title" content="Anonymous Notepad Online | No Tracking No Logs" />
+        <meta property="og:description" content="Anonymous notepad with zero tracking. No IP logging, no cookies, no fingerprinting. Write notes completely anonymously online." />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Anonymous Notepad Online | PureText" />
+        <meta name="twitter:description" content="Anonymous notepad with zero tracking. No IP logging, no cookies, no fingerprinting." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -105,11 +114,7 @@ const AnonymousNotepad = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Anonymous notepad with zero tracking.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/anonymous-notepad" />
       </div>
     </>
   );

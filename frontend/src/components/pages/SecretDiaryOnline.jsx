@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Book, Heart, Pen, Shield, ArrowRight, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const SecretDiaryOnline = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const SecretDiaryOnline = () => {
         <meta name="description" content="Keep a secret diary online with password protection and encryption. Your private journal that no one can read - not even us. Free, anonymous, and completely secure." />
         <meta name="keywords" content="secret diary online, private journal, encrypted diary, password protected diary, online diary with lock, secure journal, private diary app, anonymous diary, hidden diary online" />
         <link rel="canonical" href="https://www.puretext.me/secret-diary-online" />
+        <meta property="og:title" content="Secret Diary Online | Private Journal with Password | PureText" />
+        <meta property="og:description" content="Keep a secret diary online with password protection and encryption. Your private journal that no one can read." />
+        <meta property="og:url" content="https://www.puretext.me/secret-diary-online" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Secret Diary Online | PureText" />
+        <meta name="twitter:description" content="Keep a secret diary online with password protection and encryption. Free, anonymous, secure." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -157,11 +166,7 @@ const SecretDiaryOnline = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Your secret diary, truly private.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/secret-diary-online" />
       </div>
     </>
   );

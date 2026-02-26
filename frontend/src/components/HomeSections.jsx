@@ -186,6 +186,8 @@ const HomeSections = () => {
                 <li><a href="/notepad-with-tabs" className="hover:text-foreground transition-colors">Notepad with Tabs</a></li>
                 <li><a href="/autosave-notepad" className="hover:text-foreground transition-colors">Autosave Notepad</a></li>
                 <li><a href="/cloud-notepad-sync" className="hover:text-foreground transition-colors">Cloud Sync Notepad</a></li>
+                <li><a href="/digital-notepad" className="hover:text-foreground transition-colors">Digital Notepad</a></li>
+                <li><a href="/markdown-editor-online" className="hover:text-foreground transition-colors">Markdown Editor</a></li>
               </ul>
             </div>
             <div>
@@ -196,15 +198,21 @@ const HomeSections = () => {
                 <li><a href="/notepad-for-students" className="hover:text-foreground transition-colors">Notepad for Students</a></li>
                 <li><a href="/secure-notepad-for-work" className="hover:text-foreground transition-colors">Secure Work Notepad</a></li>
                 <li><a href="/code-snippet-manager" className="hover:text-foreground transition-colors">Code Snippet Manager</a></li>
+                <li><a href="/private-journal-online" className="hover:text-foreground transition-colors">Private Journal</a></li>
+                <li><a href="/temporary-notepad" className="hover:text-foreground transition-colors">Temporary Notepad</a></li>
+                <li><a href="/quick-notes-online" className="hover:text-foreground transition-colors">Quick Notes</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Compare</h3>
+              <h3 className="font-semibold text-foreground mb-4">Tools & Compare</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li><a href="/protectedtext-alternative" className="hover:text-foreground transition-colors">ProtectedText Alternative</a></li>
                 <li><a href="/best-protectedtext-alternatives" className="hover:text-foreground transition-colors">Best Alternatives 2025</a></li>
                 <li><a href="/puretext-vs-protectedtext" className="hover:text-foreground transition-colors">vs ProtectedText</a></li>
                 <li><a href="/puretext-vs-notion-google-keep" className="hover:text-foreground transition-colors">vs Notion & Google Keep</a></li>
+                <li><a href="/online-text-editor" className="hover:text-foreground transition-colors">Online Text Editor</a></li>
+                <li><a href="/scratch-pad-online" className="hover:text-foreground transition-colors">Scratch Pad Online</a></li>
+                <li><a href="/write-notes-online" className="hover:text-foreground transition-colors">Write Notes Online</a></li>
               </ul>
             </div>
           </div>

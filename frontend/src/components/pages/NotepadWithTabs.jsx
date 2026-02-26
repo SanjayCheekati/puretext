@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Lock, FileText, Layers, Plus, Trash2, ArrowRight, CheckCircle2, PenTool } from 'lucide-react';
 import { Button } from '../ui/button';
+import RelatedPages from '../RelatedPages';
 
 const NotepadWithTabs = () => {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ const NotepadWithTabs = () => {
         <meta name="description" content="Free online notepad with tabs - organize multiple notes in one place. Create, rename, and manage unlimited tabs. Like browser tabs but for your notes. No signup required." />
         <meta name="keywords" content="notepad with tabs, multi-tab notepad, tabbed text editor, organize notes tabs, multiple notes online, tabbed notepad free, notepad tabs online, text editor with tabs" />
         <link rel="canonical" href="https://www.puretext.me/notepad-with-tabs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.puretext.me/notepad-with-tabs" />
+        <meta property="og:title" content="Notepad with Tabs Online | Multi-Tab Text Editor Free" />
+        <meta property="og:description" content="Free online notepad with tabs. Organize multiple notes in one place with unlimited tabs. No signup required." />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Notepad with Tabs Online | PureText" />
+        <meta name="twitter:description" content="Free online notepad with unlimited tabs. Organize multiple notes in one place." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
@@ -145,11 +154,7 @@ const NotepadWithTabs = () => {
           </section>
         </main>
 
-        <footer className="border-t border-border/50 py-8 mt-16">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm text-muted-foreground">
-            <p>© 2025 PureText - Free online notepad with unlimited tabs.</p>
-          </div>
-        </footer>
+        <RelatedPages currentPath="/notepad-with-tabs" />
       </div>
     </>
   );

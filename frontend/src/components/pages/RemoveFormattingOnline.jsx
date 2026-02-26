@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import RelatedPages from '../RelatedPages';
 
 const RemoveFormattingOnline = () => {
   return (
@@ -8,11 +9,15 @@ const RemoveFormattingOnline = () => {
       <Helmet>
         <title>Remove Formatting Online - Strip Text Formatting Instantly | PureText</title>
         <meta name="description" content="Remove formatting from text online instantly. Strip bold, italics, fonts, colors, and all styling. Paste formatted text, get clean plain text. Free tool, no signup required." />
-        <link rel="canonical" href="https://puretext.me/remove-formatting-online" />
+        <link rel="canonical" href="https://www.puretext.me/remove-formatting-online" />
         <meta property="og:title" content="Remove Formatting Online - Strip Text Formatting Instantly | PureText" />
         <meta property="og:description" content="Remove formatting from text online instantly. Strip bold, italics, fonts, colors, and all styling. Get clean plain text." />
-        <meta property="og:url" content="https://puretext.me/remove-formatting-online" />
+        <meta property="og:url" content="https://www.puretext.me/remove-formatting-online" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Remove Formatting Online | PureText" />
+        <meta name="twitter:description" content="Strip all formatting from text instantly. Get clean plain text. Free, no signup." />
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -254,11 +259,7 @@ const RemoveFormattingOnline = () => {
             </p>
           </section>
 
-          <footer className="mt-8 pt-8 border-t border-gray-200">
-            <Link to="/" className="text-sm text-gray-600 hover:text-gray-900">← Back to Home</Link>
-          </footer>
-        </article>
-      </main>
+          <RelatedPages currentPath="/remove-formatting-online" />
     </>
   );
 };
