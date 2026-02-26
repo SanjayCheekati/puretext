@@ -243,7 +243,10 @@ const BestProtectedTextAlternatives = () => {
             </p>
           </section>
 
-          <RelatedPages currentPath="/best-protectedtext-alternatives" />
+        </article>
+      </main>
+
+      <RelatedPages currentPath="/best-protectedtext-alternatives" />
     </>
   );
 };
