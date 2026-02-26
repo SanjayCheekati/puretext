@@ -114,6 +114,7 @@ const NoteEditor = () => {
 
   const isPasswordProcessing = useRef(false);
   const autoSaveTimeoutRef = useRef(null);
+  const pendingSelectionRef = useRef(null);
 
   // Check tabs scroll state for mobile
   const checkTabsScroll = useCallback(() => {
@@ -455,6 +456,43 @@ const NoteEditor = () => {
     });
     setIsDirty(true);
   }, [noteData]);
+
+  // Toolbar-triggered content change with cursor positioning
+  const handleToolbarAction = useCallback((newText, cursorStart, cursorEnd) => {
+    if (!noteData) return;
+
+    // Store desired cursor position to apply after render
+    pendingSelectionRef.current = { start: cursorStart, end: cursorEnd };
+
+    const updatedTabs = [...noteData.tabs];
+    updatedTabs[noteData.activeTab] = {
+      ...updatedTabs[noteData.activeTab],
+      content: newText,
+      updatedAt: Date.now()
+    };
+
+    // Don't use startTransition here — we need synchronous render for cursor positioning
+    setNoteData({
+      ...noteData,
+      tabs: updatedTabs
+    });
+    setIsDirty(true);
+  }, [noteData]);
+
+  // Apply pending cursor position after React re-renders the textarea
+  useEffect(() => {
+    if (pendingSelectionRef.current && textareaRef.current) {
+      const { start, end } = pendingSelectionRef.current;
+      pendingSelectionRef.current = null;
+      // Use rAF to ensure DOM has been painted
+      requestAnimationFrame(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          textareaRef.current.setSelectionRange(start, end);
+        }
+      });
+    }
+  });
 
   const handleTitleChange = useCallback((title) => {
     if (!noteData) return;
@@ -1031,7 +1069,7 @@ const NoteEditor = () => {
                 {!isLocked && (
                   <MarkdownToolbar 
                     textareaRef={textareaRef} 
-                    onContentChange={handleContentChange} 
+                    onToolbarAction={handleToolbarAction} 
                     disabled={isLocked} 
                   />
                 )}
