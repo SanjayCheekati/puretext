@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Toaster } from './components/ui/use-toast.jsx';
+
+// Lazy load non-critical UI
+const Toaster = lazy(() => import('./components/ui/use-toast.jsx').then(m => ({ default: m.Toaster })));
 
 // Lazy load analytics - not needed for initial render
 const Analytics = lazy(() => import('@vercel/analytics/react').then(m => ({ default: m.Analytics })));
@@ -85,8 +87,8 @@ const App = () => {
           <Route path="/:noteName" element={<NoteEditor />} />
         </Routes>
       </Suspense>
-      <Toaster />
       <Suspense fallback={null}>
+        <Toaster />
         <Analytics />
         <SpeedInsights />
       </Suspense>

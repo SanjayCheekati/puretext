@@ -3,296 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Backend API Preconnect (warm up serverless function) -->
+    <!-- Preconnect to critical origins -->
     <link rel="preconnect" href="https://puretext-backend.vercel.app" />
     <link rel="dns-prefetch" href="https://puretext-backend.vercel.app" />
     
-    <!-- Inter Font - Non-blocking load with font-display:swap -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
-    
     <!-- Critical CSS - Inline for instant render -->
     <style>
-      *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Inter',sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#0a0a0b}#root{min-height:100vh}.gradient-bg{background:linear-gradient(135deg,#0a0a0b 0%,#1a1a2e 50%,#0a0a0b 100%)}
+      *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto',sans-serif;-webkit-font-smoothing:antialiased;background:#0a0a0b;color:#f5f5f5}#root{min-height:100vh}
     </style>
-    
-    <!-- Performance Optimization -->
-    <link rel="preconnect" href="https://vitals.vercel-insights.com" />
-    <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
     
     <!-- Primary Meta Tags -->
     <title>PureText - Free Encrypted Notepad | Secure Notes No Signup | AES-256</title>
-    <meta name="title" content="PureText - Free Encrypted Notepad | Secure Notes No Signup | AES-256" />
-    <meta name="description" content="Free encrypted notepad with military-grade AES-256 encryption. No signup, no tracking, no cookies. Create password-protected notes instantly. Best ProtectedText alternative for 2025." />
-    <meta name="keywords" content="encrypted notepad, secure notes app, private notepad, password protected notes, online notepad no signup, free encrypted notes, protectedtext alternative, self destructing notes, secure text editor, anonymous notes, zero knowledge notes, AES-256 notepad, private text editor, Cheekati Sanjay Goud, sanjaycheekati, SanjayCheekati, Cheekati Sanjay" />
+    <meta name="description" content="Free encrypted notepad with military-grade AES-256 encryption. No signup, no tracking, no cookies. Create password-protected notes instantly. Best ProtectedText alternative." />
+    <meta name="keywords" content="encrypted notepad, secure notes app, private notepad, password protected notes, online notepad no signup, free encrypted notes, protectedtext alternative, AES-256 notepad" />
     <meta name="author" content="Cheekati Sanjay Goud" />
-    <meta name="creator" content="Cheekati Sanjay Goud" />
-    <meta name="publisher" content="Cheekati Sanjay Goud" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="bingbot" content="index, follow" />
     <link rel="canonical" href="https://www.puretext.me/" />
     
-    <!-- Geo Tags -->
-    <meta name="geo.region" content="US" />
-    <meta name="geo.placename" content="United States" />
-    
-    <!-- Language -->
-    <meta http-equiv="content-language" content="en" />
-    <meta name="language" content="English" />
-    
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.puretext.me/" />
     <meta property="og:title" content="PureText - Free Encrypted Notepad | No Signup Required" />
-    <meta property="og:description" content="Military-grade AES-256 encrypted notepad. No signup, no tracking. Create secure password-protected notes instantly. Trusted by 8,000+ users." />
+    <meta property="og:description" content="Military-grade AES-256 encrypted notepad. No signup, no tracking. Create secure password-protected notes instantly." />
     <meta property="og:image" content="https://www.puretext.me/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="PureText" />
-    <meta property="og:locale" content="en_US" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.puretext.me/" />
     <meta name="twitter:title" content="PureText - Free Encrypted Notepad | AES-256 Security" />
-    <meta name="twitter:description" content="Military-grade encrypted notepad. No signup, no tracking. Create secure notes in seconds. ★★★★★ 4.9/5 rating." />
+    <meta name="twitter:description" content="Military-grade encrypted notepad. No signup, no tracking. Create secure notes in seconds." />
     <meta name="twitter:image" content="https://www.puretext.me/twitter-image.png" />
-    <meta name="twitter:creator" content="@puretext" />
-    <meta name="twitter:site" content="@puretext" />
     
-    <!-- Additional SEO -->
+    <!-- PWA -->
     <meta name="theme-color" content="#1e3a8a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="application-name" content="Puretext" />
+    <link rel="manifest" href="/manifest.json" />
     
-    <!-- Schema.org Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "PureText - Encrypted Notepad",
-      "alternateName": ["PureText Online", "Secure Notes App", "Private Notepad", "Encrypted Notepad"],
-      "url": "https://www.puretext.me",
-      "description": "Free encrypted notepad with military-grade AES-256 encryption. No signup required. The most secure way to store private notes online.",
-      "applicationCategory": "SecurityApplication",
-      "applicationSubCategory": "TextEditor",
-      "operatingSystem": "Any",
-      "browserRequirements": "Requires JavaScript. Supports Chrome, Firefox, Safari, Edge.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "8472",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "featureList": [
-        "AES-256 encryption",
-        "No signup required",
-        "Password protection",
-        "Multiple tabs",
-        "Auto-save",
-        "Self-destructing notes",
-        "Dark mode",
-        "Zero tracking"
-      ],
-      "screenshot": "https://www.puretext.me/og-image.png",
-      "softwareVersion": "2.0",
-      "author": {
-        "@type": "Person",
-        "name": "Cheekati Sanjay Goud",
-        "alternateName": ["sanjaycheekati", "SanjayCheekati", "Cheekati Sanjay"],
-        "url": "https://github.com/SanjayCheekati"
-      },
-      "creator": {
-        "@type": "Person",
-        "name": "Cheekati Sanjay Goud",
-        "alternateName": ["sanjaycheekati", "SanjayCheekati", "Cheekati Sanjay"],
-        "url": "https://github.com/SanjayCheekati"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "PureText",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://www.puretext.me/favicon.svg"
-        }
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "PureText",
-      "url": "https://www.puretext.me",
-      "logo": "https://www.puretext.me/favicon.svg",
-      "sameAs": ["https://github.com/SanjayCheekati/puretext"],
-      "founder": {
-        "@type": "Person",
-        "name": "Cheekati Sanjay Goud",
-        "alternateName": ["sanjaycheekati", "SanjayCheekati", "Cheekati Sanjay"],
-        "url": "https://github.com/SanjayCheekati"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "availableLanguage": "English"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Cheekati Sanjay Goud",
-      "alternateName": ["sanjaycheekati", "SanjayCheekati", "Cheekati Sanjay", "Sanjay Cheekati", "Sanjay Goud"],
-      "url": "https://github.com/SanjayCheekati",
-      "sameAs": [
-        "https://github.com/SanjayCheekati"
-      ],
-      "jobTitle": "Software Developer",
-      "knowsAbout": ["Web Development", "JavaScript", "React", "Node.js", "Encryption", "Cybersecurity"],
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://www.puretext.me/"
-      },
-      "description": "Creator of PureText - a free encrypted notepad application with AES-256 encryption. Full-stack developer passionate about privacy and security.",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "PureText",
-        "url": "https://www.puretext.me"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is PureText.me the same as the Windows PureText tool?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. PureText.me is a modern web-based editor, not the legacy clipboard utility."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is PureText.me a ProtectedText alternative?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. PureText.me offers private text editing in the browser without tracking."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is PureText Online used for?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "PureText is an online plain text editor for secure note-taking. It lets you paste as plain text, remove formatting, create encrypted notes, and organize content with multiple tabs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use PureText as a text cleaner tool?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. PureText functions as a text cleaner tool. When you paste formatted text, PureText handles it as plain text, removing formatting online automatically."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is PureText free to use?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, PureText Online Plain Text Editor is completely free. No registration, no subscription, no hidden costs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How secure is PureText?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "PureText uses AES-256-GCM encryption with zero-knowledge architecture. All encryption happens in your browser. Your password and data never leave your device."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do I need to create an account?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No account or signup required. Just pick any URL like puretext.me/mynotes and start writing instantly."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is PureText really free?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, 100% free forever. No premium plans, no ads, no hidden costs. We believe privacy is a right, not a privilege."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you read my notes?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. With zero-knowledge encryption, even we cannot read your notes. Only you have the password to decrypt them."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens if I forget my password?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Your notes cannot be recovered without the password. This is the trade-off for true security - use a password manager."
-          }
-        }
-      ]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://www.puretext.me/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Encrypted Notepad",
-          "item": "https://www.puretext.me/encrypted-notepad"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Secure Notes App",
-          "item": "https://www.puretext.me/secure-notes-app"
-        }
-      ]
-    }
-    </script>
+    <!-- Structured Data - minimal for fast parse -->
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"PureText","url":"https://www.puretext.me","description":"Free encrypted notepad with AES-256 encryption. No signup required.","applicationCategory":"SecurityApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"8472","bestRating":"5"}}</script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- Load font after critical render -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   </body>
 </html>
