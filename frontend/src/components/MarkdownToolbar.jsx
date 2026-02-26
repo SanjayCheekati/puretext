@@ -3,20 +3,20 @@ import { Bold, Italic, Heading1, Heading2, Heading3, Link, List, ListOrdered, Co
 import { Button } from './ui/button';
 
 const ACTIONS = [
-  { icon: Bold, label: 'Bold', key: 'bold', wrap: ['**', '**'], placeholder: 'bold text' },
-  { icon: Italic, label: 'Italic', key: 'italic', wrap: ['*', '*'], placeholder: 'italic text' },
-  { icon: Heading1, label: 'H1', key: 'h1', prefix: '# ', placeholder: 'Heading 1' },
-  { icon: Heading2, label: 'H2', key: 'h2', prefix: '## ', placeholder: 'Heading 2' },
-  { icon: Heading3, label: 'H3', key: 'h3', prefix: '### ', placeholder: 'Heading 3' },
+  { icon: Bold, label: 'Bold', key: 'bold', wrap: ['**', '**'] },
+  { icon: Italic, label: 'Italic', key: 'italic', wrap: ['*', '*'] },
+  { icon: Heading1, label: 'H1', key: 'h1', prefix: '# ' },
+  { icon: Heading2, label: 'H2', key: 'h2', prefix: '## ' },
+  { icon: Heading3, label: 'H3', key: 'h3', prefix: '### ' },
   { type: 'sep' },
   { icon: Link, label: 'Link', key: 'link', type: 'link' },
-  { icon: Code, label: 'Inline Code', key: 'code', wrap: ['`', '`'], placeholder: 'code' },
-  { icon: Quote, label: 'Blockquote', key: 'quote', prefix: '> ', placeholder: 'quote' },
+  { icon: Code, label: 'Inline Code', key: 'code', wrap: ['`', '`'] },
+  { icon: Quote, label: 'Blockquote', key: 'quote', prefix: '> ' },
   { icon: Minus, label: 'Horizontal Rule', key: 'hr', insert: '\n---\n' },
   { type: 'sep' },
-  { icon: List, label: 'Bullet List', key: 'ul', prefix: '- ', placeholder: 'list item' },
-  { icon: ListOrdered, label: 'Numbered List', key: 'ol', prefix: '1. ', placeholder: 'list item' },
-  { icon: CheckSquare, label: 'Checkbox', key: 'check', prefix: '- [ ] ', placeholder: 'todo item' },
+  { icon: List, label: 'Bullet List', key: 'ul', prefix: '- ' },
+  { icon: ListOrdered, label: 'Numbered List', key: 'ol', prefix: '1. ' },
+  { icon: CheckSquare, label: 'Checkbox', key: 'check', prefix: '- [ ] ' },
 ];
 
 // Regex to detect existing markdown line prefixes
@@ -24,7 +24,9 @@ const PREFIX_PATTERN = /^(#{1,6}\s|>\s|- \[[ x]\]\s|- |\* |\d+\.\s)/;
 
 /**
  * Applies a markdown formatting action to the textarea.
- * Returns { newText, cursorStart, cursorEnd } so the caller can set the selection.
+ * - Wrap actions: wraps selected text or inserts empty markers (e.g. ****) with cursor inside
+ * - Prefix actions: prepends prefix to current line / toggles / replaces
+ * - No placeholder text is ever inserted
  */
 export function applyMarkdownAction(textarea, action) {
   if (!textarea) return null;
@@ -53,11 +55,10 @@ export function applyMarkdownAction(textarea, action) {
         cursorEnd = cursorStart + selected.length;
       }
     } else {
-      // No selection — insert placeholder and select it
-      const inner = action.placeholder;
-      newText = value.substring(0, selectionStart) + before + inner + after + value.substring(selectionEnd);
+      // No selection — insert empty markers, place cursor between them
+      newText = value.substring(0, selectionStart) + before + after + value.substring(selectionEnd);
       cursorStart = selectionStart + before.length;
-      cursorEnd = cursorStart + inner.length;
+      cursorEnd = cursorStart; // cursor between markers, ready to type
     }
   } else if (action.prefix) {
     const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
@@ -76,31 +77,24 @@ export function applyMarkdownAction(textarea, action) {
       newText = value.substring(0, lineStart) + action.prefix + stripped + value.substring(lineEndPos);
       const offset = action.prefix.length - existingPrefix[0].length;
       cursorStart = cursorEnd = selectionStart + offset;
-    } else if (currentLine.trim() === '') {
-      // Empty line — insert prefix + placeholder
-      const inner = action.placeholder;
-      newText = value.substring(0, lineStart) + action.prefix + inner + value.substring(lineEndPos);
-      cursorStart = lineStart + action.prefix.length;
-      cursorEnd = cursorStart + inner.length;
     } else {
-      // Non-empty line, no existing prefix — prepend prefix
+      // No existing prefix — just prepend prefix, cursor after prefix
       newText = value.substring(0, lineStart) + action.prefix + value.substring(lineStart);
       cursorStart = cursorEnd = selectionStart + action.prefix.length;
     }
   } else if (action.type === 'link') {
     if (selected) {
-      // Use selection as link text, let user fill in URL
+      // Use selection as link text, place cursor inside (url)
       const result = `[${selected}](url)`;
       newText = value.substring(0, selectionStart) + result + value.substring(selectionEnd);
-      // Select "url" so user can type the URL
+      // Select "url" so user can type the actual URL
       cursorStart = selectionStart + selected.length + 3; // after ](
-      cursorEnd = cursorStart + 3; // "url"
+      cursorEnd = cursorStart + 3; // select "url"
     } else {
-      const result = '[link text](url)';
-      newText = value.substring(0, selectionStart) + result + value.substring(selectionEnd);
-      // Select "link text"
-      cursorStart = selectionStart + 1;
-      cursorEnd = cursorStart + 9; // "link text"
+      // Insert empty link structure, cursor in text part
+      newText = value.substring(0, selectionStart) + '[](url)' + value.substring(selectionEnd);
+      cursorStart = selectionStart + 1; // cursor inside []
+      cursorEnd = cursorStart;
     }
   } else if (action.insert) {
     newText = value.substring(0, selectionStart) + action.insert + value.substring(selectionEnd);

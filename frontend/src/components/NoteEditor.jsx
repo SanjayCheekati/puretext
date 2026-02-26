@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo, lazy, Suspense, startTransition } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode, Command, Timer, Clock } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode, Timer, Clock } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -11,7 +11,6 @@ import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast.jsx';
 import MarkdownToolbar from './MarkdownToolbar';
-import CommandPalette from './CommandPalette';
 import {
   Dialog,
   DialogContent,
@@ -94,12 +93,11 @@ const NoteEditor = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // Command Palette
-  const [showCommandPalette, setShowCommandPalette] = useState(false);
-
   // Note Expiration
   const [expiresAt, setExpiresAt] = useState(null);
   const [showExpiryDialog, setShowExpiryDialog] = useState(false);
+  const [customExpiryValue, setCustomExpiryValue] = useState('');
+  const [customExpiryUnit, setCustomExpiryUnit] = useState('hours');
 
   // Dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
@@ -188,11 +186,6 @@ const NoteEditor = () => {
           const prevTab = noteData.activeTab === 0 ? noteData.tabs.length - 1 : noteData.activeTab - 1;
           setNoteData({ ...noteData, activeTab: prevTab });
         }
-      }
-      // Ctrl/Cmd + K - Command Palette
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        setShowCommandPalette(prev => !prev);
       }
     };
 
@@ -415,15 +408,32 @@ const NoteEditor = () => {
   const handleSetExpiry = (duration) => {
     if (duration === null) {
       setExpiresAt(null);
+      setIsDirty(true);
       toast({ title: "Expiration removed", description: "This note will no longer expire" });
     } else {
       const expiry = Date.now() + duration;
       setExpiresAt(expiry);
       setIsDirty(true);
-      const labels = { 3600000: '1 hour', 86400000: '24 hours', 604800000: '7 days', 2592000000: '30 days' };
-      toast({ title: "Expiration set", description: `Note will self-destruct in ${labels[duration] || 'some time'}` });
+      toast({ title: "Expiration set", description: `Note will self-destruct in ${formatDuration(duration)}` });
     }
     setShowExpiryDialog(false);
+  };
+
+  const handleCustomExpiry = () => {
+    const val = parseFloat(customExpiryValue);
+    if (!val || val <= 0) return;
+    const multipliers = { minutes: 60000, hours: 3600000, days: 86400000, weeks: 604800000 };
+    const ms = val * (multipliers[customExpiryUnit] || 3600000);
+    handleSetExpiry(ms);
+    setCustomExpiryValue('');
+  };
+
+  const formatDuration = (ms) => {
+    if (ms < 60000) return `${Math.round(ms / 1000)} seconds`;
+    if (ms < 3600000) return `${Math.round(ms / 60000)} minutes`;
+    if (ms < 86400000) return `${Math.round(ms / 3600000)} hours`;
+    if (ms < 604800000) return `${Math.round(ms / 86400000)} days`;
+    return `${Math.round(ms / 604800000)} weeks`;
   };
 
   // Format remaining time for display
@@ -699,28 +709,6 @@ const NoteEditor = () => {
     });
   };
 
-  // Command Palette commands
-  const commands = useMemo(() => [
-    { type: 'sep', label: 'Editor' },
-    { id: 'save', icon: Save, label: 'Save Note', shortcut: '⌘S', keywords: ['save', 'write'], action: () => { if (password) saveNoteWithPassword(password); else handleSaveWithoutPassword(); }, disabled: !isDirty },
-    { id: 'preview', icon: isPreviewMode ? Edit3 : Eye, label: isPreviewMode ? 'Switch to Edit Mode' : 'Preview Markdown', keywords: ['preview', 'markdown', 'edit'], action: () => { const newMode = !isPreviewMode; if (newMode && remarkPlugins.length === 0) { getRemarkGfm().then(plugin => setRemarkPlugins([plugin])); } startTransition(() => setIsPreviewMode(newMode)); } },
-    { id: 'copy', icon: Copy, label: 'Copy Content', keywords: ['copy', 'clipboard'], action: handleCopyContent },
-    { id: 'download', icon: Download, label: 'Download as Text', keywords: ['download', 'export', 'file'], action: handleDownload },
-    { type: 'sep', label: 'Tabs' },
-    { id: 'newtab', icon: Plus, label: 'New Tab', shortcut: '⌘N', keywords: ['new', 'tab', 'add'], action: handleAddTab },
-    { type: 'sep', label: 'Security' },
-    { id: 'lock', icon: Lock, label: password ? 'Note is Locked' : 'Lock with Password', keywords: ['lock', 'password', 'encrypt'], action: handleLockNote, disabled: !!password },
-    { id: 'changepass', icon: Key, label: 'Change Password', keywords: ['password', 'change', 'key'], action: handleChangePassword, disabled: !password },
-    { id: 'expiry', icon: Timer, label: expiresAt ? `Self-Destruct (${getExpiryLabel()})` : 'Set Self-Destruct Timer', keywords: ['expire', 'expiry', 'self-destruct', 'timer', 'delete', 'temporary'], action: () => setShowExpiryDialog(true) },
-    { id: 'delete', icon: Trash2, label: 'Delete Note', keywords: ['delete', 'remove', 'trash'], action: () => setShowDeleteDialog(true) },
-    { type: 'sep', label: 'Share' },
-    { id: 'copyurl', icon: Share2, label: 'Copy Note URL', keywords: ['share', 'url', 'link', 'copy'], action: handleCopyURL },
-    { id: 'qrcode', icon: QrCode, label: 'Show QR Code', keywords: ['qr', 'code', 'scan'], action: handleShowQR },
-    { type: 'sep', label: 'Settings' },
-    { id: 'theme', icon: isDarkMode ? Sun : Moon, label: isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode', keywords: ['theme', 'dark', 'light', 'mode'], action: () => setIsDarkMode(!isDarkMode) },
-    { id: 'home', icon: Home, label: 'Go to Home', keywords: ['home', 'back', 'exit'], action: () => navigate('/') },
-  ], [noteData, isDirty, password, isPreviewMode, isDarkMode, expiresAt, remarkPlugins]);
-
   if (isLoading) {
     return <LoadingSkeleton />;
   }
@@ -882,18 +870,6 @@ const NoteEditor = () => {
               className="rounded-xl"
             >
               <QrCode className="h-4 w-4" />
-            </Button>
-
-            {/* Command Palette trigger */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowCommandPalette(true)}
-              title="Command Palette (⌘K)"
-              aria-label="Command Palette"
-              className="rounded-xl"
-            >
-              <Command className="h-4 w-4" />
             </Button>
 
             {/* Expiry indicator */}
@@ -1284,6 +1260,41 @@ const NoteEditor = () => {
                 <Clock className="w-4 h-4 text-muted-foreground" />
               </button>
             ))}
+
+            {/* Custom timer */}
+            <div className="pt-2 border-t border-border/30">
+              <div className="text-xs text-muted-foreground mb-2 px-1">Custom duration</div>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={customExpiryValue}
+                  onChange={(e) => setCustomExpiryValue(e.target.value)}
+                  placeholder="e.g. 5"
+                  className="flex-1 h-10 text-sm"
+                />
+                <select
+                  value={customExpiryUnit}
+                  onChange={(e) => setCustomExpiryUnit(e.target.value)}
+                  className="h-10 px-3 rounded-lg border border-border bg-card text-foreground text-sm outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="minutes">Minutes</option>
+                  <option value="hours">Hours</option>
+                  <option value="days">Days</option>
+                  <option value="weeks">Weeks</option>
+                </select>
+                <Button
+                  size="sm"
+                  onClick={handleCustomExpiry}
+                  disabled={!customExpiryValue || parseFloat(customExpiryValue) <= 0}
+                  className="h-10 px-4 rounded-lg"
+                >
+                  Set
+                </Button>
+              </div>
+            </div>
+
             {expiresAt && (
               <button
                 onClick={() => handleSetExpiry(null)}
@@ -1301,12 +1312,6 @@ const NoteEditor = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Command Palette */}
-      <CommandPalette 
-        isOpen={showCommandPalette} 
-        onClose={() => setShowCommandPalette(false)} 
-        commands={commands} 
-      />
     </div>
   );
 };
