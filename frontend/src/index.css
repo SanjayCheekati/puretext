@@ -82,6 +82,15 @@
     opacity: 0.03;
     pointer-events: none;
     z-index: 0;
+    /* Disable noise texture on mobile for performance */
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .gradient-bg::before {
+      display: block;
+      will-change: auto;
+    }
   }
   
   .dark .gradient-bg {
@@ -97,67 +106,71 @@
   }
 
   .glass-card {
-    @apply bg-card/95 backdrop-blur-xl border border-border/60;
+    @apply bg-card/95 border border-border/60;
     box-shadow: 
       0 0 0 1px hsl(var(--border) / 0.1),
-      0 1px 2px hsl(240 10% 10% / 0.02),
       0 4px 8px hsl(240 10% 10% / 0.04),
-      0 12px 24px hsl(240 10% 10% / 0.06),
-      0 24px 48px hsl(240 10% 10% / 0.08);
+      0 12px 24px hsl(240 10% 10% / 0.06);
+  }
+
+  /* Only apply backdrop-blur on devices that can handle it */
+  @supports (backdrop-filter: blur(1px)) {
+    @media (min-width: 640px) {
+      .glass-card {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+    }
   }
   
   .dark .glass-card {
     @apply bg-card/90 border-border/30;
     box-shadow: 
       0 0 0 1px hsl(262 83% 65% / 0.05),
-      0 1px 2px hsl(0 0% 0% / 0.1),
       0 4px 8px hsl(0 0% 0% / 0.15),
-      0 12px 24px hsl(0 0% 0% / 0.2),
-      0 24px 48px hsl(0 0% 0% / 0.25),
-      inset 0 1px 0 hsl(0 0% 100% / 0.03);
+      0 12px 24px hsl(0 0% 0% / 0.2);
   }
   
   .editor-card {
-    @apply bg-card backdrop-blur-xl border border-border/60;
+    @apply bg-card border border-border/60;
     box-shadow: 
       0 0 0 1px hsl(var(--border) / 0.15),
-      0 2px 4px hsl(262 83% 58% / 0.02),
       0 8px 16px hsl(240 10% 10% / 0.06),
-      0 16px 32px hsl(240 10% 10% / 0.08),
-      0 32px 64px hsl(240 10% 10% / 0.1);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+      0 16px 32px hsl(240 10% 10% / 0.08);
+    transition: box-shadow 0.3s ease;
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    @media (min-width: 640px) {
+      .editor-card {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+    }
   }
   
   .editor-card:focus-within {
     box-shadow: 
       0 0 0 1px hsl(262 83% 58% / 0.3),
       0 0 0 4px hsl(262 83% 58% / 0.1),
-      0 2px 4px hsl(262 83% 58% / 0.03),
       0 8px 16px hsl(240 10% 10% / 0.08),
-      0 16px 32px hsl(240 10% 10% / 0.1),
-      0 32px 64px hsl(240 10% 10% / 0.12);
+      0 16px 32px hsl(240 10% 10% / 0.1);
   }
   
   .dark .editor-card {
     @apply bg-card/95 border-border/40;
     box-shadow: 
       0 0 0 1px hsl(262 83% 65% / 0.08),
-      0 2px 4px hsl(0 0% 0% / 0.15),
       0 8px 16px hsl(0 0% 0% / 0.2),
-      0 16px 32px hsl(0 0% 0% / 0.25),
-      0 32px 64px hsl(0 0% 0% / 0.3),
-      inset 0 1px 0 hsl(0 0% 100% / 0.04);
+      0 16px 32px hsl(0 0% 0% / 0.25);
   }
   
   .dark .editor-card:focus-within {
     box-shadow: 
       0 0 0 1px hsl(262 83% 65% / 0.4),
       0 0 0 4px hsl(262 83% 65% / 0.15),
-      0 0 30px hsl(262 83% 65% / 0.1),
       0 8px 16px hsl(0 0% 0% / 0.25),
-      0 16px 32px hsl(0 0% 0% / 0.3),
-      0 32px 64px hsl(0 0% 0% / 0.35),
-      inset 0 1px 0 hsl(0 0% 100% / 0.05);
+      0 16px 32px hsl(0 0% 0% / 0.3);
   }
   
   .tab-button {
@@ -181,15 +194,22 @@
   }
   
   .nav-glass {
-    @apply bg-card/80 backdrop-blur-xl border-b border-border/50;
+    @apply bg-card/80 border-b border-border/50;
     box-shadow: 0 1px 3px hsl(240 10% 10% / 0.03);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    @media (min-width: 640px) {
+      .nav-glass {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+    }
   }
   
   .dark .nav-glass {
     @apply bg-card/70 border-border/30;
-    box-shadow: 
-      0 1px 3px hsl(0 0% 0% / 0.2),
-      inset 0 -1px 0 hsl(0 0% 100% / 0.03);
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.2);
   }
 
   /* Markdown prose styles */

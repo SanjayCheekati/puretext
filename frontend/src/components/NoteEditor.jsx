@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { QRCodeSVG } from 'qrcode.react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -21,6 +18,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from './ui/dialog';
+
+// Lazy load heavy dependencies - only loaded when user needs them
+const ReactMarkdown = lazy(() => import('react-markdown'));
+const LazyQRCodeSVG = lazy(() => import('qrcode.react').then(m => ({ default: m.QRCodeSVG })));
+
+// Lazy load remarkGfm only when markdown preview is used
+let remarkGfmPlugin = null;
+const getRemarkGfm = async () => {
+  if (!remarkGfmPlugin) {
+    const mod = await import('remark-gfm');
+    remarkGfmPlugin = mod.default;
+  }
+  return remarkGfmPlugin;
+};
 
 // Loading Skeleton Component
 const LoadingSkeleton = () => (
@@ -76,6 +87,7 @@ const NoteEditor = () => {
     return localStorage.getItem('theme') === 'dark';
   });
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [remarkPlugins, setRemarkPlugins] = useState([]);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -379,7 +391,7 @@ const NoteEditor = () => {
     }
   };
 
-  const handleContentChange = (content) => {
+  const handleContentChange = useCallback((content) => {
     if (!noteData) return;
 
     const updatedTabs = [...noteData.tabs];
@@ -390,14 +402,17 @@ const NoteEditor = () => {
       updatedAt: Date.now()
     };
 
-    setNoteData({
-      ...noteData,
-      tabs: updatedTabs
+    // Use startTransition for non-urgent state updates to keep input responsive
+    startTransition(() => {
+      setNoteData({
+        ...noteData,
+        tabs: updatedTabs
+      });
     });
     setIsDirty(true);
-  };
+  }, [noteData]);
 
-  const handleTitleChange = (title) => {
+  const handleTitleChange = useCallback((title) => {
     if (!noteData) return;
 
     const updatedTabs = [...noteData.tabs];
@@ -410,12 +425,14 @@ const NoteEditor = () => {
       updatedAt: Date.now()
     };
 
-    setNoteData({
-      ...noteData,
-      tabs: updatedTabs
+    startTransition(() => {
+      setNoteData({
+        ...noteData,
+        tabs: updatedTabs
+      });
     });
     setIsDirty(true);
-  };
+  }, [noteData]);
 
   const handleAddTab = () => {
     if (!noteData) return;
@@ -861,7 +878,14 @@ const NoteEditor = () => {
               <Button
                 variant={isPreviewMode ? "default" : "ghost"}
                 size="icon"
-                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                onClick={() => {
+                  const newMode = !isPreviewMode;
+                  if (newMode && remarkPlugins.length === 0) {
+                    // Pre-load remark-gfm when entering preview mode
+                    getRemarkGfm().then(plugin => setRemarkPlugins([plugin]));
+                  }
+                  startTransition(() => setIsPreviewMode(newMode));
+                }}
                 title={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
                 aria-label={isPreviewMode ? "Edit Mode" : "Preview Markdown"}
                 className="rounded-xl"
@@ -896,15 +920,17 @@ const NoteEditor = () => {
             {isPreviewMode ? (
               <div className="min-h-[500px] sm:min-h-[600px] p-6 prose prose-sm dark:prose-invert max-w-none overflow-auto [&_p]:whitespace-pre-wrap [&_li]:whitespace-pre-wrap">
                 {currentTab.content ? (
-                  <ReactMarkdown 
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      p: ({children}) => <p className="whitespace-pre-wrap mb-4">{children}</p>,
-                      li: ({children}) => <li className="whitespace-pre-wrap">{children}</li>,
-                    }}
-                  >
-                    {currentTab.content}
-                  </ReactMarkdown>
+                  <Suspense fallback={<div className="text-muted-foreground">Loading preview...</div>}>
+                    <ReactMarkdown 
+                      remarkPlugins={remarkPlugins}
+                      components={{
+                        p: ({children}) => <p className="whitespace-pre-wrap mb-4">{children}</p>,
+                        li: ({children}) => <li className="whitespace-pre-wrap">{children}</li>,
+                      }}
+                    >
+                      {currentTab.content}
+                    </ReactMarkdown>
+                  </Suspense>
                 ) : (
                   <p className="text-muted-foreground">Nothing to preview yet...</p>
                 )}
@@ -1041,12 +1067,14 @@ const NoteEditor = () => {
           <div className="py-4">
             <div className="flex justify-center mb-4">
               <div className="p-4 bg-white rounded-xl">
-                <QRCodeSVG 
-                  id="qr-code-svg"
-                  value={`${window.location.origin}/${noteName}`} 
-                  size={180}
-                  level="M"
-                />
+                <Suspense fallback={<div className="w-[180px] h-[180px] bg-muted animate-pulse rounded" />}>
+                  <LazyQRCodeSVG 
+                    id="qr-code-svg"
+                    value={`${window.location.origin}/${noteName}`} 
+                    size={180}
+                    level="M"
+                  />
+                </Suspense>
               </div>
             </div>
             <div className="text-center">

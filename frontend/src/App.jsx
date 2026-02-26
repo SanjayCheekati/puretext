@@ -1,8 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Toaster } from './components/ui/use-toast.jsx';
+
+// Lazy load analytics - not needed for initial render
+const Analytics = lazy(() => import('@vercel/analytics/react').then(m => ({ default: m.Analytics })));
+const SpeedInsights = lazy(() => import('@vercel/speed-insights/react').then(m => ({ default: m.SpeedInsights })));
 
 // Lazy load components
 const Home = lazy(() => import('./components/Home'));
@@ -32,19 +34,16 @@ const SecureNotepadForWork = lazy(() => import('./components/pages/SecureNotepad
 const NotepadForStudents = lazy(() => import('./components/pages/NotepadForStudents'));
 const CodeSnippetManager = lazy(() => import('./components/pages/CodeSnippetManager'));
 const CloudNotepadSync = lazy(() => import('./components/pages/CloudNotepadSync'));
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
 
-// Loading fallback with spinner
+// Loading fallback - minimal, matches critical CSS bg
 const LoadingFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-    <div className="text-center space-y-4">
-      <div className="flex justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-      </div>
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800 mb-1">🔒 PureText</h1>
-        <p className="text-sm text-gray-600">Loading...</p>
-      </div>
+  <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0b' }}>
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ width: 40, height: 40, margin: '0 auto 16px', border: '4px solid #7c3aed', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+      <p style={{ color: '#888', fontSize: 14 }}>Loading...</p>
     </div>
+    <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
   </div>
 );
 
@@ -77,6 +76,8 @@ const App = () => {
           <Route path="/notepad-for-students" element={<NotepadForStudents />} />
           <Route path="/code-snippet-manager" element={<CodeSnippetManager />} />
           <Route path="/cloud-notepad-sync" element={<CloudNotepadSync />} />
+          {/* Admin Panel */}
+          <Route path="/admin-panel" element={<AdminPanel />} />
           {/* View Only pages for shared links */}
           <Route path="/view" element={<ViewOnly />} />
           <Route path="/view/:shareName" element={<ViewOnly />} />
@@ -85,8 +86,10 @@ const App = () => {
         </Routes>
       </Suspense>
       <Toaster />
-      <Analytics />
-      <SpeedInsights />
+      <Suspense fallback={null}>
+        <Analytics />
+        <SpeedInsights />
+      </Suspense>
     </BrowserRouter>
   );
 };

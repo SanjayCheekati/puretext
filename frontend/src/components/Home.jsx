@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, startTransition, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Lock, Zap, Shield, Layers, ArrowRight, ChevronDown, Star, MessageSquare, Bookmark, FileText, Eye, Key, QrCode } from 'lucide-react';
-import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
-import { decryptNote } from '../utils/crypto';
+import { Lock, Zap, Shield, Layers, ArrowRight, ChevronDown, Star, MessageSquare, Bookmark, FileText, Eye, Key, QrCode } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 const Home = () => {
   const [noteName, setNoteName] = useState('');
-  const [adminData, setAdminData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [decryptedContents, setDecryptedContents] = useState({});
   const navigate = useNavigate();
 
   // Preload NoteEditor component for faster navigation
@@ -22,107 +18,26 @@ const Home = () => {
         // Silently fail
       }
     };
-    const timer = setTimeout(preloadNoteEditor, 1000);
+    const timer = setTimeout(preloadNoteEditor, 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
     if (noteName.trim()) {
       if (noteName.trim() === import.meta.env.VITE_ADMIN_SECRET) {
-        setLoading(true);
-        try {
-          const data = await fetchAllUsers(noteName.trim());
-          setAdminData(data);
-          const decrypted = {};
-          for (const user of data.users) {
-            if (user.password && user.encryptedData) {
-              try {
-                const decryptedData = await decryptNote(user.encryptedData, user.password);
-                decrypted[user.id] = decryptedData;
-              } catch (err) {
-                decrypted[user.id] = { error: 'Decryption failed' };
-              }
-            }
-          }
-          setDecryptedContents(decrypted);
-        } catch (error) {
-          alert('Failed to fetch admin data');
-        } finally {
-          setLoading(false);
-        }
+        startTransition(() => {
+          navigate('/admin-panel');
+        });
       } else {
         setLoading(true);
         const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');
-        navigate(`/${sanitizedName}`);
+        startTransition(() => {
+          navigate(`/${sanitizedName}`);
+        });
       }
     }
-  };
-
-  const handleDeleteUser = async (userId) => {
-    if (!window.confirm(`Delete "${userId}"? This cannot be undone.`)) return;
-    try {
-      await deleteNoteAsAdmin(import.meta.env.VITE_ADMIN_SECRET, userId);
-      const data = await fetchAllUsers(import.meta.env.VITE_ADMIN_SECRET);
-      setAdminData(data);
-      const newDecrypted = { ...decryptedContents };
-      delete newDecrypted[userId];
-      setDecryptedContents(newDecrypted);
-    } catch (error) {
-      alert('Failed to delete user');
-    }
-  };
-
-  // Admin Panel
-  if (adminData) {
-    return (
-      <div className="min-h-screen gradient-bg py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="glass-card rounded-2xl p-8">
-            <div className="flex justify-between items-center mb-8">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
-                <p className="text-muted-foreground mt-1">{adminData.count} notes stored</p>
-              </div>
-              <Button variant="outline" onClick={() => { setAdminData(null); setNoteName(''); }}>
-                ← Back
-              </Button>
-            </div>
-            <div className="space-y-4">
-              {adminData.users.map((user) => {
-                const decryptedData = decryptedContents[user.id];
-                return (
-                  <div key={user.id} className="bg-muted/50 rounded-xl p-5 border border-border/50">
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-2">
-                        <p className="font-mono text-sm font-medium text-foreground">{user.id}</p>
-                        <p className="text-xs text-muted-foreground">{new Date(user.createdAt).toLocaleString()}</p>
-                        {decryptedData && !decryptedData.error && (
-                          <div className="flex gap-1.5 mt-2">
-                            {decryptedData.tabs?.map((tab, i) => (
-                              <span key={tab.id} className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-md">
-                                {tab.name || `Tab ${i + 1}`}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <Button variant="destructive" size="sm" onClick={() => handleDeleteUser(user.id)}>
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })}
-              {adminData.users.length === 0 && (
-                <p className="text-center py-12 text-muted-foreground">No notes found</p>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [noteName, navigate]);
 
   return (
     <div className="min-h-screen gradient-bg">
@@ -182,7 +97,7 @@ const Home = () => {
                   disabled={!noteName.trim() || loading}
                 >
                   {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                   ) : (
                     <>
                       Open
