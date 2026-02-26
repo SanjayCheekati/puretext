@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, QrCode, Timer, Clock } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, QrCode, Timer, Clock, Eye, Edit3 } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -90,6 +90,7 @@ const NoteEditor = () => {
   const [passwordDialogMode, setPasswordDialogMode] = useState('unlock');
   const [passwordError, setPasswordError] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
   const [showTabNameDialog, setShowTabNameDialog] = useState(false);
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [tabNameDialogMode, setTabNameDialogMode] = useState('add');
@@ -631,26 +632,36 @@ const NoteEditor = () => {
     }
   };
 
-  const handleCopyURL = () => {
-    const currentTab = noteData?.tabs?.[noteData.activeTab];
-    if (currentTab && currentTab.content) {
-      const title = currentTab.title || currentTab.name || noteName;
-      const encodedTitle = btoa(encodeURIComponent(title));
-      const encodedContent = btoa(encodeURIComponent(currentTab.content));
-      const viewUrl = `${window.location.origin}/view/${noteName}?t=${encodedTitle}&c=${encodedContent}`;
-      navigator.clipboard.writeText(viewUrl);
-      toast({
-        title: "Read-Only Link Copied",
-        description: "Anyone with this link can view (but not edit) the note.",
-      });
-    } else {
-      const url = window.location.href;
+  const handleCopyURL = (mode) => {
+    if (mode === 'edit') {
+      const url = `${window.location.origin}/${noteName}`;
       navigator.clipboard.writeText(url);
       toast({
-        title: "URL Copied",
-        description: "Note URL copied to clipboard",
+        title: "Editable Link Copied",
+        description: "Anyone with this link can edit the note.",
       });
+    } else {
+      const currentTab = noteData?.tabs?.[noteData.activeTab];
+      if (currentTab && currentTab.content) {
+        const title = currentTab.title || currentTab.name || noteName;
+        const encodedTitle = btoa(encodeURIComponent(title));
+        const encodedContent = btoa(encodeURIComponent(currentTab.content));
+        const viewUrl = `${window.location.origin}/view/${noteName}?t=${encodedTitle}&c=${encodedContent}`;
+        navigator.clipboard.writeText(viewUrl);
+        toast({
+          title: "Read-Only Link Copied",
+          description: "Anyone with this link can view (but not edit) the note.",
+        });
+      } else {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url);
+        toast({
+          title: "URL Copied",
+          description: "Note URL copied to clipboard",
+        });
+      }
     }
+    setShowShareDialog(false);
   };
 
   const handleCopyContent = () => {
@@ -814,9 +825,9 @@ const NoteEditor = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleCopyURL}
-              title="Share Read-Only Link"
-              aria-label="Share Read-Only Link"
+              onClick={() => setShowShareDialog(true)}
+              title="Share Note"
+              aria-label="Share Note"
               className="rounded-xl"
             >
               <Share2 className="h-4 w-4" />
@@ -1161,6 +1172,50 @@ const NoteEditor = () => {
               Download QR
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Share Dialog */}
+      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Share2 className="w-5 h-5 text-primary" />
+              Share Note
+            </DialogTitle>
+            <DialogDescription>
+              Choose how you want to share this note.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 space-y-3">
+            <button
+              onClick={() => handleCopyURL('readonly')}
+              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-colors text-left"
+            >
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                <Eye className="w-5 h-5 text-blue-500" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium text-foreground">Read-Only Link</div>
+                <div className="text-xs text-muted-foreground">Recipient can view but not edit the note</div>
+              </div>
+              <Copy className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+            </button>
+
+            <button
+              onClick={() => handleCopyURL('edit')}
+              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-colors text-left"
+            >
+              <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                <Edit3 className="w-5 h-5 text-orange-500" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium text-foreground">Editable Link</div>
+                <div className="text-xs text-muted-foreground">Recipient can view and edit the note</div>
+              </div>
+              <Copy className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+            </button>
+          </div>
         </DialogContent>
       </Dialog>
 
