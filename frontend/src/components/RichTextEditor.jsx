@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -45,7 +45,16 @@ const ToolbarButton = memo(({ icon: Icon, label, isActive, onClick, disabled }) 
 ));
 ToolbarButton.displayName = 'ToolbarButton';
 
-const Toolbar = memo(({ editor }) => {
+const Toolbar = ({ editor }) => {
+  // Force re-render on every editor transaction so isActive() stays current
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    if (!editor) return;
+    const handler = () => forceUpdate(n => n + 1);
+    editor.on('transaction', handler);
+    return () => editor.off('transaction', handler);
+  }, [editor]);
+
   if (!editor) return null;
 
   const handleLink = () => {
@@ -170,8 +179,7 @@ const Toolbar = memo(({ editor }) => {
       />
     </div>
   );
-});
-Toolbar.displayName = 'Toolbar';
+};
 
 const RichTextEditor = ({ content, onContentChange, disabled, className }) => {
   const editor = useEditor({
