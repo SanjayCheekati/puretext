@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, useParams } from 'react-router-dom';
 import { Lock, ArrowLeft, Copy, Moon, Sun, AlertTriangle } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { Button } from './ui/button';
 import { toast } from './ui/use-toast.jsx';
+import { htmlToPlainText } from './RichTextEditor';
 
 const ViewOnly = () => {
   const [searchParams] = useSearchParams();
@@ -41,9 +40,13 @@ const ViewOnly = () => {
   }, [isDarkMode]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(content);
+    const plainText = htmlToPlainText(content);
+    navigator.clipboard.writeText(plainText);
     toast({ title: "Copied!", description: "Content copied to clipboard" });
   };
+
+  // Check if content is HTML
+  const isHTML = content && content.trim().startsWith('<');
 
   // Invalid/no content state
   if (!content) {
@@ -122,16 +125,29 @@ const ViewOnly = () => {
           </div>
 
           {/* Content */}
-          <div className="p-6 prose prose-sm dark:prose-invert max-w-none [&_p]:whitespace-pre-wrap [&_li]:whitespace-pre-wrap">
-            <ReactMarkdown 
-              remarkPlugins={[remarkGfm]}
-              components={{
-                p: ({children}) => <p className="whitespace-pre-wrap mb-4">{children}</p>,
-                li: ({children}) => <li className="whitespace-pre-wrap">{children}</li>,
-              }}
-            >
-              {content}
-            </ReactMarkdown>
+          <div className="p-6 prose prose-sm dark:prose-invert max-w-none">
+            {isHTML ? (
+              <div 
+                dangerouslySetInnerHTML={{ __html: content }}
+                className={
+                  '[&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-3 [&_h1]:mt-4 ' +
+                  '[&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-2 [&_h2]:mt-3 ' +
+                  '[&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mb-2 [&_h3]:mt-3 ' +
+                  '[&_p]:mb-1 [&_p]:leading-relaxed ' +
+                  '[&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-2 ' +
+                  '[&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-2 ' +
+                  '[&_li]:mb-0.5 ' +
+                  '[&_blockquote]:border-l-4 [&_blockquote]:border-primary/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground [&_blockquote]:my-2 ' +
+                  '[&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:font-mono ' +
+                  '[&_pre]:bg-muted [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:my-2 [&_pre]:overflow-x-auto ' +
+                  '[&_hr]:border-border [&_hr]:my-4 ' +
+                  '[&_a]:text-primary [&_a]:underline ' +
+                  '[&_strong]:font-bold [&_em]:italic [&_u]:underline [&_s]:line-through'
+                }
+              />
+            ) : (
+              <div className="whitespace-pre-wrap">{content}</div>
+            )}
           </div>
         </div>
 

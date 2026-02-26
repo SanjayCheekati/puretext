@@ -632,12 +632,25 @@ const NoteEditor = () => {
   };
 
   const handleCopyURL = () => {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url);
-    toast({
-      title: "URL Copied",
-      description: "Note URL copied to clipboard",
-    });
+    const currentTab = noteData?.tabs?.[noteData.activeTab];
+    if (currentTab && currentTab.content) {
+      const title = currentTab.title || currentTab.name || noteName;
+      const encodedTitle = btoa(encodeURIComponent(title));
+      const encodedContent = btoa(encodeURIComponent(currentTab.content));
+      const viewUrl = `${window.location.origin}/view/${noteName}?t=${encodedTitle}&c=${encodedContent}`;
+      navigator.clipboard.writeText(viewUrl);
+      toast({
+        title: "Read-Only Link Copied",
+        description: "Anyone with this link can view (but not edit) the note.",
+      });
+    } else {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url);
+      toast({
+        title: "URL Copied",
+        description: "Note URL copied to clipboard",
+      });
+    }
   };
 
   const handleCopyContent = () => {
@@ -802,8 +815,8 @@ const NoteEditor = () => {
               variant="ghost"
               size="icon"
               onClick={handleCopyURL}
-              title="Copy URL"
-              aria-label="Copy URL"
+              title="Share Read-Only Link"
+              aria-label="Share Read-Only Link"
               className="rounded-xl"
             >
               <Share2 className="h-4 w-4" />
