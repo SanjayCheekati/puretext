@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, startTransition } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo, lazy, Suspense, startTransition } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode } from 'lucide-react';
+import { Save, Share2, Lock, Key, Trash2, Copy, Download, Home, Plus, X, Moon, Sun, ChevronLeft, ChevronRight, Eye, Edit3, QrCode, Command, Timer, Clock } from 'lucide-react';
 import { fetchNote, saveNote, deleteNote, invalidateNoteCache } from '../api/notes';
 import { encryptNote, decryptNote, generateDeleteToken } from '../utils/crypto';
 import { hashDeleteToken, getDeleteToken, saveDeleteToken, removeDeleteToken } from '../utils/deleteToken';
@@ -10,6 +10,8 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast.jsx';
+import MarkdownToolbar from './MarkdownToolbar';
+import CommandPalette from './CommandPalette';
 import {
   Dialog,
   DialogContent,
@@ -74,6 +76,7 @@ const NoteEditor = () => {
   const { noteName } = useParams();
   const navigate = useNavigate();
   const tabsContainerRef = useRef(null);
+  const textareaRef = useRef(null);
 
   // State
   const [noteData, setNoteData] = useState(null);
@@ -90,6 +93,13 @@ const NoteEditor = () => {
   const [remarkPlugins, setRemarkPlugins] = useState([]);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Command Palette
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+
+  // Note Expiration
+  const [expiresAt, setExpiresAt] = useState(null);
+  const [showExpiryDialog, setShowExpiryDialog] = useState(false);
 
   // Dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
@@ -178,6 +188,11 @@ const NoteEditor = () => {
           setNoteData({ ...noteData, activeTab: prevTab });
         }
       }
+      // Ctrl/Cmd + K - Command Palette
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(prev => !prev);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -227,6 +242,10 @@ const NoteEditor = () => {
       const response = await fetchNote(noteName);
 
       if (response.exists && response.data) {
+        // Store expiration from server
+        if (response.expiresAt) {
+          setExpiresAt(new Date(response.expiresAt).getTime());
+        }
         // Note exists - check if it has user password
         if (response.hasUserPassword) {
           // Has user password - need to prompt
@@ -344,7 +363,7 @@ const NoteEditor = () => {
         existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true, expiresAt || undefined);
       setIsDirty(false);
       toast({ title: "Auto-saved", description: "Changes saved automatically" });
     } catch (err) {
@@ -382,13 +401,38 @@ const NoteEditor = () => {
         existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, false);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, false, expiresAt || undefined);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to auto-save note');
     } finally {
       setIsSaving(false);
     }
+  };
+
+  // Note Expiration handler
+  const handleSetExpiry = (duration) => {
+    if (duration === null) {
+      setExpiresAt(null);
+      toast({ title: "Expiration removed", description: "This note will no longer expire" });
+    } else {
+      const expiry = Date.now() + duration;
+      setExpiresAt(expiry);
+      setIsDirty(true);
+      const labels = { 3600000: '1 hour', 86400000: '24 hours', 604800000: '7 days', 2592000000: '30 days' };
+      toast({ title: "Expiration set", description: `Note will self-destruct in ${labels[duration] || 'some time'}` });
+    }
+    setShowExpiryDialog(false);
+  };
+
+  // Format remaining time for display
+  const getExpiryLabel = () => {
+    if (!expiresAt) return null;
+    const remaining = expiresAt - Date.now();
+    if (remaining <= 0) return 'Expired';
+    if (remaining < 3600000) return `${Math.ceil(remaining / 60000)}m left`;
+    if (remaining < 86400000) return `${Math.ceil(remaining / 3600000)}h left`;
+    return `${Math.ceil(remaining / 86400000)}d left`;
   };
 
   const handleContentChange = useCallback((content) => {
@@ -617,6 +661,28 @@ const NoteEditor = () => {
     });
   };
 
+  // Command Palette commands
+  const commands = useMemo(() => [
+    { type: 'sep', label: 'Editor' },
+    { id: 'save', icon: Save, label: 'Save Note', shortcut: '⌘S', keywords: ['save', 'write'], action: () => { if (password) saveNoteWithPassword(password); else handleSaveWithoutPassword(); }, disabled: !isDirty },
+    { id: 'preview', icon: isPreviewMode ? Edit3 : Eye, label: isPreviewMode ? 'Switch to Edit Mode' : 'Preview Markdown', keywords: ['preview', 'markdown', 'edit'], action: () => { const newMode = !isPreviewMode; if (newMode && remarkPlugins.length === 0) { getRemarkGfm().then(plugin => setRemarkPlugins([plugin])); } startTransition(() => setIsPreviewMode(newMode)); } },
+    { id: 'copy', icon: Copy, label: 'Copy Content', keywords: ['copy', 'clipboard'], action: handleCopyContent },
+    { id: 'download', icon: Download, label: 'Download as Text', keywords: ['download', 'export', 'file'], action: handleDownload },
+    { type: 'sep', label: 'Tabs' },
+    { id: 'newtab', icon: Plus, label: 'New Tab', shortcut: '⌘N', keywords: ['new', 'tab', 'add'], action: handleAddTab },
+    { type: 'sep', label: 'Security' },
+    { id: 'lock', icon: Lock, label: password ? 'Note is Locked' : 'Lock with Password', keywords: ['lock', 'password', 'encrypt'], action: handleLockNote, disabled: !!password },
+    { id: 'changepass', icon: Key, label: 'Change Password', keywords: ['password', 'change', 'key'], action: handleChangePassword, disabled: !password },
+    { id: 'expiry', icon: Timer, label: expiresAt ? `Self-Destruct (${getExpiryLabel()})` : 'Set Self-Destruct Timer', keywords: ['expire', 'expiry', 'self-destruct', 'timer', 'delete', 'temporary'], action: () => setShowExpiryDialog(true) },
+    { id: 'delete', icon: Trash2, label: 'Delete Note', keywords: ['delete', 'remove', 'trash'], action: () => setShowDeleteDialog(true) },
+    { type: 'sep', label: 'Share' },
+    { id: 'copyurl', icon: Share2, label: 'Copy Note URL', keywords: ['share', 'url', 'link', 'copy'], action: handleCopyURL },
+    { id: 'qrcode', icon: QrCode, label: 'Show QR Code', keywords: ['qr', 'code', 'scan'], action: handleShowQR },
+    { type: 'sep', label: 'Settings' },
+    { id: 'theme', icon: isDarkMode ? Sun : Moon, label: isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode', keywords: ['theme', 'dark', 'light', 'mode'], action: () => setIsDarkMode(!isDarkMode) },
+    { id: 'home', icon: Home, label: 'Go to Home', keywords: ['home', 'back', 'exit'], action: () => navigate('/') },
+  ], [noteData, isDirty, password, isPreviewMode, isDarkMode, expiresAt, remarkPlugins]);
+
   if (isLoading) {
     return <LoadingSkeleton />;
   }
@@ -779,6 +845,30 @@ const NoteEditor = () => {
             >
               <QrCode className="h-4 w-4" />
             </Button>
+
+            {/* Command Palette trigger */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowCommandPalette(true)}
+              title="Command Palette (⌘K)"
+              aria-label="Command Palette"
+              className="rounded-xl"
+            >
+              <Command className="h-4 w-4" />
+            </Button>
+
+            {/* Expiry indicator */}
+            {expiresAt && (
+              <button
+                onClick={() => setShowExpiryDialog(true)}
+                className="flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-lg bg-orange-500/15 text-orange-500 hover:bg-orange-500/25 transition-colors"
+                title="Note will self-destruct"
+              >
+                <Timer className="h-3 w-3" />
+                <span className="hidden sm:inline">{getExpiryLabel()}</span>
+              </button>
+            )}
           </div>
         </div>
       </nav>
@@ -937,7 +1027,16 @@ const NoteEditor = () => {
               </div>
             ) : (
               <>
+                {/* Markdown Formatting Toolbar */}
+                {!isLocked && (
+                  <MarkdownToolbar 
+                    textareaRef={textareaRef} 
+                    onContentChange={handleContentChange} 
+                    disabled={isLocked} 
+                  />
+                )}
                 <Textarea
+                  ref={textareaRef}
                   value={currentTab.content}
                   onChange={(e) => handleContentChange(e.target.value)}
                   placeholder=""
@@ -1115,6 +1214,61 @@ const NoteEditor = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Self-Destruct / Expiry Dialog */}
+      <Dialog open={showExpiryDialog} onOpenChange={setShowExpiryDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Timer className="w-5 h-5 text-orange-500" />
+              Self-Destruct Timer
+            </DialogTitle>
+            <DialogDescription>
+              Set a timer to automatically delete this note. Once expired, the note is gone forever.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 space-y-2">
+            {[
+              { label: '1 Hour', value: 3600000, desc: 'Quick share' },
+              { label: '24 Hours', value: 86400000, desc: 'Temporary note' },
+              { label: '7 Days', value: 604800000, desc: 'Short-term' },
+              { label: '30 Days', value: 2592000000, desc: 'Medium-term' },
+            ].map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => handleSetExpiry(opt.value)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-colors text-left"
+              >
+                <div>
+                  <div className="text-sm font-medium text-foreground">{opt.label}</div>
+                  <div className="text-xs text-muted-foreground">{opt.desc}</div>
+                </div>
+                <Clock className="w-4 h-4 text-muted-foreground" />
+              </button>
+            ))}
+            {expiresAt && (
+              <button
+                onClick={() => handleSetExpiry(null)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-red-500/30 hover:border-red-500/50 hover:bg-red-500/5 transition-colors text-sm text-red-500"
+              >
+                Remove Expiration
+              </button>
+            )}
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="ghost" className="border border-border" onClick={() => setShowExpiryDialog(false)}>
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Command Palette */}
+      <CommandPalette 
+        isOpen={showCommandPalette} 
+        onClose={() => setShowCommandPalette(false)} 
+        commands={commands} 
+      />
     </div>
   );
 };

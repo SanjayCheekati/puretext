@@ -34,6 +34,7 @@ router.get('/note/:name', async (req, res) => {
       exists: true,
       data: note.data,
       hasUserPassword: note.hasUserPassword || false,
+      expiresAt: note.expiresAt || null,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt
     });
@@ -50,7 +51,7 @@ router.get('/note/:name', async (req, res) => {
 router.post('/note/:name', async (req, res) => {
   try {
     const name = sanitizeNoteName(req.params.name);
-    const { data, deleteTokenHash, hasUserPassword } = req.body;
+    const { data, deleteTokenHash, hasUserPassword, expiresAt } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'Invalid note name' });
@@ -75,6 +76,10 @@ router.post('/note/:name', async (req, res) => {
       if (typeof hasUserPassword === 'boolean') {
         existingNote.hasUserPassword = hasUserPassword;
       }
+      // Update expiration if provided (null clears it)
+      if (expiresAt !== undefined) {
+        existingNote.expiresAt = expiresAt ? new Date(expiresAt) : null;
+      }
       await existingNote.save();
 
       return res.json({
@@ -92,7 +97,8 @@ router.post('/note/:name', async (req, res) => {
         _id: name,
         data,
         deleteTokenHash,
-        hasUserPassword: hasUserPassword || false
+        hasUserPassword: hasUserPassword || false,
+        expiresAt: expiresAt ? new Date(expiresAt) : null
       });
 
       await newNote.save();

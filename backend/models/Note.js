@@ -41,6 +41,10 @@ const noteSchema = new mongoose.Schema({
   hasUserPassword: {
     type: Boolean,
     default: false
+  },
+  expiresAt: {
+    type: Date,
+    default: null
   }
 }, {
   _id: false,
@@ -50,6 +54,8 @@ const noteSchema = new mongoose.Schema({
 // Add indexes for better query performance
 noteSchema.index({ createdAt: 1 });
 noteSchema.index({ updatedAt: 1 });
+// TTL index: MongoDB automatically deletes documents when expiresAt is reached
+noteSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0, sparse: true });
 
 const Note = mongoose.model('Note', noteSchema);
 

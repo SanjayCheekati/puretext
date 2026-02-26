@@ -44,7 +44,7 @@ export const fetchNote = async (name, forceRefresh = false) => {
   return data;
 };
 
-export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUserPassword) => {
+export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUserPassword, expiresAt) => {
   const body = { data };
   if (deleteTokenHash) {
     body.deleteTokenHash = deleteTokenHash;
@@ -53,6 +53,10 @@ export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUser
   // Only send whether user has set a password (boolean)
   if (typeof hasUserPassword === 'boolean') {
     body.hasUserPassword = hasUserPassword;
+  }
+  // Send expiration timestamp if provided (null clears expiration)
+  if (expiresAt !== undefined) {
+    body.expiresAt = expiresAt;
   }
 
   const response = await fetch(`${API_URL}/note/${name}`, {
