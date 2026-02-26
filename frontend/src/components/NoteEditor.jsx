@@ -83,6 +83,7 @@ const NoteEditor = () => {
   const [showExpiryDialog, setShowExpiryDialog] = useState(false);
   const [customExpiryValue, setCustomExpiryValue] = useState('');
   const [customExpiryUnit, setCustomExpiryUnit] = useState('hours');
+  const [, setExpiryTick] = useState(0); // forces re-render for countdown
 
   // Dialogs
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
@@ -425,10 +426,34 @@ const NoteEditor = () => {
     if (!expiresAt) return null;
     const remaining = expiresAt - Date.now();
     if (remaining <= 0) return 'Expired';
+    if (remaining < 60000) return `${Math.ceil(remaining / 1000)}s left`;
     if (remaining < 3600000) return `${Math.ceil(remaining / 60000)}m left`;
     if (remaining < 86400000) return `${Math.ceil(remaining / 3600000)}h left`;
     return `${Math.ceil(remaining / 86400000)}d left`;
   };
+
+  // Live countdown — tick every 30s (or every 1s in last minute)
+  useEffect(() => {
+    if (!expiresAt) return;
+    const remaining = expiresAt - Date.now();
+    if (remaining <= 0) {
+      toast({ title: "Note expired", description: "This note has self-destructed.", variant: "destructive" });
+      navigate('/');
+      return;
+    }
+    const interval = remaining < 60000 ? 1000 : 30000;
+    const id = setInterval(() => {
+      const r = expiresAt - Date.now();
+      if (r <= 0) {
+        clearInterval(id);
+        toast({ title: "Note expired", description: "This note has self-destructed.", variant: "destructive" });
+        navigate('/');
+      } else {
+        setExpiryTick(n => n + 1);
+      }
+    }, interval);
+    return () => clearInterval(id);
+  }, [expiresAt, navigate]);
 
   const handleContentChange = useCallback((content) => {
     if (!noteData) return;
@@ -821,8 +846,8 @@ const NoteEditor = () => {
               <QrCode className="h-4 w-4" />
             </Button>
 
-            {/* Expiry indicator */}
-            {expiresAt && (
+            {/* Self-Destruct Timer */}
+            {expiresAt ? (
               <button
                 onClick={() => setShowExpiryDialog(true)}
                 className="flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-lg bg-orange-500/15 text-orange-500 hover:bg-orange-500/25 transition-colors"
@@ -831,6 +856,17 @@ const NoteEditor = () => {
                 <Timer className="h-3 w-3" />
                 <span className="hidden sm:inline">{getExpiryLabel()}</span>
               </button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowExpiryDialog(true)}
+                title="Set Self-Destruct Timer"
+                aria-label="Set Self-Destruct Timer"
+                className="rounded-xl"
+              >
+                <Timer className="h-4 w-4" />
+              </Button>
             )}
           </div>
         </div>
