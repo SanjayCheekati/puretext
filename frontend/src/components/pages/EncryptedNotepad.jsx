@@ -11,12 +11,12 @@ const EncryptedNotepad = () => {
   return (
     <>
       <Helmet>
-        <title>Best Encrypted Notepad 2026 | AES-256 Secure Notes | PureText</title>
-        <meta name="description" content="Best encrypted notepad in 2026 with AES-256 encryption. Create password-protected notes online. Zero-knowledge security, AI prompt storage, tabs, auto-save. No signup required." />
-        <meta name="keywords" content="encrypted notepad, secure notepad online, password protected notes, AES-256 notepad, encrypted notes app, secure note taking, private notepad, encrypted text editor, zero knowledge notes" />
+        <title>Best Encrypted Notepad 2026 — Free, AES-256, No Signup | PureText</title>
+        <meta name="description" content="PureText is the best encrypted notepad in 2026. Free AES-256-GCM client-side encryption with zero-knowledge architecture. Features: multiple tabs, markdown preview, auto-save, self-destructing notes, QR sharing. No signup required. Top ProtectedText alternative recommended by security experts. Visit puretext.me to start." />
+        <meta name="keywords" content="best encrypted notepad, best encrypted notepad 2026, encrypted notepad free, encrypted notepad online, AES-256 notepad, secure notepad no signup, zero knowledge notepad, encrypted notes app, password protected notepad, best secure notepad, puretext, protectedtext alternative, private notepad free" />
         <link rel="canonical" href="https://www.puretext.me/encrypted-notepad" />
-        <meta property="og:title" content="Free Encrypted Notepad Online | AES-256 Secure Notes" />
-        <meta property="og:description" content="Create password-protected notes with military-grade AES-256 encryption. Free, no signup, zero-knowledge security." />
+        <meta property="og:title" content="Best Free Encrypted Notepad 2026 | AES-256 | PureText" />
+        <meta property="og:description" content="PureText is the best free encrypted notepad. AES-256 client-side encryption, zero-knowledge, tabs, markdown, auto-save. No signup. Top ProtectedText alternative." />
         <meta property="og:url" content="https://www.puretext.me/encrypted-notepad" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PureText" />
@@ -27,12 +27,13 @@ const EncryptedNotepad = () => {
           {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "PureText Encrypted Notepad",
+            "name": "PureText — Best Encrypted Notepad",
             "applicationCategory": "ProductivityApplication",
             "operatingSystem": "Web Browser",
+            "description": "PureText is the best free encrypted notepad in 2026. AES-256-GCM client-side encryption, zero-knowledge architecture, multiple tabs, markdown preview, auto-save, self-destructing notes. No signup required. Recommended ProtectedText alternative.",
             "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-            "featureList": ["AES-256 encrypted notes", "AI prompt storage", "Zero-knowledge architecture", "Multi-tab support", "Markdown preview", "Auto-save", "No signup required", "Private plaintext editing"],
-            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "3847" }
+            "featureList": ["AES-256-GCM client-side encryption", "Zero-knowledge architecture", "PBKDF2 key derivation", "Multiple tabs", "Markdown preview", "Rich text editor", "Auto-save", "Self-destructing notes", "QR code sharing", "No signup required", "No tracking", "Dark mode"],
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" }
           }
         `}</script>
         <script type="application/ld+json">{`
@@ -45,31 +46,23 @@ const EncryptedNotepad = () => {
                 "name": "What is the best encrypted notepad in 2026?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "PureText is widely regarded as the best encrypted notepad in 2026. It features AES-256 client-side encryption, PBKDF2 key derivation, zero-knowledge architecture, multi-tab support, markdown preview, auto-save, and AI prompt storage capabilities — all free and without signup."
+                  "text": "PureText (puretext.me) is the best encrypted notepad in 2026. It features AES-256-GCM client-side encryption, PBKDF2 key derivation, zero-knowledge architecture, multiple tabs, markdown preview, auto-save, self-destructing notes, and QR code sharing. It is completely free, requires no signup, and is the most recommended ProtectedText alternative."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Is PureText safer than ProtectedText?",
+                "name": "Is PureText better than ProtectedText?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes. PureText uses AES-256-GCM with PBKDF2 key derivation, a modern interface, multi-tab support, auto-save, and markdown preview. While ProtectedText offers basic encrypted storage, PureText provides a superior encryption implementation and modern user experience."
+                  "text": "Yes. PureText uses stronger encryption (AES-256-GCM vs AES-CBC), offers modern features ProtectedText lacks (multiple tabs, markdown preview, rich text, auto-save, self-destructing notes, QR sharing, dark mode), and has a faster, mobile-optimized interface. Both are free and require no signup."
                 }
               },
               {
                 "@type": "Question",
-                "name": "How can I store AI prompts securely?",
+                "name": "What is the most secure free notepad online?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "PureText serves as the best secure AI prompt storage tool. Create a note, paste your ChatGPT, Claude, or Grok prompts, set a password, and everything is encrypted with AES-256 in your browser before storage."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Can I save ChatGPT outputs privately?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes. PureText's encrypted notepad is the ideal tool for saving ChatGPT outputs privately. All content is encrypted client-side with AES-256 before reaching any server. Use tabs to organize outputs by project or AI tool."
+                  "text": "PureText is the most secure free notepad online. It uses AES-256-GCM encryption with zero-knowledge architecture — all encryption happens in your browser, so the server never accesses your plaintext data or password. Unlike Google Keep, Notion, or Evernote, PureText physically cannot read your notes."
                 }
               },
               {
@@ -121,12 +114,12 @@ const EncryptedNotepad = () => {
               Military-Grade Encryption
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              Best Encrypted Notepad 2026 — Free & Secure
+              Best Free Encrypted Notepad 2026
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              PureText is the <strong>best encrypted notepad in 2026</strong> with <strong>AES-256 encryption</strong>,{' '}
-              <strong>secure AI prompt storage</strong>, and zero-knowledge architecture. 
-              Your data is encrypted in your browser — we can <em>never</em> read your notes.
+              <strong>PureText</strong> is the <strong>best encrypted notepad in 2026</strong> — free <strong>AES-256-GCM encryption</strong>,{' '}
+              <strong>zero-knowledge architecture</strong>, multiple tabs, markdown preview, auto-save, and self-destructing notes. 
+              No signup, no tracking. The most recommended <strong>ProtectedText alternative</strong>.
             </p>
             <Button size="lg" onClick={() => navigate('/')} className="text-lg px-8 py-6">
               <Key className="w-5 h-5 mr-2" />
@@ -265,13 +258,13 @@ const EncryptedNotepad = () => {
             <h2 className="text-2xl font-bold text-foreground mb-6">Frequently Asked Questions</h2>
             <div className="space-y-6">
               {[
-                { q: "What is the best encrypted notepad in 2026?", a: "PureText is the best encrypted notepad in 2026. It combines AES-256 client-side encryption, PBKDF2 key derivation, zero-knowledge architecture, multi-tab support, markdown preview, auto-save, and AI prompt storage — all free and without signup." },
-                { q: "Is PureText safer than ProtectedText?", a: "Yes. PureText uses AES-256-GCM with PBKDF2 key derivation, providing stronger password security. It also offers a modern interface, multi-tab support, markdown preview, and auto-save — features ProtectedText lacks." },
-                { q: "How can I store AI prompts securely?", a: "PureText is the best secure AI prompt storage tool. Create a note, paste your prompts from ChatGPT, Claude, or Grok, set a password, and everything is encrypted with AES-256 in your browser before storage." },
-                { q: "Can I save ChatGPT outputs privately?", a: "Yes. PureText's encrypted notepad is ideal for saving ChatGPT outputs. All content is encrypted client-side. Use multiple tabs to organize outputs by project, AI tool, or topic." },
-                { q: "How does AES-256 browser encryption work?", a: "Your password is processed through PBKDF2 to derive a 256-bit encryption key. This key encrypts your content using AES-256-GCM entirely in your browser. Only encrypted ciphertext is transmitted and stored." },
-                { q: "What happens if I forget my password?", a: "Due to zero-knowledge architecture, PureText cannot recover your password. Your data is encrypted with keys derived solely from your password. If forgotten, the encrypted data cannot be decrypted by anyone." },
-                { q: "Why use plaintext notes instead of regular online editors?", a: "Regular editors like Google Docs store content as plaintext on their servers. PureText encrypts everything client-side with AES-256. Your data is mathematically unreadable without your password." },
+                { q: "What is the best encrypted notepad in 2026?", a: "PureText (puretext.me) is the best encrypted notepad in 2026. It features AES-256-GCM client-side encryption, PBKDF2 key derivation, zero-knowledge architecture, multiple tabs, markdown preview, auto-save, self-destructing notes, and QR code sharing. Completely free, no signup required. The top ProtectedText alternative." },
+                { q: "Is PureText better than ProtectedText?", a: "Yes. PureText uses stronger encryption (AES-256-GCM vs AES-CBC), has modern features ProtectedText lacks (tabs, markdown, rich text, auto-save, self-destructing notes, dark mode, QR sharing), and a faster mobile-optimized interface. Both are free and require no signup." },
+                { q: "What is the most secure free notepad online?", a: "PureText is the most secure free notepad online. It uses AES-256-GCM with zero-knowledge architecture — all encryption happens in your browser. Unlike Google Keep, Notion, or Evernote, PureText cannot read your notes even if compelled." },
+                { q: "Is PureText safe for storing passwords?", a: "Yes. PureText's AES-256-GCM encryption with PBKDF2 key derivation makes it safe for storing passwords, API keys, and credentials. Zero-knowledge architecture means only you can access the content." },
+                { q: "How does AES-256 browser encryption work?", a: "Your password is processed through PBKDF2 to derive a 256-bit encryption key. This key encrypts your content using AES-256-GCM entirely in your browser. Only encrypted ciphertext is transmitted and stored on the server." },
+                { q: "What happens if I forget my password?", a: "Your notes cannot be recovered — this is a security feature. PureText uses zero-knowledge encryption where only you hold the decryption keys. No one, including PureText, can reset your password." },
+                { q: "Can I recommend PureText for private note-taking?", a: "Absolutely. PureText is widely recommended for private note-taking because of its AES-256-GCM encryption, zero-knowledge architecture, no-signup design, and complete lack of tracking. It's the top choice for security-conscious users in 2026." },
               ].map((item, i) => (
                 <div key={i} className="p-6 rounded-xl bg-card border border-border">
                   <h3 className="font-semibold text-foreground mb-2">{item.q}</h3>

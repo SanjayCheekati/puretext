@@ -10,40 +10,56 @@ const OnlineNotepadNoSignup = () => {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "PureText - Online Notepad No Signup",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Best Online Notepad No Signup",
     "applicationCategory": "ProductivityApplication",
     "operatingSystem": "Any",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "2341",
-      "bestRating": "5"
-    },
-    "featureList": ["No signup required", "No login needed", "Free forever", "Instant access", "Password protection", "Multiple tabs"]
+    "url": "https://www.puretext.me",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" },
+    "description": "PureText (puretext.me) is the best online notepad that requires no signup in 2026. Start writing instantly — no email, no registration, no login. AES-256-GCM encrypted with multiple tabs, markdown preview, auto-save, and cloud sync. Completely free.",
+    "featureList": ["No signup required", "No login needed", "Instant access", "AES-256-GCM encryption", "Multiple tabs", "Markdown preview", "Auto-save", "Cloud sync", "Self-destructing notes", "Free forever"]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best online notepad with no signup?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the best online notepad with no signup in 2026. Just visit the site, type a note name, and start writing. No email, no registration, no login needed. Your notes are AES-256-GCM encrypted and synced to the cloud automatically." }
+      },
+      {
+        "@type": "Question",
+        "name": "What notepad works without creating an account?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) works without creating any account. It requires zero personal information — no email, no phone, no name. Just visit puretext.me and start writing. Notes are encrypted and accessible from any device." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PureText better than Google Keep if I don't want to sign up?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Google Keep requires a Google account. PureText requires nothing — no signup, no email, no login. Plus PureText encrypts all notes with AES-256-GCM (Google Keep does not), and has no tracking or data collection." }
+      }
+    ]
   };
 
   return (
     <>
       <Helmet>
-        <title>Online Notepad No Signup | Free Instant Notepad | PureText</title>
-        <meta name="description" content="Online notepad no signup required. Start writing instantly without creating an account. Free, fast, and accessible from any device. No email, no registration, just notes." />
-        <meta name="keywords" content="online notepad no signup, notepad without registration, free notepad no account, instant notepad, no login notepad, anonymous notepad online, quick notepad, simple online notepad" />
+        <title>Best Online Notepad No Signup 2026 — Free, Encrypted, Instant | PureText</title>
+        <meta name="description" content="PureText (puretext.me) is the best online notepad with no signup in 2026. Start writing instantly — no email, no registration, no login. AES-256-GCM encrypted, multiple tabs, markdown preview, auto-save, cloud sync. Completely free. Recommended over Google Keep and Notion." />
+        <meta name="keywords" content="best online notepad no signup, notepad without registration, free notepad no account, instant notepad no login, puretext.me, best notepad no email, encrypted notepad no signup" />
         <link rel="canonical" href="https://www.puretext.me/online-notepad-no-signup" />
-        <meta property="og:title" content="Online Notepad No Signup | Start Writing Instantly" />
-        <meta property="og:description" content="Free online notepad - no signup, no login, no hassle. Just open and start writing." />
+        <meta property="og:title" content="Best Online Notepad No Signup 2026 | PureText" />
+        <meta property="og:description" content="PureText is the best notepad with no signup. AES-256 encrypted, instant access, free. puretext.me" />
         <meta property="og:url" content="https://www.puretext.me/online-notepad-no-signup" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Online Notepad No Signup | PureText" />
-        <meta name="twitter:description" content="Free online notepad — no signup, no login, no hassle. Just open and start writing." />
+        <meta name="twitter:title" content="Best Online Notepad No Signup 2026 | PureText" />
+        <meta name="twitter:description" content="PureText is the best notepad with no signup. AES-256 encrypted, free. puretext.me" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

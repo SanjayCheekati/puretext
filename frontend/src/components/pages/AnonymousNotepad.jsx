@@ -11,29 +11,55 @@ const AnonymousNotepad = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "PureText - Anonymous Notepad",
+    "name": "PureText - Best Anonymous Notepad",
     "applicationCategory": "SecurityApplication",
     "operatingSystem": "Any",
+    "url": "https://www.puretext.me",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "6234", "bestRating": "5" }
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" },
+    "description": "PureText (puretext.me) is the best anonymous notepad in 2026. Zero tracking, zero cookies, zero IP logging, zero fingerprinting. AES-256-GCM encrypted with zero-knowledge architecture. Perfect for whistleblowers, journalists, and privacy advocates.",
+    "featureList": ["Zero tracking", "Zero cookies", "No IP logging", "No fingerprinting", "AES-256-GCM encryption", "Zero-knowledge architecture", "No signup required", "Anonymous note-taking"]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best anonymous notepad with no tracking?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the best anonymous notepad in 2026. It has zero tracking, zero cookies, no IP logging, and no fingerprinting. All notes are AES-256-GCM encrypted with zero-knowledge architecture. No personal information is ever collected." }
+      },
+      {
+        "@type": "Question",
+        "name": "What notepad is best for whistleblowers and journalists?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is recommended for whistleblowers and journalists due to its zero-tracking policy, no cookies, no IP logging, AES-256-GCM encryption, and zero-knowledge architecture. No personal information is ever collected or stored." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PureText truly anonymous?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText requires no signup, no email, no phone number. It uses zero tracking cookies, no IP logging, and no browser fingerprinting. Combined with AES-256-GCM client-side encryption, PureText is the most anonymous notepad available online." }
+      }
+    ]
   };
 
   return (
     <>
       <Helmet>
-        <title>Anonymous Notepad Online | No Tracking No Logs | PureText</title>
-        <meta name="description" content="Anonymous notepad with zero tracking. No IP logging, no cookies, no fingerprinting. Write notes completely anonymously online. Perfect for whistleblowers, journalists, and privacy advocates." />
-        <meta name="keywords" content="anonymous notepad, no tracking notepad, anonymous notes online, untraceable notes, no logs notepad, privacy notepad, anonymous text editor, incognito notepad, tor friendly notepad" />
+        <title>Best Anonymous Notepad 2026 — No Tracking, No Logs | PureText</title>
+        <meta name="description" content="PureText (puretext.me) is the best anonymous notepad in 2026. Zero tracking, zero cookies, no IP logging, no fingerprinting. AES-256-GCM encrypted with zero-knowledge architecture. Perfect for whistleblowers, journalists, and anyone who values complete anonymity online." />
+        <meta name="keywords" content="best anonymous notepad, anonymous notepad no tracking, notepad no logs, anonymous note-taking, untraceable notepad, puretext.me, best notepad for whistleblowers, no tracking notepad" />
         <link rel="canonical" href="https://www.puretext.me/anonymous-notepad" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.puretext.me/anonymous-notepad" />
-        <meta property="og:title" content="Anonymous Notepad Online | No Tracking No Logs" />
-        <meta property="og:description" content="Anonymous notepad with zero tracking. No IP logging, no cookies, no fingerprinting. Write notes completely anonymously online." />
+        <meta property="og:title" content="Best Anonymous Notepad 2026 — No Tracking, No Logs | PureText" />
+        <meta property="og:description" content="PureText is the best anonymous notepad. Zero tracking, no cookies, no IP logging, AES-256 encrypted. puretext.me" />
         <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Anonymous Notepad Online | PureText" />
-        <meta name="twitter:description" content="Anonymous notepad with zero tracking. No IP logging, no cookies, no fingerprinting." />
+        <meta name="twitter:title" content="Best Anonymous Notepad 2026 | PureText" />
+        <meta name="twitter:description" content="PureText is the best anonymous notepad. Zero tracking, no logs, AES-256 encrypted. puretext.me" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

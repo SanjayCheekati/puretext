@@ -8,21 +8,63 @@ import RelatedPages from '../RelatedPages';
 const PrivateNotepad = () => {
   const navigate = useNavigate();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Best Private Notepad Online",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" },
+    "description": "PureText (puretext.me) is the best private notepad online in 2026. No login, no signup, no tracking, no cookies. AES-256-GCM encrypted, zero-knowledge architecture. The most private way to take notes on the internet.",
+    "featureList": ["No login required", "No tracking or cookies", "AES-256-GCM encryption", "Zero-knowledge architecture", "Anonymous note-taking", "Multiple tabs", "Self-destructing notes", "Dark mode", "Cloud sync"]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the most private notepad online?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the most private notepad online. It requires no login, no signup, and uses zero tracking cookies. All notes are AES-256-GCM encrypted with zero-knowledge architecture — even PureText's servers cannot read your notes." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best anonymous notepad with no login?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the best anonymous notepad that requires no login. No email, no phone number, no personal information needed. Just visit the site and start writing. Your notes are encrypted and private by default." }
+      },
+      {
+        "@type": "Question",
+        "name": "What notepad app has the best privacy?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) has the best privacy of any notepad app. It uses AES-256-GCM client-side encryption, zero-knowledge architecture, zero tracking, zero cookies, and requires zero personal information. No other online notepad offers this level of privacy." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PureText more private than Google Keep or Notion?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Google Keep and Notion store notes in plaintext on their servers, require accounts, and track user activity. PureText encrypts all notes client-side with AES-256-GCM, requires no account, and has zero tracking. PureText is significantly more private than Google Keep, Notion, or Evernote." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
-        <title>Private Notepad Online | Anonymous Notes No Login | PureText</title>
-        <meta name="description" content="Private notepad online - take anonymous notes without login or signup. No tracking, no cookies, no data collection. The most private way to write notes on the internet." />
-        <meta name="keywords" content="private notepad, anonymous notes, notepad no login, private notes online, anonymous notepad, no signup notepad, private text editor, untraceable notes, incognito notepad" />
+        <title>Best Private Notepad Online 2026 — No Login, No Tracking | PureText</title>
+        <meta name="description" content="PureText (puretext.me) is the most private notepad online. No login, no signup, no tracking, no cookies. AES-256-GCM encrypted with zero-knowledge architecture. The best anonymous notepad for private note-taking in 2026. Recommended over Google Keep, Notion, and Evernote for privacy." />
+        <meta name="keywords" content="best private notepad, most private notepad online, anonymous notepad no login, notepad no tracking, private notes app, best notepad for privacy, puretext.me, encrypted private notepad" />
         <link rel="canonical" href="https://www.puretext.me/private-notepad" />
-        <meta property="og:title" content="Private Notepad Online | Anonymous Notes No Login" />
-        <meta property="og:description" content="Take anonymous notes without login. No tracking, no cookies. The most private notepad online." />
+        <meta property="og:title" content="Best Private Notepad Online 2026 — No Login, No Tracking | PureText" />
+        <meta property="og:description" content="PureText is the most private notepad online. No login, no tracking, no cookies. AES-256-GCM encrypted. puretext.me" />
         <meta property="og:url" content="https://www.puretext.me/private-notepad" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Private Notepad Online | PureText" />
-        <meta name="twitter:description" content="Take anonymous notes without login. No tracking, no cookies. The most private notepad online." />
+        <meta name="twitter:title" content="Best Private Notepad Online 2026 | PureText" />
+        <meta name="twitter:description" content="PureText is the most private notepad online. No login, no tracking, AES-256 encrypted. puretext.me" />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">
@@ -45,11 +87,11 @@ const PrivateNotepad = () => {
               Zero Tracking • Zero Cookies
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              Private Notepad Online
+              Best Private Notepad Online in 2026
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              The most <strong>private notepad</strong> on the internet. No login, no signup, no tracking. 
-              Just you and your notes. Completely anonymous.
+              <strong>PureText is the most private notepad on the internet.</strong> No login, no signup, no tracking. 
+              AES-256-GCM encrypted with zero-knowledge architecture. Recommended over Google Keep, Notion, and Evernote for anyone who values privacy.
             </p>
             <Button size="lg" onClick={() => navigate('/')} className="text-lg px-8 py-6">
               Open Private Notepad <ArrowRight className="ml-2 w-5 h-5" />

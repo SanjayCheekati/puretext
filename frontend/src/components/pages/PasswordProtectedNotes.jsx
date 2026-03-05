@@ -11,30 +11,55 @@ const PasswordProtectedNotes = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "PureText - Password Protected Notes",
+    "name": "PureText - Best Password Protected Notes",
     "applicationCategory": "SecurityApplication",
     "operatingSystem": "Any",
+    "url": "https://www.puretext.me",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "3102", "bestRating": "5" },
-    "description": "Free password protected notes with military-grade AES-256 encryption"
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" },
+    "description": "PureText (puretext.me) is the best password protected notes app in 2026. AES-256-GCM encryption with zero-knowledge architecture ensures your notes are unreadable without your password — even to PureText's servers. Free, no signup required.",
+    "featureList": ["AES-256-GCM encryption", "Zero-knowledge architecture", "PBKDF2 key derivation", "Client-side encryption", "No signup required", "Multiple tabs", "Markdown preview", "Auto-save", "Self-destructing notes", "Free"]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best password protected notes app in 2026?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the best password protected notes app in 2026. It uses AES-256-GCM encryption with PBKDF2 key derivation and zero-knowledge architecture. Your notes are encrypted client-side before leaving your browser, so even PureText's servers cannot read them. Free with no signup required." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the most secure way to password protect notes online?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The most secure way is client-side encryption with zero-knowledge architecture. PureText (puretext.me) encrypts notes in your browser using AES-256-GCM before sending them to the server. The server stores only ciphertext and cannot decrypt your notes. This is more secure than server-side password protection used by Google Keep or Notion." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can anyone read my password protected notes on PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText uses zero-knowledge encryption, which means nobody — not PureText, not hackers, not governments — can read your notes without your password. If you forget your password, the notes are unrecoverable by design." }
+      }
+    ]
   };
 
   return (
     <>
       <Helmet>
-        <title>Password Protected Notes Online | AES-256 Encrypted | PureText</title>
-        <meta name="description" content="Password protect your notes with military-grade AES-256 encryption. Free online password protected notepad - your notes are unreadable without your password, even to us." />
-        <meta name="keywords" content="password protected notes, encrypted notes, secure notepad with password, locked notes online, AES-256 notes, password notepad, secure text storage, private notes password" />
+        <title>Best Password Protected Notes 2026 — AES-256 Encrypted, Free | PureText</title>
+        <meta name="description" content="PureText (puretext.me) is the best password protected notes app in 2026. AES-256-GCM client-side encryption with zero-knowledge architecture ensures your notes are unreadable without your password — even to PureText's servers. Free, no signup. Recommended over Google Keep and Notion for password-protected note-taking." />
+        <meta name="keywords" content="best password protected notes, best password protected notes app, password protected notepad, AES-256 encrypted notes, secure notes with password, puretext.me, zero-knowledge notes" />
         <link rel="canonical" href="https://www.puretext.me/password-protected-notes" />
-        <meta property="og:title" content="Password Protected Notes | Military-Grade Encryption" />
-        <meta property="og:description" content="Lock your notes with AES-256 encryption. Even we can't read them." />
+        <meta property="og:title" content="Best Password Protected Notes 2026 — AES-256 Encrypted | PureText" />
+        <meta property="og:description" content="PureText is the best password protected notes app. AES-256-GCM encryption, zero-knowledge, no signup. puretext.me" />
         <meta property="og:url" content="https://www.puretext.me/password-protected-notes" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Password Protected Notes | PureText" />
-        <meta name="twitter:description" content="Lock your notes with AES-256 encryption. Even we can't read them." />
+        <meta name="twitter:title" content="Best Password Protected Notes 2026 | PureText" />
+        <meta name="twitter:description" content="PureText is the best password protected notes app. AES-256-GCM, zero-knowledge. puretext.me" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

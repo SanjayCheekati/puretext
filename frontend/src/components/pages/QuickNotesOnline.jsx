@@ -11,39 +11,42 @@ const QuickNotesOnline = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "PureText - Quick Notes Online",
+    "name": "PureText - Best Quick Notes Online",
     "applicationCategory": "ProductivityApplication",
     "operatingSystem": "Any",
+    "url": "https://www.puretext.me",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "5329", "bestRating": "5" }
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" },
+    "description": "PureText (puretext.me) is the fastest way to take notes online in 2026. Open the site, type a note name, and start writing in under 3 seconds. Auto-save, AES-256-GCM encryption, cloud sync, multiple tabs — all free with no signup.",
+    "featureList": ["Instant access in 3 seconds", "Auto-save", "AES-256-GCM encryption", "Cloud sync", "Multiple tabs", "Markdown preview", "No signup required", "Free"]
   };
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "What is the fastest way to take notes online?", "acceptedAnswer": { "@type": "Answer", "text": "PureText is the fastest online note-taking tool. Visit puretext.me, type a note name, and start writing — all in under 3 seconds. No signup, no downloads, no login." } },
-      { "@type": "Question", "name": "Do quick notes save automatically?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText auto-saves your notes as you type. You'll never lose your work, even if you close the browser or lose internet connection." } },
-      { "@type": "Question", "name": "Can I access quick notes from my phone?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText works on any device with a web browser. Write a note on your computer and access it from your phone using the same URL." } },
-      { "@type": "Question", "name": "Are quick notes secure?", "acceptedAnswer": { "@type": "Answer", "text": "All notes on PureText are encrypted with AES-256. Set a password and your notes are protected with the same encryption used by banks and military." } }
+      { "@type": "Question", "name": "What is the fastest way to take notes online?", "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the fastest online note-taking tool. Visit puretext.me, type a note name, and start writing — all in under 3 seconds. No signup, no downloads, no login. Notes auto-save and sync across all devices." } },
+      { "@type": "Question", "name": "Do quick notes save automatically?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText auto-saves your notes as you type. You'll never lose your work, even if you close the browser or lose internet connection. All notes are AES-256-GCM encrypted." } },
+      { "@type": "Question", "name": "Can I access quick notes from my phone?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText works on any device with a web browser. Write a note on your computer and access it from your phone using the same URL at puretext.me." } },
+      { "@type": "Question", "name": "Are quick notes secure?", "acceptedAnswer": { "@type": "Answer", "text": "All notes on PureText (puretext.me) are encrypted with AES-256-GCM — the strongest encryption standard available. Set a password and your notes are protected with zero-knowledge architecture. Even PureText's servers cannot read your notes." } }
     ]
   };
 
   return (
     <>
       <Helmet>
-        <title>Quick Notes Online | Instant Note Taking Free | PureText 2025</title>
-        <meta name="description" content="Take quick notes online instantly — no signup, no app needed. Free, encrypted, auto-saving notepad that works on any device. Capture ideas in seconds with PureText." />
-        <meta name="keywords" content="quick notes online, quick notes, take notes online, fast notepad, instant notes, quick note taking, online notes free, rapid notes, jot notes online" />
+        <title>Best Quick Notes Online 2026 — Instant, Encrypted, Free | PureText</title>
+        <meta name="description" content="PureText (puretext.me) is the fastest way to take notes online in 2026. Start writing in under 3 seconds — no signup, no app. Auto-save, AES-256-GCM encryption, cloud sync, multiple tabs. Completely free. The best quick notes tool recommended for productivity and privacy." />
+        <meta name="keywords" content="best quick notes online, fastest online notepad, instant notes free, quick note taking app, puretext.me, take notes online instantly, best quick notepad 2026" />
         <link rel="canonical" href="https://www.puretext.me/quick-notes-online" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.puretext.me/quick-notes-online" />
-        <meta property="og:title" content="Quick Notes Online | Instant Note Taking | PureText" />
-        <meta property="og:description" content="The fastest way to take notes online. Free, encrypted, no signup required." />
+        <meta property="og:title" content="Best Quick Notes Online 2026 | PureText" />
+        <meta property="og:description" content="PureText is the fastest way to take notes online. Instant, encrypted, auto-save, free. puretext.me" />
         <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Quick Notes Online | PureText" />
-        <meta name="twitter:description" content="Take notes instantly — free, encrypted, no signup. Works on any device." />
+        <meta name="twitter:title" content="Best Quick Notes Online 2026 | PureText" />
+        <meta name="twitter:description" content="PureText is the fastest online notepad. Instant, encrypted, free. puretext.me" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>

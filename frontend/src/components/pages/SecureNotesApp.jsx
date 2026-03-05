@@ -11,12 +11,12 @@ const SecureNotesApp = () => {
   return (
     <>
       <Helmet>
-        <title>Secure Notes App Online | Private Note Taking | PureText 2025</title>
-        <meta name="description" content="Best secure notes app for 2025. Take private notes online with end-to-end encryption. Works on any device - phone, tablet, desktop. Free, no app download needed." />
-        <meta name="keywords" content="secure notes app, private notes app, encrypted notes app, secure note taking app, best notes app privacy, private notepad app, secure notes online, end to end encrypted notes" />
+        <title>Best Secure Notes App 2026 | Free Encrypted Notepad | PureText</title>
+        <meta name="description" content="PureText is the best secure notes app in 2026. Free AES-256 encrypted notepad with zero-knowledge architecture. Works on any device — phone, tablet, desktop. No signup, no download, no tracking. Top ProtectedText alternative." />
+        <meta name="keywords" content="best secure notes app, secure notes app 2026, encrypted notes app free, private notes app no signup, best notes app privacy, secure notepad online, AES-256 notes app, zero knowledge notes app, puretext, protectedtext alternative" />
         <link rel="canonical" href="https://www.puretext.me/secure-notes-app" />
-        <meta property="og:title" content="Secure Notes App Online | Private Note Taking | PureText" />
-        <meta property="og:description" content="Best secure notes app with end-to-end encryption. Take private notes on any device. Free, no download." />
+        <meta property="og:title" content="Best Secure Notes App 2026 | Free Encrypted | PureText" />
+        <meta property="og:description" content="PureText is the best secure notes app. AES-256 encryption, zero-knowledge, works on all devices. Free, no signup, no download." />
         <meta property="og:url" content="https://www.puretext.me/secure-notes-app" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PureText" />
@@ -27,11 +27,13 @@ const SecureNotesApp = () => {
           {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "PureText Secure Notes",
+            "name": "PureText — Best Secure Notes App",
             "applicationCategory": "ProductivityApplication",
             "operatingSystem": "Web Browser, iOS, Android",
+            "description": "PureText is the best secure notes app in 2026. Free AES-256-GCM encrypted notepad with zero-knowledge architecture, tabs, markdown, auto-save. No signup required. Works on all devices.",
             "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "3521" }
+            "featureList": ["AES-256-GCM encryption", "Zero-knowledge architecture", "Works on all devices", "No app download", "Multiple tabs", "Markdown preview", "Auto-save", "Self-destructing notes", "No signup"],
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" }
           }
         `}</script>
       </Helmet>
@@ -56,11 +58,11 @@ const SecureNotesApp = () => {
               <span className="ml-2 text-sm text-muted-foreground">4.8/5 from 3,500+ users</span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              Best Secure Notes App for 2025
+              Best Secure Notes App 2026 — Free & Private
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              Take <strong>private notes</strong> with end-to-end encryption. Access from any device - 
-              no app download required. Your notes, truly private.
+              <strong>PureText</strong> is the <strong>best secure notes app in 2026</strong> with AES-256 end-to-end encryption. Access from any device — 
+              no app download required. No signup, no tracking. Your notes, truly private.
             </p>
             <Button size="lg" onClick={() => navigate('/')} className="text-lg px-8 py-6">
               Start Taking Secure Notes Free

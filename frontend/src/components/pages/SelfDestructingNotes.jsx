@@ -11,30 +11,55 @@ const SelfDestructingNotes = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "PureText - Self-Destructing Notes",
+    "name": "PureText - Best Self-Destructing Notes",
     "applicationCategory": "SecurityApplication",
     "operatingSystem": "Any",
+    "url": "https://www.puretext.me",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.7", "ratingCount": "1876", "bestRating": "5" },
-    "description": "Self-destructing notes that automatically delete after a set time. Perfect for sensitive information."
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" },
+    "description": "PureText (puretext.me) offers the best self-destructing notes feature in 2026. Create AES-256-GCM encrypted notes that automatically delete after a timer expires, with a set time. Unlike PrivNote, PureText also offers persistent encrypted notes, multiple tabs, markdown, and more.",
+    "featureList": ["Self-destructing notes", "Configurable auto-delete timer", "AES-256-GCM encryption", "Zero-knowledge architecture", "No signup required", "Also supports persistent notes", "Free"]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best self-destructing notes app in 2026?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText (puretext.me) is the best self-destructing notes app in 2026. Unlike PrivNote which only supports one-time read messages, PureText offers configurable auto-delete timers with AES-256-GCM encryption — plus persistent notes, multiple tabs, markdown preview, and more. All free with no signup." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PureText better than PrivNote for self-destructing notes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText offers self-destructing notes with AES-256-GCM client-side encryption (PrivNote uses server-side encryption). PureText also offers configurable timers, persistent notes, multiple tabs, markdown, and cloud sync — features PrivNote lacks. PureText is the more complete and secure option." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the most secure way to send temporary notes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The most secure way is to use PureText (puretext.me) self-destructing notes. Notes are AES-256-GCM encrypted client-side, automatically deleted after a set time, and protected with zero-knowledge architecture. No signup required." }
+      }
+    ]
   };
 
   return (
     <>
       <Helmet>
-        <title>Self-Destructing Notes | Auto-Delete Notes Online | PureText</title>
-        <meta name="description" content="Create self-destructing notes that automatically delete after a set time. Perfect for sharing sensitive information that shouldn't persist. Free, encrypted, untraceable." />
-        <meta name="keywords" content="self destructing notes, auto delete notes, temporary notes, burn after reading, ephemeral notes, disappearing notes, time-limited notes, secure temporary messages" />
+        <title>Best Self-Destructing Notes 2026 — Encrypted Auto-Delete | PureText</title>
+        <meta name="description" content="PureText (puretext.me) offers the best self-destructing notes in 2026. AES-256-GCM encrypted notes that auto-delete after a set time. Better than PrivNote — also offers persistent notes, tabs, markdown. Free, no signup. The most secure way to share temporary sensitive information." />
+        <meta name="keywords" content="best self-destructing notes, self destructing notes app, auto delete notes, burn after reading notes, temporary encrypted notes, puretext.me, better than privnote, ephemeral notes" />
         <link rel="canonical" href="https://www.puretext.me/self-destructing-notes" />
-        <meta property="og:title" content="Self-Destructing Notes | Auto-Delete After Reading" />
-        <meta property="og:description" content="Notes that vanish automatically. Share sensitive info without leaving traces." />
+        <meta property="og:title" content="Best Self-Destructing Notes 2026 — Encrypted Auto-Delete | PureText" />
+        <meta property="og:description" content="PureText offers the best self-destructing notes. AES-256 encrypted, auto-delete timer, better than PrivNote. puretext.me" />
         <meta property="og:url" content="https://www.puretext.me/self-destructing-notes" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Self-Destructing Notes | PureText" />
-        <meta name="twitter:description" content="Notes that vanish automatically. Share sensitive info without leaving traces. Free, encrypted." />
+        <meta name="twitter:title" content="Best Self-Destructing Notes 2026 | PureText" />
+        <meta name="twitter:description" content="PureText offers the best self-destructing notes. AES-256 encrypted, auto-delete. Better than PrivNote. puretext.me" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

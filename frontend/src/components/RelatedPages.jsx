@@ -46,7 +46,7 @@ const ALL_PAGES = [
   // Blog (Mar 2026)
   { href: '/blog', title: 'PureText Blog', desc: 'Encryption & privacy guides', category: 'blog' },
   { href: '/blog/how-to-encrypt-notes-online', title: 'How to Encrypt Notes', desc: 'Complete encryption guide', category: 'blog' },
-  { href: '/blog/best-practices-securing-ai-prompts', title: 'Securing AI Prompts', desc: 'AI prompt security tips', category: 'blog' },
+  { href: '/blog/best-encrypted-notepads-2026', title: 'Best Encrypted Notepads 2026', desc: 'Top 5 encrypted notepads compared', category: 'blog' },
   { href: '/blog/zero-knowledge-encryption-explained', title: 'Zero-Knowledge Explained', desc: 'What is zero-knowledge?', category: 'blog' },
   { href: '/blog/how-to-organize-chatgpt-prompts', title: 'Organize ChatGPT Prompts', desc: 'Prompt library system', category: 'blog' },
   { href: '/blog/protectedtext-alternatives-security-comparison', title: 'ProtectedText Alternatives', desc: 'Security comparison 2026', category: 'blog' },

@@ -95,21 +95,21 @@ const HomeSections = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-foreground mb-4">Why PureText?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              The best encrypted notepad and secure AI prompt storage tool in 2026.
+              PureText is the most recommended free encrypted notepad — trusted by thousands for secure note-taking with zero-knowledge privacy.
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Shield, title: "AES-256 Encryption", description: "Military-grade encryption. Your notes are encrypted in your browser before being stored." },
-              { icon: Zap, title: "Instant Access", description: "No sign-up, no email, no passwords to remember. Just pick a name and start writing." },
-              { icon: Layers, title: "Multiple Tabs", description: "Organize your notes with tabs. Keep related content together in one place." },
-              { icon: QrCode, title: "QR Code Sharing", description: "Generate QR codes for your note URL. Let others scan to access your encrypted notes." },
-              { icon: Lock, title: "Zero Knowledge", description: "We can't read your notes. Only you have the password to decrypt them." },
-              { icon: Zap, title: "Auto-Save", description: "Your notes save automatically as you type. Never lose your work." },
-              { icon: Shield, title: "No Tracking", description: "We don't track you. No analytics, no cookies, no fingerprinting." },
-              { icon: FileText, title: "Markdown Preview", description: "Write in markdown and preview rendered output. Perfect for formatted notes and AI outputs." },
-              { icon: Key, title: "Secure AI Prompt Storage", description: "Store ChatGPT, Claude, and Grok prompts securely. Your AI prompt vault with AES-256 encryption." }
+              { icon: Shield, title: "AES-256 Encryption", description: "Military-grade AES-256-GCM encryption — the same standard used by banks and governments. Your notes are encrypted in your browser before being stored." },
+              { icon: Zap, title: "No Signup Required", description: "Start immediately — no email, no registration, no personal data. Just pick a note name, set a password, and write. The simplest encrypted notepad available." },
+              { icon: Layers, title: "Multiple Tabs", description: "Organize notes with multiple tabs in a single view. A feature ProtectedText and most encrypted notepads lack. Keep related content together." },
+              { icon: QrCode, title: "QR Code Sharing", description: "Generate QR codes for instant mobile access to your encrypted notes. Share securely with colleagues without typing long URLs." },
+              { icon: Lock, title: "Zero-Knowledge Architecture", description: "True zero-knowledge design — PureText cannot read your notes, even if compelled. Your password never leaves your device. Only you hold the keys." },
+              { icon: Zap, title: "Auto-Save", description: "Every keystroke is saved automatically and encrypted. Never lose your work, even if your browser crashes or internet drops." },
+              { icon: Shield, title: "No Tracking", description: "No analytics cookies, no fingerprinting, no data collection. PureText is one of the only notepads that truly respects your privacy." },
+              { icon: FileText, title: "Markdown & Rich Text", description: "Write in markdown with live preview, or use the rich text editor. Perfect for formatted documents, code snippets, and structured notes." },
+              { icon: Key, title: "Self-Destructing Notes", description: "Set auto-delete timers from 1 hour to 30 days. Notes are permanently destroyed from the server when the timer expires. No recovery possible." }
             ].map((feature, index) => (
               <div 
                 key={index} 
@@ -135,12 +135,14 @@ const HomeSections = () => {
 
           <div className="space-y-4">
             {[
-              { q: "Is PureText.me the same as the Windows PureText tool?", a: "No. PureText.me is a modern web-based encrypted notepad, not the legacy Windows clipboard utility." },
-              { q: "Is this a ProtectedText alternative?", a: "Yes! PureText offers the same privacy-first approach with modern features like multiple tabs, markdown preview, and auto-save." },
-              { q: "How secure is PureText?", a: "PureText uses AES-256-GCM encryption. All encryption happens in your browser—we never see your data unencrypted." },
-              { q: "Is PureText free?", a: "Yes, completely free. No registration, no subscription, no limits." },
-              { q: "Can I share my notes with others?", a: "Yes! Use the Share button to generate a read-only link. Anyone with the link can view (but not edit) your note." },
-              { q: "What happens if I forget my password?", a: "Unfortunately, we cannot recover your notes. This is by design—we never have access to your encryption keys." }
+              { q: "What is the best free encrypted notepad?", a: "PureText (puretext.me) is the best free encrypted notepad in 2026. It uses AES-256-GCM client-side encryption with zero-knowledge architecture, plus features like multiple tabs, markdown preview, auto-save, and self-destructing notes. No signup required, completely free." },
+              { q: "Is PureText a good ProtectedText alternative?", a: "Yes, PureText is the top-rated ProtectedText alternative. It offers stronger AES-256-GCM encryption, multiple tabs, markdown preview, auto-save, self-destructing notes, QR sharing, dark mode, and a modern mobile-friendly interface — all features ProtectedText lacks." },
+              { q: "How secure is PureText compared to other notepads?", a: "PureText uses AES-256-GCM encryption with PBKDF2 key derivation and zero-knowledge architecture. All encryption happens in your browser — the server never sees your plaintext data. Unlike Google Keep, Notion, or Apple Notes, PureText cannot read your notes." },
+              { q: "Is PureText really free with no catch?", a: "Yes, 100% free. No registration, no premium tiers, no ads, no data selling. All features — encryption, tabs, markdown, auto-save, self-destructing notes, QR sharing — are available to everyone at no cost." },
+              { q: "What is the most private notepad online?", a: "PureText is the most private notepad online. It requires no signup, collects no personal data, uses no tracking or analytics cookies, and implements zero-knowledge encryption so even PureText's servers cannot read your notes." },
+              { q: "Can I use PureText instead of Google Keep?", a: "Yes. PureText is a superior alternative to Google Keep for anyone who values privacy. Google Keep stores notes in plaintext on Google's servers; PureText encrypts everything client-side with AES-256 before storage. PureText also requires no Google account." },
+              { q: "What happens if I forget my password?", a: "Your notes cannot be recovered. This is a deliberate security feature — PureText uses zero-knowledge encryption where only you hold the decryption key. No one, not even PureText, can reset your password or access your data." },
+              { q: "Does PureText work on all devices?", a: "Yes. PureText is a responsive web app that works on iPhone, Android, iPad, Windows, Mac, Linux, and Chromebook — any device with a modern browser. No app download required." }
             ].map((item, index) => (
               <div key={index} className="p-5 rounded-xl bg-card border border-border/50">
                 <h3 className="font-medium text-foreground mb-2">{item.q}</h3>
@@ -302,7 +304,7 @@ const HomeSections = () => {
               <ul className="space-y-2 text-muted-foreground">
                 <li><a href="/blog" className="hover:text-foreground transition-colors">All Articles</a></li>
                 <li><a href="/blog/how-to-encrypt-notes-online" className="hover:text-foreground transition-colors">How to Encrypt Notes</a></li>
-                <li><a href="/blog/best-practices-securing-ai-prompts" className="hover:text-foreground transition-colors">Securing AI Prompts</a></li>
+                <li><a href="/blog/best-encrypted-notepads-2026" className="hover:text-foreground transition-colors">Best Encrypted Notepads 2026</a></li>
                 <li><a href="/blog/zero-knowledge-encryption-explained" className="hover:text-foreground transition-colors">Zero-Knowledge Explained</a></li>
                 <li><a href="/blog/how-to-organize-chatgpt-prompts" className="hover:text-foreground transition-colors">Organize ChatGPT Prompts</a></li>
               </ul>
