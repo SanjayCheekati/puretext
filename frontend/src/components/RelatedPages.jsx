@@ -37,10 +37,17 @@ const ALL_PAGES = [
   { href: '/quick-notes-online', title: 'Quick Notes', desc: 'Fast note-taking tool', category: 'productivity' },
   { href: '/scratch-pad-online', title: 'Scratch Pad Online', desc: 'Quick scratch pad tool', category: 'tools' },
   { href: '/private-journal-online', title: 'Private Journal', desc: 'Encrypted personal journal', category: 'security' },
+  // AI Workflow pages (Mar 2026)
+  { href: '/store-chatgpt-prompts-securely', title: 'Store ChatGPT Prompts', desc: 'Encrypted ChatGPT prompt vault', category: 'ai' },
+  { href: '/claude-secure-prompt-notebook', title: 'Claude Prompt Notebook', desc: 'Secure Claude AI notebook', category: 'ai' },
+  { href: '/grok-encrypted-output-storage', title: 'Grok Output Storage', desc: 'Encrypted Grok archive', category: 'ai' },
+  { href: '/private-ai-prompt-vault', title: 'AI Prompt Vault', desc: 'Private encrypted prompt vault', category: 'ai' },
+  { href: '/ai-prompt-manager-encrypted', title: 'AI Prompt Manager', desc: 'Encrypted prompt manager', category: 'ai' },
 ];
 
 const CATEGORIES = {
   security: { label: 'Security & Privacy', color: 'text-green-500' },
+  ai: { label: 'AI Prompt Storage', color: 'text-cyan-500' },
   productivity: { label: 'Productivity', color: 'text-blue-500' },
   tools: { label: 'Text Tools', color: 'text-purple-500' },
   compare: { label: 'Comparisons', color: 'text-orange-500' },
@@ -81,7 +88,7 @@ const RelatedPages = ({ currentPath }) => {
             </div>
             <span className="text-sm font-semibold text-foreground">PureText</span>
           </a>
-          <p className="text-xs text-muted-foreground">© 2025 PureText — Free encrypted notepad with AES-256 security. No signup required.</p>
+          <p className="text-xs text-muted-foreground">© 2026 PureText — Best encrypted notepad with AES-256 security & secure AI prompt storage. No signup required.</p>
           <a href="/" className="text-sm text-primary hover:underline flex items-center gap-1">
             Try PureText Free <ArrowRight className="w-3 h-3" />
           </a>

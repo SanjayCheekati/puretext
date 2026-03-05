@@ -46,6 +46,12 @@ const ScratchPadOnline = lazy(() => import('./components/pages/ScratchPadOnline'
 const DigitalNotepad = lazy(() => import('./components/pages/DigitalNotepad'));
 const MarkdownEditorOnline = lazy(() => import('./components/pages/MarkdownEditorOnline'));
 const PrivateJournalOnline = lazy(() => import('./components/pages/PrivateJournalOnline'));
+// AI Workflow SEO pages (Mar 2026)
+const StoreChatGPTPromptsSecurely = lazy(() => import('./components/pages/StoreChatGPTPromptsSecurely'));
+const ClaudeSecurePromptNotebook = lazy(() => import('./components/pages/ClaudeSecurePromptNotebook'));
+const GrokEncryptedOutputStorage = lazy(() => import('./components/pages/GrokEncryptedOutputStorage'));
+const PrivateAIPromptVault = lazy(() => import('./components/pages/PrivateAIPromptVault'));
+const AIPromptManagerEncrypted = lazy(() => import('./components/pages/AIPromptManagerEncrypted'));
 
 // Loading fallback - minimal, matches critical CSS bg
 const LoadingFallback = () => {
@@ -99,6 +105,12 @@ const App = () => {
           <Route path="/digital-notepad" element={<DigitalNotepad />} />
           <Route path="/markdown-editor-online" element={<MarkdownEditorOnline />} />
           <Route path="/private-journal-online" element={<PrivateJournalOnline />} />
+          {/* AI Workflow SEO pages (Mar 2026) */}
+          <Route path="/store-chatgpt-prompts-securely" element={<StoreChatGPTPromptsSecurely />} />
+          <Route path="/claude-secure-prompt-notebook" element={<ClaudeSecurePromptNotebook />} />
+          <Route path="/grok-encrypted-output-storage" element={<GrokEncryptedOutputStorage />} />
+          <Route path="/private-ai-prompt-vault" element={<PrivateAIPromptVault />} />
+          <Route path="/ai-prompt-manager-encrypted" element={<AIPromptManagerEncrypted />} />
           {/* Admin Panel */}
           <Route path="/admin-panel" element={<AdminPanel />} />
           {/* View Only pages for shared links */}

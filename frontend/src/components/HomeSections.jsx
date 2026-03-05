@@ -95,7 +95,7 @@ const HomeSections = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-foreground mb-4">Why PureText?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              A modern, privacy-first alternative to ProtectedText with powerful features.
+              The best encrypted notepad and secure AI prompt storage tool in 2026.
             </p>
           </div>
 
@@ -107,7 +107,9 @@ const HomeSections = () => {
               { icon: QrCode, title: "QR Code Sharing", description: "Generate QR codes for your note URL. Let others scan to access your encrypted notes." },
               { icon: Lock, title: "Zero Knowledge", description: "We can't read your notes. Only you have the password to decrypt them." },
               { icon: Zap, title: "Auto-Save", description: "Your notes save automatically as you type. Never lose your work." },
-              { icon: Shield, title: "No Tracking", description: "We don't track you. No analytics, no cookies, no fingerprinting." }
+              { icon: Shield, title: "No Tracking", description: "We don't track you. No analytics, no cookies, no fingerprinting." },
+              { icon: FileText, title: "Markdown Preview", description: "Write in markdown and preview rendered output. Perfect for formatted notes and AI outputs." },
+              { icon: Key, title: "Secure AI Prompt Storage", description: "Store ChatGPT, Claude, and Grok prompts securely. Your AI prompt vault with AES-256 encryption." }
             ].map((feature, index) => (
               <div 
                 key={index} 
@@ -259,7 +261,7 @@ const HomeSections = () => {
       {/* Footer with SEO Links */}
       <footer className="py-12 px-6 border-t border-border/50">
         <div className="max-w-6xl mx-auto">
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12 text-sm">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12 text-sm">
             <div>
               <h3 className="font-semibold text-foreground mb-4">Products</h3>
               <ul className="space-y-2 text-muted-foreground">
@@ -296,15 +298,13 @@ const HomeSections = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-foreground mb-4">Tools & Compare</h3>
+              <h3 className="font-semibold text-foreground mb-4">AI Prompt Storage</h3>
               <ul className="space-y-2 text-muted-foreground">
-                <li><a href="/protectedtext-alternative" className="hover:text-foreground transition-colors">ProtectedText Alternative</a></li>
-                <li><a href="/best-protectedtext-alternatives" className="hover:text-foreground transition-colors">Best Alternatives 2026</a></li>
-                <li><a href="/puretext-vs-protectedtext" className="hover:text-foreground transition-colors">vs ProtectedText</a></li>
-                <li><a href="/puretext-vs-notion-google-keep" className="hover:text-foreground transition-colors">vs Notion & Google Keep</a></li>
-                <li><a href="/online-text-editor" className="hover:text-foreground transition-colors">Online Text Editor</a></li>
-                <li><a href="/scratch-pad-online" className="hover:text-foreground transition-colors">Scratch Pad Online</a></li>
-                <li><a href="/write-notes-online" className="hover:text-foreground transition-colors">Write Notes Online</a></li>
+                <li><a href="/store-chatgpt-prompts-securely" className="hover:text-foreground transition-colors">Store ChatGPT Prompts</a></li>
+                <li><a href="/claude-secure-prompt-notebook" className="hover:text-foreground transition-colors">Claude Prompt Notebook</a></li>
+                <li><a href="/grok-encrypted-output-storage" className="hover:text-foreground transition-colors">Grok Output Storage</a></li>
+                <li><a href="/private-ai-prompt-vault" className="hover:text-foreground transition-colors">AI Prompt Vault</a></li>
+                <li><a href="/ai-prompt-manager-encrypted" className="hover:text-foreground transition-colors">AI Prompt Manager</a></li>
               </ul>
             </div>
           </div>

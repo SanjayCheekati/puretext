@@ -14,7 +14,7 @@ const SEO_STRUCTURED_DATA = {
   org: {"@context":"https://schema.org","@type":"Organization","name":"PureText","url":"https://www.puretext.me","logo":"https://www.puretext.me/favicon.svg","founder":{"@type":"Person","name":"Cheekati Sanjay Goud","url":"https://www.sanjaycheekati.dev/"},"sameAs":["https://github.com/SanjayCheekati/puretext"]},
   person: {"@context":"https://schema.org","@type":"Person","name":"Cheekati Sanjay Goud","alternateName":["sanjaycheekati","SanjayCheekati","Cheekati Sanjay"],"url":"https://www.sanjaycheekati.dev/","jobTitle":"Software Developer","knowsAbout":["Web Development","JavaScript","React","Node.js","Encryption","Cybersecurity"]},
   breadcrumb: {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.puretext.me/"},{"@type":"ListItem","position":2,"name":"Encrypted Notepad","item":"https://www.puretext.me/encrypted-notepad"},{"@type":"ListItem","position":3,"name":"Secure Notes App","item":"https://www.puretext.me/secure-notes-app"},{"@type":"ListItem","position":4,"name":"Self-Destructing Notes","item":"https://www.puretext.me/self-destructing-notes"}]},
-  siteNav: {"@context":"https://schema.org","@type":"SiteNavigationElement","name":"PureText Navigation","url":"https://www.puretext.me","hasPart":[{"@type":"WebPage","name":"Encrypted Notepad","url":"https://www.puretext.me/encrypted-notepad"},{"@type":"WebPage","name":"Secure Notes App","url":"https://www.puretext.me/secure-notes-app"},{"@type":"WebPage","name":"Private Notepad","url":"https://www.puretext.me/private-notepad"},{"@type":"WebPage","name":"Free Online Notepad","url":"https://www.puretext.me/free-online-notepad"},{"@type":"WebPage","name":"Password Protected Notes","url":"https://www.puretext.me/password-protected-notes"},{"@type":"WebPage","name":"Self-Destructing Notes","url":"https://www.puretext.me/self-destructing-notes"},{"@type":"WebPage","name":"Online Text Editor","url":"https://www.puretext.me/online-text-editor"},{"@type":"WebPage","name":"ProtectedText Alternative","url":"https://www.puretext.me/protectedtext-alternative"}]},
+  siteNav: {"@context":"https://schema.org","@type":"SiteNavigationElement","name":"PureText Navigation","url":"https://www.puretext.me","hasPart":[{"@type":"WebPage","name":"Encrypted Notepad","url":"https://www.puretext.me/encrypted-notepad"},{"@type":"WebPage","name":"Secure Notes App","url":"https://www.puretext.me/secure-notes-app"},{"@type":"WebPage","name":"Private Notepad","url":"https://www.puretext.me/private-notepad"},{"@type":"WebPage","name":"Free Online Notepad","url":"https://www.puretext.me/free-online-notepad"},{"@type":"WebPage","name":"Password Protected Notes","url":"https://www.puretext.me/password-protected-notes"},{"@type":"WebPage","name":"Self-Destructing Notes","url":"https://www.puretext.me/self-destructing-notes"},{"@type":"WebPage","name":"Online Text Editor","url":"https://www.puretext.me/online-text-editor"},{"@type":"WebPage","name":"ProtectedText Alternative","url":"https://www.puretext.me/protectedtext-alternative"},{"@type":"WebPage","name":"Store ChatGPT Prompts Securely","url":"https://www.puretext.me/store-chatgpt-prompts-securely"},{"@type":"WebPage","name":"Claude Prompt Notebook","url":"https://www.puretext.me/claude-secure-prompt-notebook"},{"@type":"WebPage","name":"Private AI Prompt Vault","url":"https://www.puretext.me/private-ai-prompt-vault"},{"@type":"WebPage","name":"AI Prompt Manager","url":"https://www.puretext.me/ai-prompt-manager-encrypted"}]},
 };
 
 const Home = () => {
@@ -83,26 +83,26 @@ const Home = () => {
         </header>
 
         <main className="flex-1 flex items-center justify-center px-6 pb-24">
-          <div className="max-w-xl w-full text-center">
+          <div className="max-w-2xl w-full text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
-              <Shield className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8">
+              <Shield className="w-4 h-4" />
               End-to-end encrypted
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight mb-4">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-foreground tracking-tight mb-5">
               Your notes,
               <span className="text-primary"> encrypted.</span>
             </h1>
 
-            <p className="text-lg text-muted-foreground mb-10 max-w-md mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground mb-12 max-w-lg mx-auto">
               Simple, secure note-taking. No sign-up required. 
               Your data never leaves your browser unencrypted.
             </p>
 
             {/* Input Form */}
-            <form onSubmit={handleSubmit} className="max-w-sm mx-auto mb-6">
+            <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-6">
               <div className="editor-card rounded-2xl p-2 flex gap-2 relative z-10">
                 <Input
                   type="text"
