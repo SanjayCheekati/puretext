@@ -43,11 +43,19 @@ const ALL_PAGES = [
   { href: '/grok-encrypted-output-storage', title: 'Grok Output Storage', desc: 'Encrypted Grok archive', category: 'ai' },
   { href: '/private-ai-prompt-vault', title: 'AI Prompt Vault', desc: 'Private encrypted prompt vault', category: 'ai' },
   { href: '/ai-prompt-manager-encrypted', title: 'AI Prompt Manager', desc: 'Encrypted prompt manager', category: 'ai' },
+  // Blog (Mar 2026)
+  { href: '/blog', title: 'PureText Blog', desc: 'Encryption & privacy guides', category: 'blog' },
+  { href: '/blog/how-to-encrypt-notes-online', title: 'How to Encrypt Notes', desc: 'Complete encryption guide', category: 'blog' },
+  { href: '/blog/best-practices-securing-ai-prompts', title: 'Securing AI Prompts', desc: 'AI prompt security tips', category: 'blog' },
+  { href: '/blog/zero-knowledge-encryption-explained', title: 'Zero-Knowledge Explained', desc: 'What is zero-knowledge?', category: 'blog' },
+  { href: '/blog/how-to-organize-chatgpt-prompts', title: 'Organize ChatGPT Prompts', desc: 'Prompt library system', category: 'blog' },
+  { href: '/blog/protectedtext-alternatives-security-comparison', title: 'ProtectedText Alternatives', desc: 'Security comparison 2026', category: 'blog' },
 ];
 
 const CATEGORIES = {
   security: { label: 'Security & Privacy', color: 'text-green-500' },
   ai: { label: 'AI Prompt Storage', color: 'text-cyan-500' },
+  blog: { label: 'Blog', color: 'text-pink-500' },
   productivity: { label: 'Productivity', color: 'text-blue-500' },
   tools: { label: 'Text Tools', color: 'text-purple-500' },
   compare: { label: 'Comparisons', color: 'text-orange-500' },

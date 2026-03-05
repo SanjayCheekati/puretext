@@ -261,7 +261,7 @@ const HomeSections = () => {
       {/* Footer with SEO Links */}
       <footer className="py-12 px-6 border-t border-border/50">
         <div className="max-w-6xl mx-auto">
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12 text-sm">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12 text-sm">
             <div>
               <h3 className="font-semibold text-foreground mb-4">Products</h3>
               <ul className="space-y-2 text-muted-foreground">
@@ -295,6 +295,16 @@ const HomeSections = () => {
                 <li><a href="/private-journal-online" className="hover:text-foreground transition-colors">Private Journal</a></li>
                 <li><a href="/temporary-notepad" className="hover:text-foreground transition-colors">Temporary Notepad</a></li>
                 <li><a href="/quick-notes-online" className="hover:text-foreground transition-colors">Quick Notes</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Blog</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/blog" className="hover:text-foreground transition-colors">All Articles</a></li>
+                <li><a href="/blog/how-to-encrypt-notes-online" className="hover:text-foreground transition-colors">How to Encrypt Notes</a></li>
+                <li><a href="/blog/best-practices-securing-ai-prompts" className="hover:text-foreground transition-colors">Securing AI Prompts</a></li>
+                <li><a href="/blog/zero-knowledge-encryption-explained" className="hover:text-foreground transition-colors">Zero-Knowledge Explained</a></li>
+                <li><a href="/blog/how-to-organize-chatgpt-prompts" className="hover:text-foreground transition-colors">Organize ChatGPT Prompts</a></li>
               </ul>
             </div>
             <div>

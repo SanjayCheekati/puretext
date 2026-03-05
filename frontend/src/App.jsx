@@ -52,6 +52,9 @@ const ClaudeSecurePromptNotebook = lazy(() => import('./components/pages/ClaudeS
 const GrokEncryptedOutputStorage = lazy(() => import('./components/pages/GrokEncryptedOutputStorage'));
 const PrivateAIPromptVault = lazy(() => import('./components/pages/PrivateAIPromptVault'));
 const AIPromptManagerEncrypted = lazy(() => import('./components/pages/AIPromptManagerEncrypted'));
+// Blog (Mar 2026)
+const BlogList = lazy(() => import('./components/BlogList'));
+const BlogPost = lazy(() => import('./components/BlogPost'));
 
 // Loading fallback - minimal, matches critical CSS bg
 const LoadingFallback = () => {
@@ -111,6 +114,9 @@ const App = () => {
           <Route path="/grok-encrypted-output-storage" element={<GrokEncryptedOutputStorage />} />
           <Route path="/private-ai-prompt-vault" element={<PrivateAIPromptVault />} />
           <Route path="/ai-prompt-manager-encrypted" element={<AIPromptManagerEncrypted />} />
+          {/* Blog */}
+          <Route path="/blog" element={<BlogList />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           {/* Admin Panel */}
           <Route path="/admin-panel" element={<AdminPanel />} />
           {/* View Only pages for shared links */}
