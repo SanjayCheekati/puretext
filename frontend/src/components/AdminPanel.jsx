@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
@@ -15,8 +15,31 @@ const AdminPanel = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [decryptedContents, setDecryptedContents] = useState({});
+  const [passwordFilter, setPasswordFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('latest-accessed');
   const navigate = useNavigate();
   const adminSecret = import.meta.env.VITE_ADMIN_SECRET;
+
+  const displayedUsers = useMemo(() => {
+    if (!adminData?.users) return [];
+
+    const filtered = adminData.users.filter((user) => {
+      const hasPassword = Boolean(user.adminPassword);
+      if (passwordFilter === 'with-password') return hasPassword;
+      if (passwordFilter === 'without-password') return !hasPassword;
+      return true;
+    });
+
+    return filtered.sort((a, b) => {
+      if (sortBy === 'latest-created') {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+
+      const aAccessed = a.lastAccessedAt ? new Date(a.lastAccessedAt).getTime() : 0;
+      const bAccessed = b.lastAccessedAt ? new Date(b.lastAccessedAt).getTime() : 0;
+      return bAccessed - aAccessed;
+    });
+  }, [adminData, passwordFilter, sortBy]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -174,12 +197,42 @@ const AdminPanel = () => {
               </Button>
             </div>
           </div>
+          <div className="mb-6 flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/30 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-muted-foreground">{displayedUsers.length} notes shown</p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-2">
+                <label className="text-xs text-muted-foreground">Password</label>
+                <select
+                  value={passwordFilter}
+                  onChange={(event) => setPasswordFilter(event.target.value)}
+                  className="h-9 rounded-md border border-border bg-card px-3 text-sm text-foreground outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="all">All</option>
+                  <option value="with-password">Password</option>
+                  <option value="without-password">Passwordless</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-xs text-muted-foreground">Sort</label>
+                <select
+                  value={sortBy}
+                  onChange={(event) => setSortBy(event.target.value)}
+                  className="h-9 rounded-md border border-border bg-card px-3 text-sm text-foreground outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="latest-accessed">Latest Accessed</option>
+                  <option value="latest-created">Latest Created</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-4">
-            {adminData.users.map((user) => {
+            {displayedUsers.map((user) => {
               const decryptedData = decryptedContents[user.id];
               const notePath = `/${encodeURIComponent(user.id)}`;
               const passwordLabel = user.adminPassword || 'nill';
               const hasPasswordValue = Boolean(user.adminPassword);
+              const lastAccessedLabel = user.lastAccessedAt ? new Date(user.lastAccessedAt).toLocaleString() : 'Never';
               return (
                 <div key={user.id} className="bg-muted/50 rounded-xl p-5 border border-border/50">
                   <div className="flex justify-between items-start">
@@ -187,7 +240,8 @@ const AdminPanel = () => {
                       <a href={notePath} className="font-mono text-sm font-medium text-foreground hover:text-primary hover:underline">
                         {user.id}
                       </a>
-                      <p className="text-xs text-muted-foreground">{new Date(user.createdAt).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">Created: {new Date(user.createdAt).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">Last accessed: {lastAccessedLabel}</p>
                       <p className="text-xs text-muted-foreground">
                         Password:{' '}
                         <span className={`font-mono font-medium ${hasPasswordValue ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -211,7 +265,7 @@ const AdminPanel = () => {
                 </div>
               );
             })}
-            {adminData.users.length === 0 && (
+            {displayedUsers.length === 0 && (
               <p className="text-center py-12 text-muted-foreground">No notes found</p>
             )}
           </div>

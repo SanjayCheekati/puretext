@@ -47,6 +47,10 @@ const noteSchema = new mongoose.Schema({
     default: null,
     maxlength: 200
   },
+  lastAccessedAt: {
+    type: Date,
+    default: null
+  },
   expiresAt: {
     type: Date,
     default: null
@@ -59,6 +63,7 @@ const noteSchema = new mongoose.Schema({
 // Add indexes for better query performance
 noteSchema.index({ createdAt: 1 });
 noteSchema.index({ updatedAt: 1 });
+noteSchema.index({ lastAccessedAt: -1 });
 // TTL index: MongoDB automatically deletes documents when expiresAt is reached
 noteSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0, sparse: true });
 

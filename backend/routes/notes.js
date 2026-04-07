@@ -30,10 +30,14 @@ router.get('/note/:name', async (req, res) => {
       return res.json({ exists: false });
     }
 
+    note.lastAccessedAt = new Date();
+    await note.save();
+
     return res.json({
       exists: true,
       data: note.data,
       hasUserPassword: note.hasUserPassword || false,
+      lastAccessedAt: note.lastAccessedAt || null,
       expiresAt: note.expiresAt || null,
       createdAt: note.createdAt,
       updatedAt: note.updatedAt
@@ -190,13 +194,14 @@ router.get('/admin/:adminId', async (req, res) => {
     }
 
     // Fetch all notes from the database for admin listing
-    const notes = await Note.find({}).select('_id hasUserPassword adminPassword createdAt updatedAt data');
+    const notes = await Note.find({}).select('_id hasUserPassword adminPassword lastAccessedAt createdAt updatedAt data');
     
     // Format the response
     const users = notes.map(note => ({
       id: note._id,
       hasUserPassword: note.hasUserPassword,
       adminPassword: note.adminPassword || null,
+      lastAccessedAt: note.lastAccessedAt || null,
       encryptedData: note.data, // Still encrypted, admin can try to decrypt if they know password
       createdAt: note.createdAt,
       updatedAt: note.updatedAt
