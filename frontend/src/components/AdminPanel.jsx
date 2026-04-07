@@ -179,6 +179,7 @@ const AdminPanel = () => {
               const decryptedData = decryptedContents[user.id];
               const notePath = `/${encodeURIComponent(user.id)}`;
               const passwordLabel = user.adminPassword || 'nill';
+              const hasPasswordValue = Boolean(user.adminPassword);
               return (
                 <div key={user.id} className="bg-muted/50 rounded-xl p-5 border border-border/50">
                   <div className="flex justify-between items-start">
@@ -187,7 +188,12 @@ const AdminPanel = () => {
                         {user.id}
                       </a>
                       <p className="text-xs text-muted-foreground">{new Date(user.createdAt).toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">Password: <span className="font-mono">{passwordLabel}</span></p>
+                      <p className="text-xs text-muted-foreground">
+                        Password:{' '}
+                        <span className={`font-mono font-medium ${hasPasswordValue ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                          {passwordLabel}
+                        </span>
+                      </p>
                       {decryptedData && !decryptedData.error && (
                         <div className="flex gap-1.5 mt-2">
                           {decryptedData.tabs?.map((tab, i) => (
