@@ -6,12 +6,11 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 const ADMIN_PANEL_PASSWORD = 'Sanjay@649893659901';
-const ADMIN_SESSION_KEY = 'puretext_admin_unlocked';
+const ADMIN_AUTO_LOCK_MS = 3 * 60 * 1000;
 
 const AdminPanel = () => {
   const [adminData, setAdminData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [authChecking, setAuthChecking] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
@@ -20,10 +19,32 @@ const AdminPanel = () => {
   const adminSecret = import.meta.env.VITE_ADMIN_SECRET;
 
   useEffect(() => {
-    const unlocked = sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
-    setIsAuthenticated(unlocked);
-    setAuthChecking(false);
-  }, []);
+    if (!isAuthenticated) return;
+
+    let lockTimer;
+    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+
+    const lockForInactivity = () => {
+      setIsAuthenticated(false);
+      setAdminData(null);
+      setDecryptedContents({});
+      setPasswordInput('');
+      setAuthError('Session locked due to inactivity. Please enter password again.');
+    };
+
+    const resetLockTimer = () => {
+      clearTimeout(lockTimer);
+      lockTimer = setTimeout(lockForInactivity, ADMIN_AUTO_LOCK_MS);
+    };
+
+    resetLockTimer();
+    activityEvents.forEach((eventName) => window.addEventListener(eventName, resetLockTimer));
+
+    return () => {
+      clearTimeout(lockTimer);
+      activityEvents.forEach((eventName) => window.removeEventListener(eventName, resetLockTimer));
+    };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -66,7 +87,6 @@ const AdminPanel = () => {
   const handleUnlock = (event) => {
     event.preventDefault();
     if (passwordInput === ADMIN_PANEL_PASSWORD) {
-      sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
       setIsAuthenticated(true);
       setAuthError('');
       setPasswordInput('');
@@ -77,7 +97,6 @@ const AdminPanel = () => {
   };
 
   const handleLock = () => {
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
     setIsAuthenticated(false);
     setAdminData(null);
     setDecryptedContents({});
@@ -99,14 +118,6 @@ const AdminPanel = () => {
     }
   };
 
-  if (authChecking) {
-    return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen gradient-bg flex items-center justify-center px-4">
@@ -120,7 +131,10 @@ const AdminPanel = () => {
               type="password"
               placeholder="Admin password"
               value={passwordInput}
-              onChange={(event) => setPasswordInput(event.target.value)}
+              onChange={(event) => {
+                setPasswordInput(event.target.value);
+                if (authError) setAuthError('');
+              }}
             />
             {authError && <p className="text-sm text-destructive">{authError}</p>}
 
