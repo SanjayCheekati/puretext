@@ -271,12 +271,19 @@ const NoteEditor = () => {
     }
   };
 
-  const handlePasswordSubmit = async (inputPassword) => {
+  const handlePasswordSubmit = async (inputPassword, confirmPassword = '') => {
     if (isPasswordProcessing.current) return;
     isPasswordProcessing.current = true;
 
     try {
       setPasswordError('');
+
+      if (passwordDialogMode === 'lock' || passwordDialogMode === 'change') {
+        if (inputPassword !== confirmPassword) {
+          setPasswordError('Passwords do not match');
+          return;
+        }
+      }
 
       if (passwordDialogMode === 'unlock') {
         // Decrypt existing note
@@ -309,7 +316,7 @@ const NoteEditor = () => {
           setIsLocked(false);
           setShowPasswordDialog(false);
           // Save immediately with new password
-          await saveNoteWithPassword(inputPassword);
+          await saveNoteWithPassword(inputPassword, confirmPassword);
         }
       } else if (passwordDialogMode === 'change') {
         // Change password
@@ -317,7 +324,7 @@ const NoteEditor = () => {
           setPassword(inputPassword);
           setShowPasswordDialog(false);
           // Save with new password
-          await saveNoteWithPassword(inputPassword);
+          await saveNoteWithPassword(inputPassword, confirmPassword);
         }
       }
     } catch (err) {
@@ -327,7 +334,7 @@ const NoteEditor = () => {
     }
   };
 
-  const saveNoteWithPassword = async (pwd) => {
+  const saveNoteWithPassword = async (pwd, adminPassword) => {
     if (!noteData || !noteName) return;
 
     try {
@@ -346,7 +353,7 @@ const NoteEditor = () => {
         existingToken = newToken;
       }
 
-      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true, expiresAt || undefined);
+      await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true, expiresAt || undefined, adminPassword);
       invalidateNoteCache(noteName);
       setIsDirty(false);
     } catch (err) {
@@ -608,11 +615,13 @@ const NoteEditor = () => {
 
   const handleLockNote = () => {
     setPasswordDialogMode('lock');
+    setPasswordError('');
     setShowPasswordDialog(true);
   };
 
   const handleChangePassword = () => {
     setPasswordDialogMode('change');
+    setPasswordError('');
     setShowPasswordDialog(true);
   };
 
@@ -775,6 +784,7 @@ const NoteEditor = () => {
   }
 
   const currentTab = noteData.tabs[noteData.activeTab] || noteData.tabs[0];
+  const needsConfirmPassword = passwordDialogMode === 'lock' || passwordDialogMode === 'change';
 
   return (
     <div className="min-h-screen gradient-bg">
@@ -1041,16 +1051,27 @@ const NoteEditor = () => {
           <form onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
-            handlePasswordSubmit(formData.get('password'));
+            handlePasswordSubmit(
+              String(formData.get('password') || ''),
+              String(formData.get('confirmPassword') || '')
+            );
           }}>
             <div className="space-y-4 py-4">
               <Input
                 type="password"
                 name="password"
-                placeholder="Enter password"
+                placeholder={needsConfirmPassword ? 'Enter new password' : 'Enter password'}
                 required
                 autoFocus
               />
+              {needsConfirmPassword && (
+                <Input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm password"
+                  required
+                />
+              )}
               {passwordError && (
                 <p className="text-sm text-red-600">{passwordError}</p>
               )}

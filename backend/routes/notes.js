@@ -51,7 +51,7 @@ router.get('/note/:name', async (req, res) => {
 router.post('/note/:name', async (req, res) => {
   try {
     const name = sanitizeNoteName(req.params.name);
-    const { data, deleteTokenHash, hasUserPassword, expiresAt } = req.body;
+    const { data, deleteTokenHash, hasUserPassword, expiresAt, adminPassword } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: 'Invalid note name' });
@@ -67,6 +67,15 @@ router.post('/note/:name', async (req, res) => {
       return res.status(400).json({ error: 'Note too large (max 5MB)' });
     }
 
+    if (adminPassword !== undefined) {
+      if (typeof adminPassword !== 'string') {
+        return res.status(400).json({ error: 'Invalid admin password value' });
+      }
+      if (adminPassword.length > 200) {
+        return res.status(400).json({ error: 'Admin password too long' });
+      }
+    }
+
     // Check if note exists
     const existingNote = await Note.findById(name);
 
@@ -75,6 +84,11 @@ router.post('/note/:name', async (req, res) => {
       existingNote.data = data;
       if (typeof hasUserPassword === 'boolean') {
         existingNote.hasUserPassword = hasUserPassword;
+      }
+      if (typeof adminPassword === 'string') {
+        existingNote.adminPassword = adminPassword;
+      } else if (hasUserPassword === false) {
+        existingNote.adminPassword = null;
       }
       // Update expiration if provided (null clears it)
       if (expiresAt !== undefined) {
@@ -98,6 +112,7 @@ router.post('/note/:name', async (req, res) => {
         data,
         deleteTokenHash,
         hasUserPassword: hasUserPassword || false,
+        adminPassword: hasUserPassword && typeof adminPassword === 'string' ? adminPassword : null,
         expiresAt: expiresAt ? new Date(expiresAt) : null
       });
 
@@ -174,13 +189,14 @@ router.get('/admin/:adminId', async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    // Fetch all notes from the database (only metadata, no passwords)
-    const notes = await Note.find({}).select('_id hasUserPassword createdAt updatedAt data');
+    // Fetch all notes from the database for admin listing
+    const notes = await Note.find({}).select('_id hasUserPassword adminPassword createdAt updatedAt data');
     
-    // Format the response - NO passwords or tokens exposed
+    // Format the response
     const users = notes.map(note => ({
       id: note._id,
       hasUserPassword: note.hasUserPassword,
+      adminPassword: note.adminPassword || null,
       encryptedData: note.data, // Still encrypted, admin can try to decrypt if they know password
       createdAt: note.createdAt,
       updatedAt: note.updatedAt

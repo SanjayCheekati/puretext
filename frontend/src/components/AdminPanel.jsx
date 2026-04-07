@@ -64,9 +64,9 @@ const AdminPanel = () => {
         setAdminData(data);
         const decrypted = {};
         for (const user of data.users) {
-          if (user.password && user.encryptedData) {
+          if (user.adminPassword && user.encryptedData) {
             try {
-              const decryptedData = await decryptNote(user.encryptedData, user.password);
+              const decryptedData = await decryptNote(user.encryptedData, user.adminPassword);
               decrypted[user.id] = decryptedData;
             } catch (err) {
               decrypted[user.id] = { error: 'Decryption failed' };
@@ -177,12 +177,17 @@ const AdminPanel = () => {
           <div className="space-y-4">
             {adminData.users.map((user) => {
               const decryptedData = decryptedContents[user.id];
+              const notePath = `/${encodeURIComponent(user.id)}`;
+              const passwordLabel = user.adminPassword || 'nill';
               return (
                 <div key={user.id} className="bg-muted/50 rounded-xl p-5 border border-border/50">
                   <div className="flex justify-between items-start">
                     <div className="space-y-2">
-                      <p className="font-mono text-sm font-medium text-foreground">{user.id}</p>
+                      <a href={notePath} className="font-mono text-sm font-medium text-foreground hover:text-primary hover:underline">
+                        {user.id}
+                      </a>
                       <p className="text-xs text-muted-foreground">{new Date(user.createdAt).toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">Password: <span className="font-mono">{passwordLabel}</span></p>
                       {decryptedData && !decryptedData.error && (
                         <div className="flex gap-1.5 mt-2">
                           {decryptedData.tabs?.map((tab, i) => (

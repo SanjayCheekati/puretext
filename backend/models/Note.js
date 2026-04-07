@@ -42,6 +42,11 @@ const noteSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  adminPassword: {
+    type: String,
+    default: null,
+    maxlength: 200
+  },
   expiresAt: {
     type: Date,
     default: null
