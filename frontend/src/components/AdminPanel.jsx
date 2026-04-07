@@ -3,16 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import { fetchAllUsers, deleteNoteAsAdmin } from '../api/notes';
 import { decryptNote } from '../utils/crypto';
 import { Button } from './ui/button';
+import { Input } from './ui/input';
+
+const ADMIN_PANEL_PASSWORD = 'Sanjay@649893659901';
+const ADMIN_SESSION_KEY = 'puretext_admin_unlocked';
 
 const AdminPanel = () => {
   const [adminData, setAdminData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [authError, setAuthError] = useState('');
   const [decryptedContents, setDecryptedContents] = useState({});
   const navigate = useNavigate();
   const adminSecret = import.meta.env.VITE_ADMIN_SECRET;
 
   useEffect(() => {
+    const unlocked = sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
+    setIsAuthenticated(unlocked);
+    setAuthChecking(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
     const loadData = async () => {
+      if (!adminSecret) {
+        alert('Admin panel is not configured');
+        navigate('/');
+        return;
+      }
+
+      setLoading(true);
       try {
         const data = await fetchAllUsers(adminSecret);
         setAdminData(data);
@@ -36,7 +61,29 @@ const AdminPanel = () => {
       }
     };
     loadData();
-  }, [adminSecret, navigate]);
+  }, [isAuthenticated, adminSecret, navigate]);
+
+  const handleUnlock = (event) => {
+    event.preventDefault();
+    if (passwordInput === ADMIN_PANEL_PASSWORD) {
+      sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+      setIsAuthenticated(true);
+      setAuthError('');
+      setPasswordInput('');
+      return;
+    }
+
+    setAuthError('Incorrect password');
+  };
+
+  const handleLock = () => {
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    setIsAuthenticated(false);
+    setAdminData(null);
+    setDecryptedContents({});
+    setPasswordInput('');
+    setAuthError('');
+  };
 
   const handleDeleteUser = async (userId) => {
     if (!window.confirm(`Delete "${userId}"? This cannot be undone.`)) return;
@@ -51,6 +98,41 @@ const AdminPanel = () => {
       alert('Failed to delete user');
     }
   };
+
+  if (authChecking) {
+    return (
+      <div className="min-h-screen gradient-bg flex items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen gradient-bg flex items-center justify-center px-4">
+        <div className="glass-card w-full max-w-md rounded-2xl border border-border/50 p-8">
+          <h1 className="text-2xl font-bold text-foreground">Admin Access</h1>
+          <p className="mt-2 text-muted-foreground">Enter the admin password to unlock this page.</p>
+
+          <form onSubmit={handleUnlock} className="mt-6 space-y-4">
+            <Input
+              autoFocus
+              type="password"
+              placeholder="Admin password"
+              value={passwordInput}
+              onChange={(event) => setPasswordInput(event.target.value)}
+            />
+            {authError && <p className="text-sm text-destructive">{authError}</p>}
+
+            <div className="flex gap-3">
+              <Button type="submit" className="flex-1">Unlock</Button>
+              <Button type="button" variant="outline" onClick={() => navigate('/')}>Back</Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -71,9 +153,12 @@ const AdminPanel = () => {
               <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
               <p className="text-muted-foreground mt-1">{adminData.count} notes stored</p>
             </div>
-            <Button variant="outline" onClick={() => navigate('/')}>
-              ← Back
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={handleLock}>Lock</Button>
+              <Button variant="outline" onClick={() => navigate('/')}>
+                ← Back
+              </Button>
+            </div>
           </div>
           <div className="space-y-4">
             {adminData.users.map((user) => {
