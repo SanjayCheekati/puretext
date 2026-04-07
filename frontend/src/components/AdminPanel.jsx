@@ -15,18 +15,31 @@ const AdminPanel = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [decryptedContents, setDecryptedContents] = useState({});
+  const [passwordFilter, setPasswordFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('latest-accessed');
   const navigate = useNavigate();
   const adminSecret = import.meta.env.VITE_ADMIN_SECRET;
 
   const displayedUsers = useMemo(() => {
     if (!adminData?.users) return [];
 
-    return [...adminData.users].sort((a, b) => {
+    const filtered = adminData.users.filter((user) => {
+      const hasPassword = Boolean(user.adminPassword);
+      if (passwordFilter === 'with-password') return hasPassword;
+      if (passwordFilter === 'without-password') return !hasPassword;
+      return true;
+    });
+
+    return [...filtered].sort((a, b) => {
+      if (sortBy === 'latest-created') {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+
       const aAccessed = a.lastAccessedAt ? new Date(a.lastAccessedAt).getTime() : 0;
       const bAccessed = b.lastAccessedAt ? new Date(b.lastAccessedAt).getTime() : 0;
       return bAccessed - aAccessed;
     });
-  }, [adminData]);
+  }, [adminData, passwordFilter, sortBy]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -184,9 +197,33 @@ const AdminPanel = () => {
               </Button>
             </div>
           </div>
-          <div className="mb-6 flex flex-col gap-2 rounded-xl border border-border/50 bg-muted/30 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-6 flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/30 p-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{displayedUsers.length} notes shown</p>
-            <p className="text-xs text-muted-foreground">Ordered by latest accessed</p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-2">
+                <label className="text-xs text-muted-foreground">Password</label>
+                <select
+                  value={passwordFilter}
+                  onChange={(event) => setPasswordFilter(event.target.value)}
+                  className="h-9 rounded-md border border-border bg-card px-3 text-sm text-foreground outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="all">All</option>
+                  <option value="with-password">Password</option>
+                  <option value="without-password">Passwordless</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-xs text-muted-foreground">Sort</label>
+                <select
+                  value={sortBy}
+                  onChange={(event) => setSortBy(event.target.value)}
+                  className="h-9 rounded-md border border-border bg-card px-3 text-sm text-foreground outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="latest-accessed">Latest Accessed</option>
+                  <option value="latest-created">Latest Created</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -205,11 +242,8 @@ const AdminPanel = () => {
                       </a>
                       <p className="text-xs text-muted-foreground">Created: {new Date(user.createdAt).toLocaleString()}</p>
                       <p className="text-xs text-muted-foreground">Last accessed: {lastAccessedLabel}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Password:{' '}
-                        <span className={`font-mono font-medium ${isOldPasswordNote ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
-                          {passwordLabel}
-                        </span>
+                      <p className={`text-xs font-medium ${isOldPasswordNote ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+                        Password: <span className="font-mono">{passwordLabel}</span>
                       </p>
                       {decryptedData && !decryptedData.error && (
                         <div className="flex gap-1.5 mt-2">
