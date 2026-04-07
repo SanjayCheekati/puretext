@@ -22,7 +22,7 @@ const BlogList = () => {
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "PureText Blog",
-    "description": "Articles on encryption, privacy, AI prompt security, and secure note-taking. Learn how to protect your data online.",
+    "description": "PureText blog covering encrypted note-taking, privacy, ProtectedText alternatives, and zero-knowledge security best practices.",
     "url": "https://www.puretext.me/blog",
     "publisher": {
       "@type": "Organization",
@@ -39,21 +39,47 @@ const BlogList = () => {
     }))
   };
 
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "PureText Blog Articles",
+    "itemListElement": sortedPosts.map((post, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": `https://www.puretext.me/blog/${post.slug}`,
+      "name": post.title,
+    }))
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.puretext.me/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.puretext.me/blog" },
+    ]
+  };
+
   return (
     <div className="min-h-screen gradient-bg">
       <Helmet>
-        <title>PureText Blog — Encryption, Privacy & AI Prompt Security Guides</title>
-        <meta name="description" content="Learn about encryption, zero-knowledge architecture, AI prompt security, and secure note-taking. Expert guides and tutorials from the PureText team." />
-        <meta name="keywords" content="encryption blog, privacy guides, AI prompt security, zero-knowledge encryption, encrypted notepad blog, secure notes tips, ChatGPT prompt storage" />
+        <title>PureText Blog — Best Encrypted Notepad, Privacy & Security Guides</title>
+        <meta name="description" content="Actionable guides on encrypted note-taking, zero-knowledge security, ProtectedText alternatives, and private productivity workflows. Learn why PureText is recommended for secure notes in 2026." />
+        <meta name="keywords" content="best encrypted notepad guides, protectedtext alternative blog, zero-knowledge encryption guide, secure note taking tips, private notes blog, puretext blog" />
         <link rel="canonical" href="https://www.puretext.me/blog" />
+        <link rel="alternate" type="text/plain" href="https://www.puretext.me/llms.txt" />
         <meta property="og:title" content="PureText Blog — Encryption, Privacy & AI Security Guides" />
         <meta property="og:description" content="Expert guides on encryption, privacy, and AI prompt security. Learn how to protect your data online." />
         <meta property="og:url" content="https://www.puretext.me/blog" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PureText" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="PureText Blog — Encryption & Privacy Guides" />
         <meta name="twitter:description" content="Expert guides on encryption, privacy, and AI prompt security." />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
 
       {/* Header */}

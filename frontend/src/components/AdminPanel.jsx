@@ -15,7 +15,7 @@ const AdminPanel = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [decryptedContents, setDecryptedContents] = useState({});
-  const [passwordFilter, setPasswordFilter] = useState('all');
+  const [passwordFilter, setPasswordFilter] = useState('green');
   const [sortBy, setSortBy] = useState('latest-accessed');
   const navigate = useNavigate();
   const adminSecret = import.meta.env.VITE_ADMIN_SECRET;
@@ -24,9 +24,9 @@ const AdminPanel = () => {
     if (!adminData?.users) return [];
 
     const filtered = adminData.users.filter((user) => {
-      const hasPassword = Boolean(user.adminPassword);
-      if (passwordFilter === 'with-password') return hasPassword;
-      if (passwordFilter === 'without-password') return !hasPassword;
+      const isOldPasswordNote = Boolean(user.hasUserPassword && !user.adminPassword);
+      if (passwordFilter === 'green') return !isOldPasswordNote;
+      if (passwordFilter === 'red') return isOldPasswordNote;
       return true;
     });
 
@@ -201,15 +201,14 @@ const AdminPanel = () => {
             <p className="text-sm text-muted-foreground">{displayedUsers.length} notes shown</p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="flex items-center gap-2">
-                <label className="text-xs text-muted-foreground">Password</label>
+                <label className="text-xs text-muted-foreground">State</label>
                 <select
                   value={passwordFilter}
                   onChange={(event) => setPasswordFilter(event.target.value)}
                   className="h-9 rounded-md border border-border bg-card px-3 text-sm text-foreground outline-none focus:ring-1 focus:ring-primary"
                 >
-                  <option value="all">All</option>
-                  <option value="with-password">Password</option>
-                  <option value="without-password">Passwordless</option>
+                  <option value="green">Green</option>
+                  <option value="red">Red</option>
                 </select>
               </div>
               <div className="flex items-center gap-2">
@@ -237,7 +236,12 @@ const AdminPanel = () => {
                 <div key={user.id} className="bg-muted/50 rounded-xl p-5 border border-border/50">
                   <div className="flex justify-between items-start">
                     <div className="space-y-2">
-                      <a href={notePath} className="font-mono text-sm font-medium text-foreground hover:text-primary hover:underline">
+                      <a
+                        href={notePath}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-sm font-medium text-foreground hover:text-primary hover:underline"
+                      >
                         {user.id}
                       </a>
                       <p className="text-xs text-muted-foreground">Created: {new Date(user.createdAt).toLocaleString()}</p>

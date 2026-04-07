@@ -7,9 +7,15 @@
   <!-- Homepage -->
   <url>
     <loc>https://www.puretext.me/</loc>
-    <lastmod>2026-02-26</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.puretext.me/llms.txt</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   
   <!-- High-Value Keywords -->
@@ -237,7 +243,7 @@
   <!-- Blog (Mar 2026) -->
   <url>
     <loc>https://www.puretext.me/blog</loc>
-    <lastmod>2026-03-05</lastmod>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>

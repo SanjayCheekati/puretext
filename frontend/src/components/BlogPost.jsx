@@ -149,11 +149,14 @@ const BlogPost = () => {
         <meta name="description" content={post.metaDescription} />
         <meta name="keywords" content={post.tags.join(', ')} />
         <meta name="author" content={post.author} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
         <link rel="canonical" href={`https://www.puretext.me/blog/${post.slug}`} />
+        <link rel="alternate" type="text/plain" href="https://www.puretext.me/llms.txt" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:url" content={`https://www.puretext.me/blog/${post.slug}`} />
+        <meta property="og:site_name" content="PureText" />
         <meta property="article:published_time" content={post.date} />
         <meta property="article:author" content={post.author} />
         <meta property="article:section" content={post.category} />

@@ -559,6 +559,10 @@ const NoteEditor = () => {
   const handleDeleteTab = (index) => {
     if (!noteData || noteData.tabs.length === 1) return;
 
+    const tabName = noteData.tabs[index]?.name || `Tab ${index + 1}`;
+    const confirmed = window.confirm(`Delete "${tabName}" tab? This cannot be undone.`);
+    if (!confirmed) return;
+
     const updatedTabs = noteData.tabs.filter((_, i) => i !== index);
     const newActiveTab = index === noteData.activeTab
       ? Math.max(0, index - 1)
