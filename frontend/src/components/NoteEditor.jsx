@@ -10,6 +10,7 @@ import { Input } from './ui/input';
 import { Separator } from './ui/separator';
 import { toast } from './ui/use-toast.jsx';
 import RichTextEditor, { htmlToPlainText } from './RichTextEditor';
+import { sanitizeNoteName } from '../utils/noteName';
 import {
   Dialog,
   DialogContent,
@@ -63,6 +64,7 @@ const NoteEditor = () => {
   const { noteName } = useParams();
   const navigate = useNavigate();
   const tabsContainerRef = useRef(null);
+  const canonicalNoteName = sanitizeNoteName(noteName || '');
 
   // State
   const [noteData, setNoteData] = useState(null);
@@ -222,6 +224,11 @@ const NoteEditor = () => {
   const loadNote = async () => {
     try {
       setIsLoading(true);
+      setPassword('');
+      setPasswordError('');
+      setShowPasswordDialog(false);
+      setPasswordDialogMode('unlock');
+
       const response = await fetchNote(noteName);
 
       if (response.exists && response.data) {
@@ -262,6 +269,7 @@ const NoteEditor = () => {
           lastSaved: Date.now()
         };
         setNoteData(newNote);
+        setPassword('');
         setIsLocked(false);
       }
     } catch (err) {
@@ -287,7 +295,7 @@ const NoteEditor = () => {
 
       if (passwordDialogMode === 'unlock') {
         // Decrypt existing note
-        const response = await fetchNote(noteName);
+        const response = await fetchNote(noteName, true);
         if (response.exists && response.data) {
           // Try to decrypt with user password first
           try {
@@ -343,18 +351,18 @@ const NoteEditor = () => {
 
       // Check if we need to create delete token
       let deleteTokenHash;
-      let existingToken = getDeleteToken(noteName);
+      let existingToken = getDeleteToken(canonicalNoteName || noteName);
 
       if (!existingToken) {
         const newToken = generateDeleteToken();
         const hash = await hashDeleteToken(newToken);
-        saveDeleteToken(noteName, newToken);
+        saveDeleteToken(canonicalNoteName || noteName, newToken);
         deleteTokenHash = hash;
         existingToken = newToken;
       }
 
       await saveNote(noteName, encrypted, deleteTokenHash, existingToken, true, expiresAt || undefined, adminPassword);
-      invalidateNoteCache(noteName);
+      invalidateNoteCache(canonicalNoteName || noteName);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to save note');
@@ -385,18 +393,18 @@ const NoteEditor = () => {
 
       // Check if we need to create delete token
       let deleteTokenHash;
-      let existingToken = getDeleteToken(noteName);
+      let existingToken = getDeleteToken(canonicalNoteName || noteName);
 
       if (!existingToken) {
         const newToken = generateDeleteToken();
         const hash = await hashDeleteToken(newToken);
-        saveDeleteToken(noteName, newToken);
+        saveDeleteToken(canonicalNoteName || noteName, newToken);
         deleteTokenHash = hash;
         existingToken = newToken;
       }
 
       await saveNote(noteName, encrypted, deleteTokenHash, existingToken, false, expiresAt || undefined);
-      invalidateNoteCache(noteName);
+      invalidateNoteCache(canonicalNoteName || noteName);
       setIsDirty(false);
     } catch (err) {
       setError('Failed to auto-save note');
@@ -632,7 +640,7 @@ const NoteEditor = () => {
   const handleDeleteNote = async () => {
     if (!noteName) return;
 
-    const token = getDeleteToken(noteName);
+    const token = getDeleteToken(canonicalNoteName || noteName);
     if (!token) {
       setError('No delete token found. Cannot delete this note.');
       toast({ title: "Error", description: "No delete token found", variant: "destructive" });
@@ -641,8 +649,8 @@ const NoteEditor = () => {
 
     try {
       await deleteNote(noteName, token);
-      removeDeleteToken(noteName);
-      invalidateNoteCache(noteName);
+      removeDeleteToken(canonicalNoteName || noteName);
+      invalidateNoteCache(canonicalNoteName || noteName);
       toast({ title: "Deleted", description: "Note deleted successfully" });
       navigate('/');
     } catch (err) {

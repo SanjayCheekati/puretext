@@ -2,6 +2,8 @@ const API_URL = import.meta.env.PROD
   ? 'https://puretext-backend.vercel.app/api'
   : 'http://localhost:5000/api';
 
+import { sanitizeNoteName } from '../utils/noteName';
+
 // Simple in-memory cache for note metadata
 const noteCache = new Map();
 const CACHE_TTL = 30000; // 30 seconds
@@ -20,31 +22,41 @@ const setCachedNote = (name, data) => {
 };
 
 export const invalidateNoteCache = (name) => {
-  noteCache.delete(name);
+  noteCache.delete(sanitizeNoteName(name));
 };
 
 export const fetchNote = async (name, forceRefresh = false) => {
+  const canonicalName = sanitizeNoteName(name);
+  if (!canonicalName) {
+    throw new Error('Invalid note name');
+  }
+
   // Check cache first (unless force refresh)
   if (!forceRefresh) {
-    const cached = getCachedNote(name);
+    const cached = getCachedNote(canonicalName);
     if (cached) {
       return cached;
     }
   }
 
-  const response = await fetch(`${API_URL}/note/${name}`);
+  const response = await fetch(`${API_URL}/note/${canonicalName}`);
   if (!response.ok) {
     throw new Error('Failed to fetch note');
   }
   const data = await response.json();
   
   // Cache the response
-  setCachedNote(name, data);
+  setCachedNote(canonicalName, data);
   
   return data;
 };
 
 export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUserPassword, expiresAt, adminPassword) => {
+  const canonicalName = sanitizeNoteName(name);
+  if (!canonicalName) {
+    throw new Error('Invalid note name');
+  }
+
   const body = { data };
   if (deleteTokenHash) {
     body.deleteTokenHash = deleteTokenHash;
@@ -62,7 +74,7 @@ export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUser
     body.adminPassword = adminPassword;
   }
 
-  const response = await fetch(`${API_URL}/note/${name}`, {
+  const response = await fetch(`${API_URL}/note/${canonicalName}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -76,7 +88,12 @@ export const saveNote = async (name, data, deleteTokenHash, deleteToken, hasUser
 };
 
 export const deleteNote = async (name, deleteToken) => {
-  const response = await fetch(`${API_URL}/note/${name}`, {
+  const canonicalName = sanitizeNoteName(name);
+  if (!canonicalName) {
+    throw new Error('Invalid note name');
+  }
+
+  const response = await fetch(`${API_URL}/note/${canonicalName}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -98,7 +115,8 @@ export const fetchAllUsers = async (adminId) => {
 };
 
 export const deleteNoteAsAdmin = async (adminId, noteId) => {
-  const response = await fetch(`${API_URL}/admin/${adminId}/delete/${noteId}`, {
+  const canonicalNoteId = sanitizeNoteName(noteId);
+  const response = await fetch(`${API_URL}/admin/${adminId}/delete/${canonicalNoteId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

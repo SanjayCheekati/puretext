@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Lock, ArrowRight, ChevronDown, Shield } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { sanitizeNoteName } from '../utils/noteName';
 
 // Lazy load below-fold sections to speed up FCP/LCP
 const BelowFoldSections = lazy(() => import('./HomeSections'));
@@ -44,7 +45,11 @@ const Home = () => {
         });
       } else {
         setLoading(true);
-        const sanitizedName = noteName.trim().toLowerCase().replace(/\s+/g, '-');
+        const sanitizedName = sanitizeNoteName(noteName.trim());
+        if (!sanitizedName) {
+          setLoading(false);
+          return;
+        }
         startTransition(() => {
           navigate(`/${sanitizedName}`);
         });
