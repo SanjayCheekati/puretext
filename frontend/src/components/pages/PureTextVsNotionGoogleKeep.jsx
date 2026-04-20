@@ -20,6 +20,44 @@ const PureTextVsNotionGoogleKeep = () => {
     { feature: "Team Collaboration", puretext: false, notion: true, googlekeep: true },
   ];
 
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Private Notes App",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me/puretext-vs-notion-google-keep",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Encrypted private notes",
+      "No mandatory signup",
+      "Fast browser-based editing",
+      "Zero-knowledge note architecture"
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does PureText differ from Notion and Google Keep?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText focuses on privacy-first encrypted notes with low friction access, while Notion and Google Keep focus more on account-based productivity ecosystems." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is PureText better for private notes than Google Keep?",
+        "acceptedAnswer": { "@type": "Answer", "text": "For users prioritizing encrypted private notes and minimal signup friction, PureText provides a dedicated privacy-focused workflow." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use PureText without creating an account?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText supports note access without mandatory account registration." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -35,6 +73,8 @@ const PureTextVsNotionGoogleKeep = () => {
         <meta name="twitter:title" content="PureText vs Notion vs Google Keep | PureText" />
         <meta name="twitter:description" content="Compare privacy, security, and simplicity across PureText, Notion, and Google Keep." />
         <meta name="keywords" content="puretext vs notion, puretext vs google keep, encrypted notes app, private notes, secure notepad, notion alternative, google keep alternative" />
+        <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <main className="min-h-screen bg-background">

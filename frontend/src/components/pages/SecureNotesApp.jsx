@@ -8,6 +8,28 @@ import RelatedPages from '../RelatedPages';
 const SecureNotesApp = () => {
   const navigate = useNavigate();
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is PureText really free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText is free to use with encrypted notes and no mandatory signup." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use PureText on my phone?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText works on mobile and desktop browsers across major devices." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the service recover my forgotten password?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. With zero-knowledge encryption, forgotten passwords cannot be recovered by the provider." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -36,6 +58,7 @@ const SecureNotesApp = () => {
             "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4200", "bestRating": "5" }
           }
         `}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

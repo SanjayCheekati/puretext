@@ -4,6 +4,44 @@ import { Link } from 'react-router-dom';
 import RelatedPages from '../RelatedPages';
 
 const RemoveFormattingOnline = () => {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Remove Formatting Online Tool",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me/remove-formatting-online",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Remove text formatting",
+      "Plain text conversion workflow",
+      "Browser-based text cleanup",
+      "Encrypted note support"
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What formatting can this tool remove?",
+        "acceptedAnswer": { "@type": "Answer", "text": "It removes common rich-text styling such as fonts, colors, bold, italics, and extra formatting artifacts." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use Remove Formatting Online for free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText provides free browser-based formatting cleanup." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is cleaned text portable to other apps?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The output is plain text and can be pasted into most tools and platforms." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -18,6 +56,8 @@ const RemoveFormattingOnline = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Remove Formatting Online | PureText" />
         <meta name="twitter:description" content="Strip all formatting from text instantly. Get clean plain text. Free, no signup." />
+        <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">

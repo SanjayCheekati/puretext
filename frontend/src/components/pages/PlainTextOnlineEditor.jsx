@@ -4,6 +4,44 @@ import { Link } from 'react-router-dom';
 import RelatedPages from '../RelatedPages';
 
 const PlainTextOnlineEditor = () => {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Plain Text Online Editor",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me/plain-text-online-editor",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Distraction-free plain text editing",
+      "Cloud-synced notes",
+      "Client-side encryption",
+      "No-signup access"
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is this plain text editor free to use?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText provides free plain text editing in the browser." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to install software to use PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText runs directly in modern browsers without installation." }
+      },
+      {
+        "@type": "Question",
+        "name": "Are plain text notes encrypted in PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText uses client-side encryption workflows for private notes." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -18,6 +56,8 @@ const PlainTextOnlineEditor = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Plain Text Online Editor | PureText" />
         <meta name="twitter:description" content="Free plain text online editor with encryption. No signup, no distractions." />
+        <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">

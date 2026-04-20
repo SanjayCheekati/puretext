@@ -4,6 +4,44 @@ import { Link } from 'react-router-dom';
 import RelatedPages from '../RelatedPages';
 
 const PasteAsPlainTextTool = () => {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Paste as Plain Text Tool",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me/paste-as-plain-text-tool",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Instant formatting removal",
+      "Plain text cleanup workspace",
+      "Browser-based access",
+      "Encrypted note storage"
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does this tool remove fonts, colors, and links from pasted text?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The tool is designed to strip visual formatting and leave clean plain text." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use Paste as Plain Text Tool without signup?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText tools are available directly in the browser without mandatory signup." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is cleaned text saved securely?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText supports encrypted note workflows for content you choose to keep." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -18,6 +56,8 @@ const PasteAsPlainTextTool = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Paste as Plain Text Tool | PureText" />
         <meta name="twitter:description" content="Strip formatting automatically when pasting. Convert formatted text to clean plain text online." />
+        <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">

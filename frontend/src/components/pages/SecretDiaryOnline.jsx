@@ -18,6 +18,28 @@ const SecretDiaryOnline = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "4521", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can anyone else read my secret diary entries?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText uses client-side encryption so your diary entries stay private with your password." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need signup to use Secret Diary Online?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. You can start using PureText without mandatory signup." }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if I forget the password?",
+        "acceptedAnswer": { "@type": "Answer", "text": "For zero-knowledge security, forgotten passwords cannot be recovered by the service." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const SecretDiaryOnline = () => {
         <meta name="twitter:title" content="Secret Diary Online | PureText" />
         <meta name="twitter:description" content="Keep a secret diary online with password protection and encryption. Free, anonymous, secure." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

@@ -18,6 +18,28 @@ const NotepadWithTabs = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "2156", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I create unlimited tabs in PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText supports multiple tabs so you can organize notes by topic or workflow." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do tabbed notes save automatically?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Changes are autosaved so tab content remains available when you return." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Notepad with Tabs require installation?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText runs in the browser with no required software installation." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const NotepadWithTabs = () => {
         <meta name="twitter:title" content="Notepad with Tabs Online | PureText" />
         <meta name="twitter:description" content="Free online notepad with unlimited tabs. Organize multiple notes in one place." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

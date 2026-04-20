@@ -18,6 +18,28 @@ const CloudNotepadSync = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "9421", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does PureText sync notes across phone and laptop?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText syncs notes across devices when you open the same note URL with the correct credentials." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to create an account for cloud sync?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText supports cloud note syncing without mandatory account signup." }
+      },
+      {
+        "@type": "Question",
+        "name": "Are synced notes encrypted?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText uses client-side encryption so synced note data is protected before storage." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const CloudNotepadSync = () => {
         <meta name="twitter:title" content="Cloud Notepad with Sync | PureText" />
         <meta name="twitter:description" content="Cloud notepad with automatic sync across all your devices. Free and encrypted." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

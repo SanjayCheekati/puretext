@@ -18,6 +18,28 @@ const NotepadForStudents = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "12847", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is PureText free for students?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText offers free online note-taking for students without mandatory signup." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can students organize notes by subject?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Students can use different note names and tabs to organize classes, topics, and study plans." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this student notepad work on mobile?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText works in modern mobile and desktop browsers so notes remain accessible across devices." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const NotepadForStudents = () => {
         <meta name="twitter:title" content="Notepad for Students | PureText" />
         <meta name="twitter:description" content="Free notepad for students. Take lecture notes and organize study materials online." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

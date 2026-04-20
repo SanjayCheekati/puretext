@@ -18,6 +18,28 @@ const SecureNotepadForWork = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "3891", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is PureText suitable for confidential work notes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText is designed for secure note workflows with strong encryption and privacy-first access." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can teams use PureText without enterprise setup?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Teams can use shared workflows by note URL while keeping sensitive data protected with passwords." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does PureText collect note content for analytics?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText follows a privacy-focused approach and uses encrypted storage architecture." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const SecureNotepadForWork = () => {
         <meta name="twitter:title" content="Secure Notepad for Work | PureText" />
         <meta name="twitter:description" content="Keep confidential work notes encrypted. GDPR compliant, enterprise-grade security, no data retention." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

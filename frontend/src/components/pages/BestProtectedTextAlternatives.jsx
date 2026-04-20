@@ -4,6 +4,44 @@ import { Link } from 'react-router-dom';
 import RelatedPages from '../RelatedPages';
 
 const BestProtectedTextAlternatives = () => {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - ProtectedText Alternatives Guide",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me/best-protectedtext-alternatives",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Client-side encryption",
+      "No-signup note access",
+      "Cross-device note access",
+      "Private note-taking workflows"
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best ProtectedText alternative in this comparison?",
+        "acceptedAnswer": { "@type": "Answer", "text": "This page recommends PureText as a strong ProtectedText alternative for users who want modern speed and privacy-focused encrypted notes." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do ProtectedText alternatives require account signup?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Some alternatives require signup, while PureText is designed for quick access without mandatory account creation." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I migrate notes from ProtectedText to PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. You can copy note content and move it to a PureText note URL protected with your own password." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -18,6 +56,8 @@ const BestProtectedTextAlternatives = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Best ProtectedText Alternatives 2025 | PureText" />
         <meta name="twitter:description" content="Compare the best ProtectedText alternatives for encrypted note-taking in 2025." />
+        <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">

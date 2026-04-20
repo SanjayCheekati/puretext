@@ -18,6 +18,28 @@ const CodeSnippetManager = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "7632", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I store snippets for multiple programming languages?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText is language-agnostic, so you can organize snippets for any language using note tabs and structured text." }
+      },
+      {
+        "@type": "Question",
+        "name": "Are code snippets encrypted in PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText applies strong client-side encryption so only users with access credentials can read snippet content." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need signup to use the snippet manager?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. PureText works without mandatory signup and is available directly in the browser." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const CodeSnippetManager = () => {
         <meta name="twitter:title" content="Code Snippet Manager | PureText" />
         <meta name="twitter:description" content="Free online code snippet manager. Store and organize code snippets from anywhere." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">

@@ -4,6 +4,44 @@ import { Link } from 'react-router-dom';
 import RelatedPages from '../RelatedPages';
 
 const PureTextVsProtectedText = () => {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PureText - Encrypted Notes App",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "url": "https://www.puretext.me/puretext-vs-protectedtext",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "Client-side encrypted notes",
+      "No mandatory signup",
+      "Modern fast web editor",
+      "Multi-tab note workflows"
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the main difference between PureText and ProtectedText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Both support encrypted note workflows, but PureText focuses on modern performance, polished UX, and expanded note organization features." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do both services support zero-knowledge encrypted notes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Both are designed around client-side encryption principles for private note access." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I migrate from ProtectedText to PureText?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. You can copy note content into a PureText note and secure it with your own password." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -18,6 +56,8 @@ const PureTextVsProtectedText = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="PureText vs ProtectedText | PureText" />
         <meta name="twitter:description" content="Compare PureText and ProtectedText — speed, design, features, and security." />
+        <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <main className="min-h-screen bg-gray-50 py-12 px-4">

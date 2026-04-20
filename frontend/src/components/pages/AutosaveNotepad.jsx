@@ -18,6 +18,28 @@ const AutosaveNotepad = () => {
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "3245", "bestRating": "5" }
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How often does PureText autosave notes?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PureText autosaves continuously while you type, so your latest changes are preserved without manual save actions." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I recover notes after a browser crash?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText is designed for autosave reliability, so your latest synced content is available when you return." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does autosave work on mobile devices?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. PureText autosave works across desktop and mobile browsers using the same note URL." }
+      }
+    ]
+  };
+
   return (
     <>
       <Helmet>
@@ -34,6 +56,7 @@ const AutosaveNotepad = () => {
         <meta name="twitter:title" content="Autosave Notepad Online | PureText" />
         <meta name="twitter:description" content="Online notepad with automatic saving. Never lose your work again." />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen gradient-bg">
