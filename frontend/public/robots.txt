@@ -17,4 +17,3 @@ Crawl-delay: 1
 
 # Sitemaps
 Sitemap: https://www.puretext.me/sitemap.xml
-Sitemap: https://www.puretext.me/sitemap-use-cases.xml
