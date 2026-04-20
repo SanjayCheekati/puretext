@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useCasePages } from './data/useCasePages';
 
 // Lazy load non-critical UI
 const Toaster = lazy(() => import('./components/ui/use-toast.jsx').then(m => ({ default: m.Toaster })));
@@ -10,8 +11,10 @@ const SpeedInsights = lazy(() => import('@vercel/speed-insights/react').then(m =
 
 // Lazy load components
 const Home = lazy(() => import('./components/Home'));
+const UseCasesHub = lazy(() => import('./components/UseCasesHub'));
 const NoteEditor = lazy(() => import('./components/NoteEditor'));
 const ViewOnly = lazy(() => import('./components/ViewOnly'));
+const UseCaseLandingPage = lazy(() => import('./components/pages/UseCaseLandingPage'));
 
 // Lazy load SEO landing pages
 const ProtectedTextAlternative = lazy(() => import('./components/pages/ProtectedTextAlternative'));
@@ -76,6 +79,7 @@ const App = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/use-cases" element={<UseCasesHub />} />
           {/* SEO Landing Pages */}
           <Route path="/protectedtext-alternative" element={<ProtectedTextAlternative />} />
           <Route path="/best-protectedtext-alternatives" element={<BestProtectedTextAlternatives />} />
@@ -114,6 +118,12 @@ const App = () => {
           <Route path="/grok-encrypted-output-storage" element={<GrokEncryptedOutputStorage />} />
           <Route path="/private-ai-prompt-vault" element={<PrivateAIPromptVault />} />
           <Route path="/ai-prompt-manager-encrypted" element={<AIPromptManagerEncrypted />} />
+
+          {/* High-value use-case landing pages */}
+          {useCasePages.map((page) => (
+            <Route key={page.slug} path={`/${page.slug}`} element={<UseCaseLandingPage page={page} />} />
+          ))}
+
           {/* Blog */}
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogPost />} />

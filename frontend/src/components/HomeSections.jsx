@@ -289,6 +289,7 @@ const HomeSections = () => {
             <div>
               <h3 className="font-semibold text-foreground mb-4">Use Cases</h3>
               <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/use-cases" className="hover:text-foreground transition-colors">All Use Cases</a></li>
                 <li><a href="/secret-diary-online" className="hover:text-foreground transition-colors">Secret Diary Online</a></li>
                 <li><a href="/self-destructing-notes" className="hover:text-foreground transition-colors">Self-Destructing Notes</a></li>
                 <li><a href="/notepad-for-students" className="hover:text-foreground transition-colors">Notepad for Students</a></li>

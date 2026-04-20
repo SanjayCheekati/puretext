@@ -11,6 +11,7 @@ const ALL_PAGES = [
   { href: '/secure-notepad-for-work', title: 'Secure Notepad for Work', desc: 'Business-grade encrypted notes', category: 'security' },
   { href: '/secret-diary-online', title: 'Secret Diary Online', desc: 'Private journal with password', category: 'security' },
   { href: '/self-destructing-notes', title: 'Self-Destructing Notes', desc: 'Auto-delete after reading', category: 'security' },
+  { href: '/use-cases', title: 'Use Cases Hub', desc: '100+ encrypted note use cases', category: 'productivity' },
   // Productivity
   { href: '/free-online-notepad', title: 'Free Online Notepad', desc: 'Cloud notepad any device', category: 'productivity' },
   { href: '/online-notepad-no-signup', title: 'Online Notepad No Signup', desc: 'Start writing instantly', category: 'productivity' },
