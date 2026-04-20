@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     const feedback = new Feedback({
       name: name?.trim().slice(0, 100) || 'Anonymous',
       email: email?.trim().slice(0, 200) || '',
-      type: ['feature', 'bug', 'improvement', 'other'].includes(type) ? type : 'feature',
+      type: ['feature', 'bug', 'improvement', 'other', 'newsletter'].includes(type) ? type : 'feature',
       message: message.trim()
     });
 

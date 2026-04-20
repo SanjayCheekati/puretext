@@ -2,6 +2,12 @@ import React from 'react';
 import { Lock, ArrowRight } from 'lucide-react';
 
 const ALL_PAGES = [
+  // Privacy hubs
+  { href: '/privacy-vault', title: 'Privacy Vault Hub', desc: 'All secure private notes', category: 'privacy' },
+  { href: '/all-secure-private-notes', title: 'All Secure Private Notes', desc: 'Mother page for secret vaults', category: 'privacy' },
+  { href: '/zero-knowledge-data-storage', title: 'Zero-Knowledge Data Storage', desc: 'Central zero-knowledge cluster', category: 'privacy' },
+  { href: '/privacy-tools', title: 'Privacy Tools', desc: 'VPN and privacy stack resources', category: 'privacy' },
+  { href: '/support-development', title: 'Support Development', desc: 'Roadmap and privacy tips signup', category: 'privacy' },
   // Security & Encryption
   { href: '/encrypted-notepad', title: 'Encrypted Notepad', desc: 'AES-256 encrypted notes', category: 'security' },
   { href: '/secure-notes-app', title: 'Secure Notes App', desc: 'Private note-taking app', category: 'security' },
@@ -28,9 +34,12 @@ const ALL_PAGES = [
   { href: '/digital-notepad', title: 'Digital Notepad', desc: 'Your notepad in the cloud', category: 'tools' },
   // Comparisons
   { href: '/protectedtext-alternative', title: 'ProtectedText Alternative', desc: 'Better than ProtectedText', category: 'compare' },
-  { href: '/best-protectedtext-alternatives', title: 'Best Alternatives 2025', desc: 'Top ProtectedText replacements', category: 'compare' },
+  { href: '/best-protectedtext-alternatives', title: 'Best Alternatives 2026', desc: 'Top ProtectedText replacements', category: 'compare' },
   { href: '/puretext-vs-protectedtext', title: 'PureText vs ProtectedText', desc: 'Side-by-side comparison', category: 'compare' },
   { href: '/puretext-vs-notion-google-keep', title: 'PureText vs Notion vs Keep', desc: 'Privacy comparison', category: 'compare' },
+  { href: '/puretext-vs-bitwarden', title: 'PureText vs Bitwarden', desc: 'Notes vault vs password manager', category: 'compare' },
+  { href: '/puretext-vs-1password', title: 'PureText vs 1Password', desc: 'Encrypted notes comparison', category: 'compare' },
+  { href: '/puretext-vs-standard-notes', title: 'PureText vs Standard Notes', desc: 'Zero-knowledge notes comparison', category: 'compare' },
   // New pages
   { href: '/online-text-editor', title: 'Online Text Editor', desc: 'Free text editor in browser', category: 'tools' },
   { href: '/write-notes-online', title: 'Write Notes Online', desc: 'Quick online note-taking', category: 'productivity' },
@@ -38,6 +47,10 @@ const ALL_PAGES = [
   { href: '/quick-notes-online', title: 'Quick Notes', desc: 'Fast note-taking tool', category: 'productivity' },
   { href: '/scratch-pad-online', title: 'Scratch Pad Online', desc: 'Quick scratch pad tool', category: 'tools' },
   { href: '/private-journal-online', title: 'Private Journal', desc: 'Encrypted personal journal', category: 'security' },
+  { href: '/secure-api-key-manager', title: 'Secure API Key Manager', desc: 'Developer secret storage', category: 'ai' },
+  { href: '/developer-secrets-manager', title: 'Developer Secrets Manager', desc: 'Encrypted dev secret workflows', category: 'ai' },
+  { href: '/private-medical-records-vault', title: 'Private Medical Records Vault', desc: 'Encrypted personal data vault', category: 'security' },
+  { href: '/temporary-secure-sharing', title: 'Temporary Secure Sharing', desc: 'Share secrets safely', category: 'security' },
   // AI Workflow pages (Mar 2026)
   { href: '/store-chatgpt-prompts-securely', title: 'Store ChatGPT Prompts', desc: 'Encrypted ChatGPT prompt vault', category: 'ai' },
   { href: '/claude-secure-prompt-notebook', title: 'Claude Prompt Notebook', desc: 'Secure Claude AI notebook', category: 'ai' },
@@ -51,9 +64,12 @@ const ALL_PAGES = [
   { href: '/blog/zero-knowledge-encryption-explained', title: 'Zero-Knowledge Explained', desc: 'What is zero-knowledge?', category: 'blog' },
   { href: '/blog/how-to-organize-chatgpt-prompts', title: 'Organize ChatGPT Prompts', desc: 'Prompt library system', category: 'blog' },
   { href: '/blog/protectedtext-alternatives-security-comparison', title: 'ProtectedText Alternatives', desc: 'Security comparison 2026', category: 'blog' },
+  { href: '/blog/puretext-vs-bitwarden-private-notes', title: 'PureText vs Bitwarden Guide', desc: 'Comparison for private notes', category: 'blog' },
+  { href: '/blog/privacy-tools-stack-2026', title: 'Privacy Tools Stack 2026', desc: 'VPN and browser hardening guide', category: 'blog' },
 ];
 
 const CATEGORIES = {
+  privacy: { label: 'Privacy Hubs', color: 'text-teal-500' },
   security: { label: 'Security & Privacy', color: 'text-green-500' },
   ai: { label: 'AI Prompt Storage', color: 'text-cyan-500' },
   blog: { label: 'Blog', color: 'text-pink-500' },

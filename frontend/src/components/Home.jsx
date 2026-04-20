@@ -80,10 +80,12 @@ const Home = () => {
             </div>
             <nav className="hidden sm:flex items-center gap-6 text-sm text-muted-foreground">
               <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
-              <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-              <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+              <a href="/use-cases" className="hover:text-foreground transition-colors">Use Cases</a>
+              <a href="/use-cases?category=privacy-secrets" className="hover:text-foreground transition-colors">Privacy & Secrets</a>
+              <a href="/use-cases?category=developer-tools" className="hover:text-foreground transition-colors">Developer Tools</a>
+              <a href="/use-cases?category=personal-data" className="hover:text-foreground transition-colors">Personal Data</a>
+              <a href="/privacy-vault" className="hover:text-foreground transition-colors">Privacy Vault</a>
               <a href="/blog" className="hover:text-foreground transition-colors">Blog</a>
-              <a href="/puretext-vs-notion-google-keep" className="hover:text-foreground transition-colors">Compare</a>
             </nav>
           </div>
         </header>

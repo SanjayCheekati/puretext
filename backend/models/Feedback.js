@@ -13,7 +13,7 @@ const feedbackSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['feature', 'bug', 'improvement', 'other'],
+    enum: ['feature', 'bug', 'improvement', 'other', 'newsletter'],
     default: 'feature'
   },
   message: {

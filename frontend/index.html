@@ -11,7 +11,7 @@
     
     <!-- Critical CSS - Inline for instant render -->
     <style>
-      *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto',sans-serif;-webkit-font-smoothing:antialiased;background:#0a0a0b;color:#f5f5f5}#root{min-height:100vh}
+      *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto',sans-serif;-webkit-font-smoothing:antialiased;background:#0a0a0b;color:#f5f5f5}#root{min-height:100vh}.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     </style>
     
     <!-- Primary Meta Tags -->
@@ -47,6 +47,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"PureText","url":"https://www.puretext.me","logo":"https://www.puretext.me/favicon.svg","description":"PureText builds private note-taking tools with client-side encryption and zero-knowledge architecture."},{"@type":"WebSite","name":"PureText","url":"https://www.puretext.me","inLanguage":"en","publisher":{"@type":"Organization","name":"PureText"}}]}</script>
   </head>
   <body>
+    <h1 class="visually-hidden">PureText: Free Encrypted Notepad with AES-256 Security and No Signup</h1>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <!-- Load font after critical render -->

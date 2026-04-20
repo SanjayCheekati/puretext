@@ -289,15 +289,17 @@ const HomeSections = () => {
             <div>
               <h3 className="font-semibold text-foreground mb-4">Use Cases</h3>
               <ul className="space-y-2 text-muted-foreground">
-                <li><a href="/use-cases" className="hover:text-foreground transition-colors">All Use Cases</a></li>
+                <li><a href="/use-cases" className="hover:text-foreground transition-colors">All Encrypted Use Cases</a></li>
+                <li><a href="/privacy-vault" className="hover:text-foreground transition-colors">Best Private Notes 2026 Hub</a></li>
+                <li><a href="/use-cases?category=privacy-secrets" className="hover:text-foreground transition-colors">Privacy & Secrets Vault Pages</a></li>
+                <li><a href="/use-cases?category=developer-tools" className="hover:text-foreground transition-colors">Developer Secrets Manager Pages</a></li>
+                <li><a href="/use-cases?category=personal-data" className="hover:text-foreground transition-colors">Personal Data Protection Vaults</a></li>
                 <li><a href="/secret-diary-online" className="hover:text-foreground transition-colors">Secret Diary Online</a></li>
                 <li><a href="/self-destructing-notes" className="hover:text-foreground transition-colors">Self-Destructing Notes</a></li>
                 <li><a href="/notepad-for-students" className="hover:text-foreground transition-colors">Notepad for Students</a></li>
-                <li><a href="/secure-notepad-for-work" className="hover:text-foreground transition-colors">Secure Work Notepad</a></li>
-                <li><a href="/code-snippet-manager" className="hover:text-foreground transition-colors">Code Snippet Manager</a></li>
-                <li><a href="/private-journal-online" className="hover:text-foreground transition-colors">Private Journal</a></li>
-                <li><a href="/temporary-notepad" className="hover:text-foreground transition-colors">Temporary Notepad</a></li>
-                <li><a href="/quick-notes-online" className="hover:text-foreground transition-colors">Quick Notes</a></li>
+                <li><a href="/secure-api-key-manager" className="hover:text-foreground transition-colors">Secure API Key Manager</a></li>
+                <li><a href="/private-medical-records-vault" className="hover:text-foreground transition-colors">Private Medical Records Vault</a></li>
+                <li><a href="/temporary-secure-sharing" className="hover:text-foreground transition-colors">Temporary Secure Sharing</a></li>
               </ul>
             </div>
             <div>
@@ -318,6 +320,18 @@ const HomeSections = () => {
                 <li><a href="/grok-encrypted-output-storage" className="hover:text-foreground transition-colors">Grok Output Storage</a></li>
                 <li><a href="/private-ai-prompt-vault" className="hover:text-foreground transition-colors">AI Prompt Vault</a></li>
                 <li><a href="/ai-prompt-manager-encrypted" className="hover:text-foreground transition-colors">AI Prompt Manager</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><a href="/privacy-tools" className="hover:text-foreground transition-colors">Privacy Tools and Add-ons</a></li>
+                <li><a href="/support-development" className="hover:text-foreground transition-colors">Support Development</a></li>
+                <li><a href="/all-secure-private-notes" className="hover:text-foreground transition-colors">All Secure Private Notes</a></li>
+                <li><a href="/zero-knowledge-data-storage" className="hover:text-foreground transition-colors">Zero-Knowledge Data Storage</a></li>
+                <li><a href="/puretext-vs-bitwarden" className="hover:text-foreground transition-colors">PureText vs Bitwarden</a></li>
+                <li><a href="/puretext-vs-1password" className="hover:text-foreground transition-colors">PureText vs 1Password</a></li>
+                <li><a href="/puretext-vs-standard-notes" className="hover:text-foreground transition-colors">PureText vs Standard Notes</a></li>
               </ul>
             </div>
           </div>

@@ -12,6 +12,9 @@ const SpeedInsights = lazy(() => import('@vercel/speed-insights/react').then(m =
 // Lazy load components
 const Home = lazy(() => import('./components/Home'));
 const UseCasesHub = lazy(() => import('./components/UseCasesHub'));
+const PrivacyVaultHub = lazy(() => import('./components/PrivacyVaultHub'));
+const PrivacyTools = lazy(() => import('./components/PrivacyTools'));
+const SupportDevelopment = lazy(() => import('./components/SupportDevelopment'));
 const NoteEditor = lazy(() => import('./components/NoteEditor'));
 const ViewOnly = lazy(() => import('./components/ViewOnly'));
 const UseCaseLandingPage = lazy(() => import('./components/pages/UseCaseLandingPage'));
@@ -80,6 +83,12 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/use-cases" element={<UseCasesHub />} />
+          <Route path="/privacy-vault" element={<PrivacyVaultHub />} />
+          <Route path="/all-secure-private-notes" element={<PrivacyVaultHub />} />
+          <Route path="/zero-knowledge-data-storage" element={<PrivacyVaultHub />} />
+          <Route path="/privacy-tools" element={<PrivacyTools />} />
+          <Route path="/resources" element={<PrivacyTools />} />
+          <Route path="/support-development" element={<SupportDevelopment />} />
           {/* SEO Landing Pages */}
           <Route path="/protectedtext-alternative" element={<ProtectedTextAlternative />} />
           <Route path="/best-protectedtext-alternatives" element={<BestProtectedTextAlternatives />} />
